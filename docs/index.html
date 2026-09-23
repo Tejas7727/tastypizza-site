@@ -49,9 +49,18 @@
 
 <section class="hero">
   <div class="hero-media">
-    <img src="assets/img/meat-lovers-pizza@wide.webp" width="1600" height="900" fetchpriority="high"
-         alt="A pepperoni pizza fresh out of the oven">
+    <video data-hero-video poster="assets/video/hero-poster.webp" autoplay muted loop playsinline
+           preload="auto" aria-label="A pizza bubbling in the oven" width="1440" height="810">
+      <source src="assets/video/hero.mp4" type="video/mp4">
+      <img src="assets/video/hero-poster.webp" width="1440" height="810"
+           alt="A pizza bubbling in the oven">
+    </video>
     <div class="hero-scrim"></div>
+  </div>
+  <div class="steam" aria-hidden="true">
+    <i style="--x:38%;--w:170px;--d:12s;--delay:0s"></i>
+    <i style="--x:54%;--w:130px;--d:9.5s;--delay:2.4s"></i>
+    <i style="--x:68%;--w:190px;--d:14s;--delay:5.1s"></i>
   </div>
   <div class="hero-in">
     <p class="kicker">Halifax&#x27;s official food, made on Main Street.</p>
@@ -63,9 +72,9 @@
     </div>
     <p class="hero-open"><span class="openpill big" data-clock hidden></span></p>
   </div>
-  <img class="chef chef-hero" src="assets/img/chef.png" width="231" height="100" alt="" aria-hidden="true">
+  <span class="scrollcue" aria-hidden="true">Scroll</span>
 </section>
-<section class="band band-cream" id="hits">
+<section class="band band-bone" id="hits">
   <div class="wrap">
     <header class="sec-head">
       <h2>What people actually order</h2>
@@ -303,7 +312,7 @@
       </article></div>
   </div>
 </section>
-<section class="band band-cream" id="order">
+<section class="band band-bone" id="order">
   <div class="wrap">
     <header class="sec-head"><h2>Three ways to get it</h2></header>
     <div class="order-grid">
@@ -328,7 +337,7 @@
     </div>
   </div>
 </section>
-<section class="band band-bone" id="find">
+<section class="band band-cream" id="find">
   <div class="wrap find">
     <div class="find-copy">
       <p class="kicker">Come and get it</p>
@@ -378,6 +387,10 @@
     </div>
   </div>
   <ul class="fine"><li>HST not included in listed prices.</li><li>Prices and store hours are subject to change without notice.</li></ul>
+  <p class="credit">Food photography and the hero clip are freely-licensed stock, used as
+     placeholders until Tasty Pizza's own photos replace them. Hero clip by Ruth Hartnup
+     (<a class="ul" href="https://commons.wikimedia.org/wiki/File:Bubbling_baking_pizza.webm"
+     rel="noopener" target="_blank">CC BY 2.0</a>). Map &copy; OpenStreetMap contributors.</p>
   <p class="copy">© 2026 Tasty Pizza. Site rebuilt September 2026.</p>
 </footer>
 

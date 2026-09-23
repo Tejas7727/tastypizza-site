@@ -55,8 +55,14 @@ def main():
         lines.append(f"| `{slug}` | {who} | {lic} | {link} |")
     lines += [
         "",
-        "Map tiles on the contact card are © OpenStreetMap contributors (ODbL).",
+        "## Video",
         "",
+        "| Used for | Author | Licence | Source |",
+        "|---|---|---|---|",
+        "| hero clip (`assets/video/hero.*`) | Ruth Hartnup | CC BY 2.0 | "
+        "[Bubbling baking pizza](https://commons.wikimedia.org/wiki/File:Bubbling_baking_pizza.webm) |",
+        "",
+        "Map tiles on the contact card are © OpenStreetMap contributors (ODbL).",
         "Typefaces: Alfa Slab One and Archivo, both SIL Open Font License, self-hosted.",
         "",
         "The Tasty Pizza logo and chef mascot belong to Tasty Pizza and are used unchanged.",

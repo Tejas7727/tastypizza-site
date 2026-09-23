@@ -39,12 +39,24 @@ def collect_hits(site, menu):
 
 
 def hero(site):
+    """Full viewport, and the food is moving — a pizza bubbling in the oven,
+    with heat rising off it. The poster carries the frame until the video is
+    decoded, and is all anyone sees under prefers-reduced-motion."""
     return f"""
 <section class="hero">
   <div class="hero-media">
-    <img src="assets/img/meat-lovers-pizza@wide.webp" width="1600" height="900" fetchpriority="high"
-         alt="A pepperoni pizza fresh out of the oven">
+    <video data-hero-video poster="assets/video/hero-poster.webp" autoplay muted loop playsinline
+           preload="auto" aria-label="A pizza bubbling in the oven" width="1440" height="810">
+      <source src="assets/video/hero.mp4" type="video/mp4">
+      <img src="assets/video/hero-poster.webp" width="1440" height="810"
+           alt="A pizza bubbling in the oven">
+    </video>
     <div class="hero-scrim"></div>
+  </div>
+  <div class="steam" aria-hidden="true">
+    <i style="--x:38%;--w:170px;--d:12s;--delay:0s"></i>
+    <i style="--x:54%;--w:130px;--d:9.5s;--delay:2.4s"></i>
+    <i style="--x:68%;--w:190px;--d:14s;--delay:5.1s"></i>
   </div>
   <div class="hero-in">
     <p class="kicker">{e(site['claim'])}</p>
@@ -56,7 +68,7 @@ def hero(site):
     </div>
     <p class="hero-open"><span class="openpill big" data-clock hidden></span></p>
   </div>
-  <img class="chef chef-hero" src="assets/img/chef.png" width="231" height="100" alt="" aria-hidden="true">
+  <span class="scrollcue" aria-hidden="true">Scroll</span>
 </section>"""
 
 
@@ -78,7 +90,7 @@ def hits_section(site, menu):
         </div>
       </article>""")
     return f"""
-<section class="band band-cream" id="hits">
+<section class="band band-bone" id="hits">
   <div class="wrap">
     <header class="sec-head">
       <h2>What people actually order</h2>
@@ -208,7 +220,7 @@ def order_section(site):
                         f'<span class="plat-n">{name}</span><span class="plat-s">{sub}</span>'
                         f'<span class="plat-go" aria-hidden="true">{icon("chev")}</span></a>')
     return f"""
-<section class="band band-cream" id="order">
+<section class="band band-bone" id="order">
   <div class="wrap">
     <header class="sec-head"><h2>Three ways to get it</h2></header>
     <div class="order-grid">
@@ -244,7 +256,7 @@ def find_section(site):
     lat, lng = site["geo"]["lat"], site["geo"]["lng"]
     bbox = f"{lng - 0.010},{lat - 0.005},{lng + 0.010},{lat + 0.005}"
     return f"""
-<section class="band band-bone" id="find">
+<section class="band band-cream" id="find">
   <div class="wrap find">
     <div class="find-copy">
       <p class="kicker">Come and get it</p>
@@ -417,6 +429,13 @@ def copy_assets():
         dst.mkdir(parents=True, exist_ok=True)
         for f in fonts.glob("*.woff2"):
             shutil.copy2(f, dst / f.name)
+    video = ROOT / "assets" / "video"
+    if video.exists():
+        dst = OUT / "assets" / "video"
+        dst.mkdir(parents=True, exist_ok=True)
+        for f in video.iterdir():
+            if f.is_file():
+                shutil.copy2(f, dst / f.name)
     brand = ROOT / "assets" / "brand"
     if brand.exists():
         for f in brand.iterdir():

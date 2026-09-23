@@ -89,6 +89,51 @@
     });
   }
 
+  /* ------------------------------------------------------------ hero + header */
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  (function heroVideo() {
+    var v = $('[data-hero-video]');
+    if (!v) return;
+    if (calm && calm.matches) {
+      v.removeAttribute('autoplay');
+      v.pause();
+      return;
+    }
+    // Some browsers refuse autoplay until the element is muted in JS as well.
+    v.muted = true;
+    var go = v.play();
+    if (go && go.catch) go.catch(function () { /* poster stands in */ });
+    // don't burn battery decoding a video nobody can see
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (en) {
+          if (en.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+          else v.pause();
+        });
+      }, { threshold: 0.05 }).observe(v);
+    }
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) v.pause();
+      else { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    });
+  })();
+
+  (function stickyHeader() {
+    var top = $('.top');
+    if (!top) return;
+    var on = false;
+    var paint = function () {
+      var want = window.scrollY > 8;
+      if (want !== on) {
+        on = want;
+        if (on) top.setAttribute('data-stuck', ''); else top.removeAttribute('data-stuck');
+      }
+    };
+    paint();
+    window.addEventListener('scroll', paint, { passive: true });
+  })();
+
   /* ------------------------------------------------------------ nav drawer */
   var burger = $('.burger'), drawer = $('.drawer');
   if (burger && drawer) {
@@ -286,24 +331,90 @@
   });
 
   /* ------------------------------------------------------------ the builder */
+  /* Each topping is drawn, not approximated with a coloured dot: pepperoni cups at
+     the edge and has fat flecks, peppers are rings, olives have holes, onion is a
+     translucent sliver. `c` is the swatch colour shown on the button. */
   var TOPPING_LOOK = {
-    'Pepperoni': { c: '#C0392B', w: 17, br: '50%' },
-    'Salami': { c: '#9E3B36', w: 16, br: '50%' },
-    'Mushrooms': { c: '#C9B79B', w: 15, br: '42% 58% 50% 50%' },
-    'Green Peppers': { c: '#3E8E41', w: 16, h: 7, br: '99px' },
-    'Red Peppers': { c: '#CF4520', w: 16, h: 7, br: '99px' },
-    'Onions': { c: '#F2E6D8', w: 17, h: 5, br: '99px' },
-    'Red Onions': { c: '#9C6B9E', w: 17, h: 5, br: '99px' },
-    'Bacon': { c: '#A8503A', w: 14, h: 7, br: '3px' },
-    'Hamburger': { c: '#7B4B2A', w: 11, br: '45%' },
-    'Tomatoes': { c: '#D64031', w: 14, br: '50%' },
-    'Pineapple': { c: '#F0C233', w: 13, br: '4px' },
-    'Italian Sausage': { c: '#8C4A2F', w: 12, br: '50%' },
-    'Hot Peppers': { c: '#2E7D32', w: 13, h: 6, br: '99px' },
-    'Black Olives': { c: '#2B2430', w: 12, br: '50%' },
-    'Green Olives': { c: '#7D8F3A', w: 12, br: '50%' },
-    'Donair Meat': { c: '#8A5A34', w: 16, h: 8, br: '3px' },
-    'Ham': { c: '#E29A9A', w: 15, h: 8, br: '3px' }
+    'Pepperoni': { c: '#C23B2B', size: 30, svg:
+      '<circle cx="16" cy="16" r="14" fill="#A8291C"/><circle cx="16" cy="16" r="12.4" fill="#CC4630"/>' +
+      '<circle cx="16" cy="16" r="10.4" fill="#D9573C"/>' +
+      '<ellipse cx="12" cy="12" rx="2.1" ry="1.7" fill="#8E2318" opacity=".62"/>' +
+      '<ellipse cx="20" cy="14.5" rx="1.7" ry="1.4" fill="#8E2318" opacity=".55"/>' +
+      '<ellipse cx="15" cy="21" rx="1.9" ry="1.5" fill="#8E2318" opacity=".5"/>' +
+      '<ellipse cx="12" cy="11" rx="4.5" ry="3" fill="#F08A6A" opacity=".3"/>' },
+    'Salami': { c: '#96332F', size: 28, svg:
+      '<circle cx="16" cy="16" r="14" fill="#7E2926"/><circle cx="16" cy="16" r="12.2" fill="#9C3934"/>' +
+      '<circle cx="11.5" cy="13" r="1.9" fill="#F2DCCF" opacity=".78"/>' +
+      '<circle cx="20" cy="12.5" r="1.5" fill="#F2DCCF" opacity=".7"/>' +
+      '<circle cx="18" cy="20.5" r="1.7" fill="#F2DCCF" opacity=".72"/>' +
+      '<circle cx="12" cy="20" r="1.2" fill="#F2DCCF" opacity=".6"/>' },
+    'Mushrooms': { c: '#C2AD8E', size: 27, svg:
+      '<path d="M4 18c0-7 5.4-12 12-12s12 5 12 12c0 2-2 3-5 3H9c-3 0-5-1-5-3Z" fill="#D9C7A8"/>' +
+      '<path d="M11 21h10c0 4-2 6-5 6s-5-2-5-6Z" fill="#EFE3CC"/>' +
+      '<path d="M8 19h16M12 19.4l-.6 2M20 19.4l.6 2" stroke="#B49C77" stroke-width="1.1" stroke-linecap="round"/>' +
+      '<path d="M9 12c3-3 8-4 12-2" stroke="#EDDFC4" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>' },
+    'Green Peppers': { c: '#3E8E41', size: 26, svg:
+      '<path d="M16 3a13 13 0 1 1 0 26 13 13 0 0 1 0-26Zm0 5a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" fill="#3D8B3F"/>' +
+      '<path d="M16 4.6a11.4 11.4 0 0 1 9 4.4" stroke="#6FBF6B" stroke-width="2" stroke-linecap="round" fill="none" opacity=".75"/>' },
+    'Red Peppers': { c: '#CE4A22', size: 26, svg:
+      '<path d="M16 3a13 13 0 1 1 0 26 13 13 0 0 1 0-26Zm0 5a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" fill="#C8461F"/>' +
+      '<path d="M16 4.6a11.4 11.4 0 0 1 9 4.4" stroke="#EE7A4C" stroke-width="2" stroke-linecap="round" fill="none" opacity=".75"/>' },
+    'Onions': { c: '#EFE2D2', size: 30, svg:
+      '<path d="M3 20a13 13 0 0 1 26 0" stroke="#F4EADC" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".92"/>' +
+      '<path d="M7 20a9 9 0 0 1 18 0" stroke="#E2D2BE" stroke-width="2" fill="none" stroke-linecap="round" opacity=".8"/>' },
+    'Red Onions': { c: '#9A6C9E', size: 30, svg:
+      '<path d="M3 20a13 13 0 0 1 26 0" stroke="#A375A6" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".92"/>' +
+      '<path d="M7 20a9 9 0 0 1 18 0" stroke="#C9A8CB" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/>' },
+    'Bacon': { c: '#A8503A', size: 28, svg:
+      '<path d="M2 12c5-5 9 3 14-1s9 2 14-2v9c-5 4-9-2-14 2s-9-4-14 1Z" fill="#A8503A"/>' +
+      '<path d="M2 14.5c5-5 9 3 14-1s9 2 14-2" stroke="#EBC7B2" stroke-width="1.8" fill="none" opacity=".72"/>' +
+      '<path d="M2 19c5-5 9 3 14-1s9 2 14-2" stroke="#7E3527" stroke-width="1.3" fill="none" opacity=".55"/>' },
+    'Hamburger': { c: '#7B4B2A', size: 26, svg:
+      '<path d="M6 14c0-2.6 2.3-4.3 4.6-3.6 1.3-2.2 4.6-2.4 6-.4 2.6-1 5.4.8 5.4 3.4 2.2.5 3 3.2 1.4 4.8-.6 2.6-3.6 3.6-5.6 2.2-1.7 1.6-4.7 1.3-6-.6-2.6.5-5-1.6-4.8-4.2Z" fill="#7A4826"/>' +
+      '<path d="M10 13.5c1.6-1.2 3.6-.6 4.4 1M18 12.6c1.8-.3 3 .8 3.2 2.3" stroke="#A9754C" stroke-width="1.5" stroke-linecap="round" fill="none"/>' +
+      '<circle cx="12" cy="17.6" r="1.7" fill="#5E3117" opacity=".55"/>' +
+      '<circle cx="18.6" cy="18.4" r="1.4" fill="#5E3117" opacity=".45"/>' +
+      '<circle cx="15.4" cy="14.6" r="1.2" fill="#9C6841" opacity=".8"/>' },
+    'Tomatoes': { c: '#D64031', size: 26, svg:
+      '<circle cx="16" cy="16" r="13" fill="#CE3A2C"/><circle cx="16" cy="16" r="10.6" fill="#E45744"/>' +
+      '<path d="M16 6.5v19M6.5 16h19M9 9l14 14M23 9 9 23" stroke="#F4A092" stroke-width="1.5" opacity=".45"/>' +
+      '<circle cx="16" cy="16" r="3.4" fill="#F2AFA2" opacity=".7"/>' },
+    // a wedge cut from a pineapple ring: the notched inner edge and the fibre fan
+    // keep it distinct from the olives and peppers, which are full rings
+    'Pineapple': { c: '#F0C233', size: 26, svg:
+      '<path d="M16 19.8a4.2 4.2 0 0 1 3.9-4.2l9.3-.7a1.6 1.6 0 0 1 1.7 1.9 15.6 15.6 0 0 1-11.6 12 1.6 1.6 0 0 1-2-1.6Z" ' +
+      'transform="rotate(-140 16 16)" fill="#D79A12"/>' +
+      '<path d="M16 19.8a3.4 3.4 0 0 1 3.2-3.4l8.8-.6a1.2 1.2 0 0 1 1.3 1.4 14.2 14.2 0 0 1-10.6 10.9 1.2 1.2 0 0 1-1.5-1.2Z" ' +
+      'transform="rotate(-140 16 16)" fill="#F7CE42"/>' +
+      '<g transform="rotate(-140 16 16)" stroke="#CE9410" stroke-width=".85" stroke-linecap="round" opacity=".62">' +
+      '<path d="M18.6 19.6 27.4 19"/><path d="M19.6 22.8 26.8 21.4"/><path d="M21.3 25.4 25.6 23.4"/></g>' +
+      '<path d="M16 19.8a3.4 3.4 0 0 1 3.2-3.4" transform="rotate(-140 16 16)" stroke="#FCEBAE" stroke-width="1.3" fill="none" stroke-linecap="round"/>' },
+    'Italian Sausage': { c: '#8C4A2F', size: 25, svg:
+      '<path d="M8.4 12.6c.6-3 4-4.6 6.6-3.4 2.4-1.7 6-.4 6.8 2.4 2.7 1 3.2 4.8 1 6.6.2 3-3 5.2-5.7 4-2.3 1.9-5.9.9-7-1.8-2.9-.6-4-4.4-1.7-6.4Z" fill="#8A472D"/>' +
+      '<circle cx="12.6" cy="14" r="1.5" fill="#C08A63" opacity=".85"/>' +
+      '<circle cx="19.4" cy="14.8" r="1.2" fill="#C08A63" opacity=".75"/>' +
+      '<circle cx="15.8" cy="19.4" r="1.6" fill="#5C2D18" opacity=".6"/>' +
+      '<circle cx="19.8" cy="19.2" r="1" fill="#C08A63" opacity=".6"/>' +
+      '<circle cx="13.4" cy="18.4" r=".9" fill="#5C2D18" opacity=".5"/>' },
+    'Hot Peppers': { c: '#2E7D32', size: 22, svg:
+      '<path d="M16 5a11 11 0 1 1 0 22 11 11 0 0 1 0-22Zm0 4.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z" fill="#2F7D33"/>' +
+      '<circle cx="12.5" cy="13" r="1" fill="#FCF3CE"/><circle cx="19" cy="18" r="1" fill="#FCF3CE"/>' },
+    'Black Olives': { c: '#2B2430', size: 22, svg:
+      '<path d="M16 4a12 12 0 1 1 0 24 12 12 0 0 1 0-24Zm0 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z" fill="#2A232E"/>' +
+      '<path d="M9 10a9.6 9.6 0 0 1 5-4" stroke="#6B5E72" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".75"/>' },
+    'Green Olives': { c: '#7D8F3A', size: 22, svg:
+      '<path d="M16 4a12 12 0 1 1 0 24 12 12 0 0 1 0-24Zm0 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z" fill="#7E9139"/>' +
+      '<circle cx="16" cy="16" r="4.2" fill="#C3453A"/>' +
+      '<path d="M9 10a9.6 9.6 0 0 1 5-4" stroke="#BDCB86" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".8"/>' },
+    'Donair Meat': { c: '#8A5A34', size: 28, svg:
+      '<path d="M3 13c5-2 8 2 13 0s10-1 13 1l-1 6c-5 2-8-2-13 0s-10 1-13-1Z" fill="#8A5A34"/>' +
+      '<path d="M3 15c5-2 8 2 13 0s10-1 13 1" stroke="#B5845A" stroke-width="1.5" fill="none" opacity=".65"/>' +
+      '<path d="M5 18.5c4-1.5 7 1.5 11 0" stroke="#5E3A1E" stroke-width="1.2" fill="none" opacity=".5"/>' },
+    'Ham': { c: '#E29A9A', size: 26, svg:
+      '<path d="M5.6 12.4c2.6-2.6 6-3.6 9.4-3.2 3.2.4 6.6-.6 9.2 1.2 2.4 1.7 3 5.4 1.2 7.8-1.8 2.4-5.2 2.4-8 3-3 .6-6.4 1.2-8.8-.8-2.4-2-4.2-5.6-3-8Z" fill="#DE9494"/>' +
+      '<path d="M8 14.2c3.4.8 6.8-.8 10.2 0 2 .5 3.4.2 4.6-.8" stroke="#F5C6C6" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".85"/>' +
+      '<path d="M7.6 19c3.4-1 6.8.6 10.2-.2 1.8-.4 3.2-.2 4.4.6" stroke="#F5C6C6" stroke-width="1.3" fill="none" stroke-linecap="round" opacity=".7"/>' +
+      '<path d="M11 11.4c2.4.4 5 .2 7.4-.2" stroke="#C97B7B" stroke-width="1" fill="none" stroke-linecap="round" opacity=".6"/>' }
   };
 
   var B = { size: 1, crust: 'White', sur: 0, tops: [] };
@@ -355,23 +466,23 @@
   function sprinkle(name) {
     var host = $('[data-tops]');
     if (!host) return;
-    var look = TOPPING_LOOK[name] || { c: '#B85', w: 14, br: '50%' };
+    var look = TOPPING_LOOK[name];
+    if (!look) return;
     var n = 7;
     for (var i = 0; i < n; i++) {
-      var bit = document.createElement('i');
+      var bit = document.createElement('span');
       bit.className = 'bit';
       bit.setAttribute('data-for', name);
-      // even-ish scatter: golden angle, jittered
+      // golden-angle scatter, jittered, so toppings never land in a visible ring
       var a = (i * 2.399 + Math.random() * 0.7);
-      var r = 14 + Math.sqrt((i + 0.6) / n) * 31;
+      var r = 13 + Math.sqrt((i + 0.55) / n) * 31;
       bit.style.left = (50 + Math.cos(a) * r) + '%';
       bit.style.top = (50 + Math.sin(a) * r) + '%';
-      bit.style.setProperty('--c', look.c);
-      bit.style.setProperty('--w', look.w + 'px');
-      bit.style.setProperty('--h', (look.h || look.w) + 'px');
-      bit.style.setProperty('--br', look.br);
+      var size = look.size * (0.86 + Math.random() * 0.28);
+      bit.style.setProperty('--w', size.toFixed(1) + 'px');
       bit.style.setProperty('--rot', Math.round(Math.random() * 360) + 'deg');
-      bit.style.animationDelay = (i * 32) + 'ms';
+      bit.style.animationDelay = (i * 38) + 'ms';
+      bit.innerHTML = '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">' + look.svg + '</svg>';
       host.appendChild(bit);
     }
   }

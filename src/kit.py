@@ -161,6 +161,10 @@ def footer(site):
     </div>
   </div>
   <ul class="fine">{fine}</ul>
+  <p class="credit">Food photography and the hero clip are freely-licensed stock, used as
+     placeholders until Tasty Pizza's own photos replace them. Hero clip by Ruth Hartnup
+     (<a class="ul" href="https://commons.wikimedia.org/wiki/File:Bubbling_baking_pizza.webm"
+     rel="noopener" target="_blank">CC BY 2.0</a>). Map &copy; OpenStreetMap contributors.</p>
   <p class="copy">© {date.today().year} Tasty Pizza. Site rebuilt {date.today().strftime('%B %Y')}.</p>
 </footer>"""
 

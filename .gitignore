@@ -18,3 +18,8 @@ __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
+
+# Video working files. The encoded hero lives in assets/video/; the 3MB original is
+# re-downloadable from the Commons link in CREDITS.md.
+research/video/
+research/_toppings.html
