@@ -1,0 +1,20 @@
+# Competitive analysis and review-mining notes. The repo is public so GitHub Pages
+# can serve a preview; this file is the client's strategy, not the website, so it
+# stays local and is handed over directly.
+ANALYSIS.md
+
+# Downloaded photo candidates — hundreds of files, only the chosen ones matter and
+# those are already built into docs/assets/img/. candidates.json is kept because
+# CREDITS.md is generated from it.
+research/photo-candidates/*/
+research/**/_*.jpg
+research/**/_*.png
+research/_pick-hashes.json
+
+# Working files
+research/current-site/home.html
+
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

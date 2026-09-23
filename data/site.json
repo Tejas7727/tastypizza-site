@@ -1,0 +1,84 @@
+{
+  "_readme": "Business details. Edit anything here and the whole site updates. Times are 24-hour, local Halifax time.",
+
+  "name": "Tasty Pizza",
+  "tagline": "Dartmouth's donair and pizza shop for over 20 years",
+  "claim": "Halifax's official food, made on Main Street.",
+  "blurb": "Family-run on Main Street in Dartmouth. Dough and pizza sauce made fresh every day, the best donair in town, and a kitchen that's still on at 2am Friday.",
+
+  "phone": "902-435-5700",
+  "phoneLink": "+19024355700",
+  "email": "tastypizzadm@gmail.com",
+
+  "address": {
+    "street": "760 Main St.",
+    "note": "Just off the #7 Hwy",
+    "city": "Dartmouth",
+    "province": "NS",
+    "postal": "B2W 3T8",
+    "country": "CA"
+  },
+  "geo": { "lat": 44.6938, "lng": -63.4993 },
+  "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Tasty+Pizza+760+Main+St+Dartmouth+NS+B2W+3T8",
+  "mapsDirectionsUrl": "https://www.google.com/maps/dir/?api=1&destination=760+Main+St+Dartmouth+NS+B2W+3T8",
+
+  "_hoursReadme": "24-hour clock. Closing times past midnight use 24+ (e.g. 26 = 2am next day). Set 'closed': true for a day off.",
+  "hours": [
+    { "day": "Sunday",    "open": 14, "close": 22 },
+    { "day": "Monday",    "open": 11, "close": 23 },
+    { "day": "Tuesday",   "open": 11, "close": 23 },
+    { "day": "Wednesday", "open": 11, "close": 23 },
+    { "day": "Thursday",  "open": 11, "close": 23 },
+    { "day": "Friday",    "open": 11, "close": 26 },
+    { "day": "Saturday",  "open": 11, "close": 25 }
+  ],
+
+  "ordering": {
+    "doordash": "https://www.doordash.com/en-CA/store/tasty-pizza-dartmouth-32990155/",
+    "ubereats": "https://www.ubereats.com/ca/store/tasty-pizza/IST5GL8wVniy8hh0oilx9w",
+    "skipthedishes": ""
+  },
+
+  "social": {
+    "facebook": "https://www.facebook.com/people/Tasty-Pizza/100091965769509/",
+    "instagram": "https://www.instagram.com/tastypizzadartmouth/"
+  },
+
+  "delivery": {
+    "minimum": 10,
+    "fee": 2,
+    "note": "Delivery on orders over $10 after 2pm in our local area.",
+    "areas": ["Cole Harbour", "Forest Hill", "Lake Echo", "Main Street", "Westphal", "Montague"]
+  },
+
+  "_hitsReadme": "The six cards in 'What people actually order' on the home page. Use the exact item name from menu.json. Reorder or swap any of them; six fits best.",
+  "hits": [
+    "Donair",
+    "Garlic Fingers",
+    "All Dressed",
+    "Donair Pizza",
+    "Classic Poutine",
+    "Fish & Chips — 1 pc"
+  ],
+
+  "facts": [
+    { "icon": "parking", "label": "Free parking" },
+    { "icon": "card",    "label": "Debit at your door, on request" },
+    { "icon": "clock",   "label": "Open 7 days" },
+    { "icon": "dough",   "label": "Dough & sauce made fresh daily" }
+  ],
+
+  "finePrint": [
+    "HST not included in listed prices.",
+    "Prices and store hours are subject to change without notice."
+  ],
+
+  "_liveReadme": "Leave this false while the site is only a preview on github.io. It tells Google not to index the preview, so it can never compete with the real tastypizza.ca in search. Set it to true on the day the site goes live on tastypizza.ca.",
+  "live": false,
+
+  "seo": {
+    "title": "Tasty Pizza — Donairs, Pizza & Garlic Fingers in Dartmouth, NS",
+    "description": "Dartmouth's donair and pizza shop on Main Street. Fresh dough daily, garlic fingers, subs and seafood. Open 7 days, Friday till 2am. Call 902-435-5700.",
+    "url": "https://tastypizza.ca"
+  }
+}

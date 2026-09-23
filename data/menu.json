@@ -1,0 +1,425 @@
+{
+  "_readme": [
+    "THE MENU. This one file is the whole menu on the website.",
+    "",
+    "TO CHANGE A PRICE:  find the number, type a new one. Prices are plain numbers, no $ sign.",
+    "TO ADD AN ITEM:     copy a whole { ... } line, paste it below, change the name and price.",
+    "TO REMOVE AN ITEM:  delete its whole { ... } line.",
+    "TO HIDE SOMETHING:  add  \"hidden\": true  to it instead of deleting (easy to put back).",
+    "",
+    "Two kinds of item:",
+    "  one price      ->  \"price\": 12.95",
+    "  several sizes  ->  \"prices\": [9.50, 12.90, 16.90, 20.95]  (matches the group's \"sizes\" list, in order)",
+    "  no price yet   ->  \"price\": null   (shows as 'Call for price')",
+    "",
+    "\"tags\" are the little labels + filters on the menu page. Use any of:",
+    "  veg  spicy  seafood  chicken  donair  popular  new  glutenfree",
+    "",
+    "Careful: every { } needs a comma after it EXCEPT the last one in a list."
+  ],
+
+  "toppings": [
+    "Pepperoni", "Salami", "Mushrooms", "Green Peppers", "Red Peppers", "Onions",
+    "Red Onions", "Bacon", "Hamburger", "Tomatoes", "Pineapple", "Italian Sausage",
+    "Hot Peppers", "Black Olives", "Green Olives", "Donair Meat", "Ham"
+  ],
+
+  "specialToppings": {
+    "names": ["Zesty Chicken", "Sliced Steak", "Parmesan Cheese", "Cheddar Cheese", "Feta Cheese"],
+    "prices": [1.95, 2.85, 3.95, 4.95]
+  },
+
+  "crusts": [
+    { "name": "White",       "surcharge": 0 },
+    { "name": "Whole Wheat", "surcharge": 0 },
+    { "name": "Gluten Free", "surcharge": 4.99, "tags": ["glutenfree"] }
+  ],
+
+  "builder": {
+    "sizes": ["9\" Small", "12\" Medium", "16\" Large", "18\" X-Large"],
+    "_readme": "Price by number of toppings. Row 0 = cheese only, row 1 = 1 topping, and so on. Row 5 is the Tasty Special.",
+    "priceByToppingCount": [
+      [9.50, 12.90, 16.90, 20.95],
+      [10.70, 13.80, 17.90, 22.25],
+      [11.20, 15.75, 19.75, 23.95],
+      [11.95, 16.45, 20.45, 25.35],
+      [12.80, 17.45, 22.95, 27.45],
+      [13.50, 18.75, 24.45, 28.45]
+    ],
+    "maxToppings": 5,
+    "specialName": "Tasty Pizza Special"
+  },
+
+  "categories": [
+    {
+      "id": "pizza",
+      "name": "Pizza",
+      "blurb": "Dough and sauce made fresh every single day. That's the whole trick.",
+      "groups": [
+        {
+          "id": "build-your-own",
+          "name": "Build Your Own",
+          "note": "Pick your size, pick your toppings. Whole wheat, white or gluten free crust.",
+          "sizes": ["9\" S", "12\" M", "16\" L", "18\" XL"],
+          "items": [
+            { "name": "Cheese", "desc": "Our sauce, a lot of mozzarella, nothing in the way.", "prices": [9.50, 12.90, 16.90, 20.95], "photo": "cheese-pizza", "tags": ["veg"] },
+            { "name": "1 Topping", "desc": "Any one from the topping list.", "prices": [10.70, 13.80, 17.90, 22.25] },
+            { "name": "2 Toppings", "desc": "Any two from the topping list.", "prices": [11.20, 15.75, 19.75, 23.95] },
+            { "name": "3 Toppings", "desc": "Any three from the topping list.", "prices": [11.95, 16.45, 20.45, 25.35] },
+            { "name": "4 Toppings", "desc": "Any four from the topping list.", "prices": [12.80, 17.45, 22.95, 27.45] },
+            { "name": "Tasty Pizza Special", "desc": "Five toppings, your pick. The one most people land on.", "prices": [13.50, 18.75, 24.45, 28.45], "tags": ["popular"] }
+          ]
+        },
+        {
+          "id": "gourmet",
+          "name": "Gourmet Specialty Pizza",
+          "note": "Built for you, already figured out. Whole wheat, white or gluten free crust.",
+          "sizes": ["9\" S", "12\" M", "16\" L", "18\" XL"],
+          "_tiersReadme": "Two price levels. Each pizza says which tier it's on. Change 8 numbers here to reprice every specialty pizza.",
+          "tiers": {
+            "1": [13.25, 19.75, 25.45, 30.95],
+            "2": [14.95, 21.50, 27.45, 32.95]
+          },
+          "items": [
+            { "name": "All Dressed", "desc": "Pepperoni, salami, mushrooms, green peppers, onions, bacon, hamburger.", "tier": 1, "photo": "all-dressed-pizza", "tags": ["popular"] },
+            { "name": "Donair Pizza", "desc": "Donair meat, onions, tomatoes, donair sauce.", "tier": 2, "photo": "donair-pizza", "tags": ["donair", "popular"] },
+            { "name": "Bubba", "desc": "Garlic spread, donair meat, onions, tomatoes, donair sauce.", "tier": 2, "tags": ["donair"] },
+            { "name": "Meat Lovers", "desc": "Pepperoni, salami, bacon, hamburger, ham, donair meat, Italian sausage.", "tier": 1, "photo": "meat-lovers-pizza", "tags": ["popular"] },
+            { "name": "Hawaiian", "desc": "Ham, pineapple, mozzarella.", "tier": 1, "photo": "hawaiian-pizza" },
+            { "name": "Greek", "desc": "Tomatoes, red onions, black olives, feta and mozzarella, oregano and olive oil.", "tier": 1, "photo": "greek-pizza", "tags": ["veg"] },
+            { "name": "Cheese Lovers", "desc": "Feta, cheddar, mozzarella and parmesan.", "tier": 1, "tags": ["veg"] },
+            { "name": "BBQ Chicken", "desc": "Chicken, zesty sauce, tomatoes, green peppers, red onions, mushrooms, mozzarella and cheddar.", "tier": 1, "photo": "bbq-chicken-pizza", "tags": ["chicken"] },
+            { "name": "Vegetarian", "desc": "Mushrooms, green peppers, onions, tomatoes, hot peppers, olives, pineapple.", "tier": 1, "photo": "veggie-pizza", "tags": ["veg"] },
+            { "name": "Canadian Classic", "desc": "Pepperoni, mushrooms, bacon, mozzarella and cheddar on a garlic crust.", "tier": 1 },
+            { "name": "Cheeseburger", "desc": "Hamburger, cheddar and mozzarella, your choice of four vegetables.", "tier": 1 },
+            { "name": "Philly Cheese Steak", "desc": "Zesty sauce, sliced steak, red onions, tomatoes, green peppers, mushrooms, mozzarella and cheddar.", "tier": 2 }
+          ]
+        },
+        {
+          "id": "garlic-fingers",
+          "name": "Garlic Fingers",
+          "note": "Served with donair sauce, the way it's meant to be.",
+          "sizes": ["9\" S", "12\" M", "16\" L", "18\" XL"],
+          "items": [
+            { "name": "Garlic Fingers", "desc": "Garlic butter, mozzarella, pulled apart by hand.", "prices": [10.25, 13.95, 17.95, 22.45], "photo": "garlic-fingers", "tags": ["veg", "popular"] },
+            { "name": "With Bacon", "desc": "Same, with bacon through it.", "prices": [11.25, 14.95, 19.95, 24.45] },
+            { "name": "With Donair", "desc": "Same, loaded with donair meat.", "prices": [14.95, 17.95, 21.95, 26.95], "tags": ["donair"] },
+            { "name": "Honey Garlic Fingers", "desc": "PLACEHOLDER — on the old menu with no price. Confirm price before launch.", "price": null }
+          ]
+        },
+        {
+          "id": "pizza-extras",
+          "name": "Pizza Extras",
+          "sizes": ["9\" S", "12\" M", "16\" L", "18\" XL"],
+          "items": [
+            { "name": "Special Topping", "desc": "Zesty chicken, sliced steak, parmesan, cheddar or feta.", "prices": [1.95, 2.85, 3.95, 4.95] },
+            { "name": "Gluten Free Crust", "desc": "Any size.", "price": 4.99, "tags": ["glutenfree"] }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "donairs",
+      "name": "Donairs",
+      "blurb": "The official food of Halifax. We've been making it on Main Street for twenty years.",
+      "groups": [
+        {
+          "id": "donair",
+          "name": "Donair",
+          "note": "On pita bread with tomatoes, onions and donair sauce.",
+          "sizes": ["Small", "Medium", "Large", "Super"],
+          "items": [
+            { "name": "Donair", "desc": "Spiced beef off the spit, sweet sauce, warm pita. The one we're known for.", "prices": [9.25, 11.35, 13.45, 15.55], "photo": "donair", "tags": ["donair", "popular"] },
+            { "name": "Add Cheese", "desc": "Melted through the meat.", "prices": [2.00, 2.30, 2.85, 3.35] },
+            { "name": "Add Extra Meat", "desc": "For when a large isn't a large.", "prices": [3.35, 4.35, 5.35, 6.35] }
+          ]
+        },
+        {
+          "id": "donair-plates",
+          "name": "Donair Plates",
+          "note": "Donair meat over fries with mozzarella, tomatoes, onions and donair sauce.",
+          "items": [
+            { "name": "Small Donair Plate", "price": 11.95, "photo": "donair-plate", "tags": ["donair"] },
+            { "name": "Large Donair Plate", "price": 15.95, "tags": ["donair"] }
+          ]
+        },
+        {
+          "id": "donair-fried",
+          "name": "Donair, Deep Fried",
+          "note": "Served with donair sauce. Nowhere else does these properly.",
+          "items": [
+            { "name": "Donair Egg Roll", "desc": "Donair, rolled and fried. Order more than one.", "price": 2.50, "photo": "donair-egg-roll", "tags": ["donair", "popular"] },
+            { "name": "Donair Egg Rolls — Dozen", "price": 28.00, "tags": ["donair"] },
+            { "name": "Donair Pogo", "desc": "Donair on a stick in batter. Yes, really.", "price": 3.45, "photo": "donair-pogo", "tags": ["donair", "popular"] },
+            { "name": "Donair Pogos — Dozen", "price": 38.95, "tags": ["donair"] }
+          ]
+        },
+        {
+          "id": "donair-sauce",
+          "name": "Donair Sauce",
+          "note": "Take some home. People do.",
+          "items": [
+            { "name": "Small Donair Sauce", "price": 2.25, "tags": ["donair"] },
+            { "name": "Large Donair Sauce", "price": 3.25, "tags": ["donair"] },
+            { "name": "Extra Large Donair Sauce", "price": 4.95, "tags": ["donair"] }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "favourites",
+      "name": "Favourites",
+      "blurb": "Fries, gravy, wings, poutine and the fish and chips people drive over for.",
+      "groups": [
+        {
+          "id": "poutine",
+          "name": "Poutine",
+          "note": "Real cheese curds and homemade gravy. Always.",
+          "sizes": ["Small", "Large"],
+          "items": [
+            { "name": "Classic Poutine", "desc": "Curds, gravy, fries. Done right.", "prices": [8.55, 12.25], "photo": "poutine", "tags": ["popular"] },
+            { "name": "Donair Poutine", "desc": "With donair meat and a line of donair sauce.", "prices": [null, 14.25], "tags": ["donair", "popular"] },
+            { "name": "Chicken Poutine", "prices": [null, 13.95], "tags": ["chicken"] },
+            { "name": "Hamburger Poutine", "prices": [null, 13.95] },
+            { "name": "Greek Poutine", "desc": "Feta, tomato, red onion, olives.", "prices": [null, 13.95] },
+            { "name": "Extra Cheese", "prices": [2.25, 2.95] },
+            { "name": "Extra Gravy", "prices": [1.75, 2.75] }
+          ]
+        },
+        {
+          "id": "wings",
+          "name": "Chicken Wings",
+          "note": "Sauces: hot, mild, honey garlic, honey mustard, ranch, sweet & sour, BBQ.",
+          "items": [
+            { "name": "10 Wings", "price": 12.99, "photo": "chicken-wings", "tags": ["chicken", "popular"] },
+            { "name": "15 Wings", "price": 18.95, "tags": ["chicken"] },
+            { "name": "20 Wings", "price": 24.95, "tags": ["chicken"] },
+            { "name": "30 Wings", "price": 36.95, "desc": "For the room.", "tags": ["chicken"] }
+          ]
+        },
+        {
+          "id": "nachos",
+          "name": "Nachos",
+          "items": [
+            { "name": "Nachos", "desc": "Green onion, tomato, black olives, jalapeño, mozzarella and cheddar. Salsa and sour cream on the side.", "price": 15.45, "photo": "nachos", "tags": ["veg", "spicy"] },
+            { "name": "Add Chicken, Hamburger or Bacon", "price": 3.65 },
+            { "name": "Extra Cheese", "price": 3.95 }
+          ]
+        },
+        {
+          "id": "burgers",
+          "name": "Burgers",
+          "note": "Platter comes with fries.",
+          "sizes": ["Burger", "Platter"],
+          "items": [
+            { "name": "Hamburger", "prices": [6.45, 9.95], "photo": "hamburger" },
+            { "name": "Cheeseburger", "prices": [6.95, 9.95] },
+            { "name": "Chicken Burger", "prices": [6.95, 9.95], "tags": ["chicken"] },
+            { "name": "Donair Burger", "desc": "Donair meat and sauce on a burger. A Dartmouth idea.", "prices": [7.25, 10.45], "tags": ["donair"] },
+            { "name": "Pizza Burger", "prices": [6.95, 10.45] },
+            { "name": "Add Bacon", "prices": [1.00, 1.00] }
+          ]
+        },
+        {
+          "id": "sides",
+          "name": "Sides & Plates",
+          "items": [
+            { "name": "Club House Sandwich with Fries", "desc": "Real turkey.", "price": 14.45, "photo": "club-sandwich" },
+            { "name": "Hot Hamburger with Gravy & Fries", "price": 12.30, "tags": ["popular"] },
+            { "name": "Hot Turkey with Gravy & Fries", "price": 12.30 },
+            { "name": "Large Fries", "price": 5.45, "photo": "fries", "tags": ["veg"] },
+            { "name": "Large Onion Rings", "price": 5.45, "photo": "onion-rings", "tags": ["veg"] },
+            { "name": "12 Chicken Fries", "price": 9.45, "tags": ["chicken"] },
+            { "name": "9 Mozza Sticks", "price": 10.95, "photo": "mozza-sticks", "tags": ["veg"] },
+            { "name": "Cup of Gravy — Small", "price": 1.65 },
+            { "name": "Cup of Gravy — Large", "price": 2.85 }
+          ]
+        },
+        {
+          "id": "bread-sticks",
+          "name": "Bread Sticks (\"Yum Yums\")",
+          "note": "Tossed in parmesan, served with donair dipping sauce.",
+          "items": [
+            { "name": "Small Yum Yums", "price": 12.95, "photo": "bread-sticks", "tags": ["veg"] },
+            { "name": "Large Yum Yums", "price": 16.45, "tags": ["veg"] }
+          ]
+        },
+        {
+          "id": "wraps-pockets",
+          "name": "Wraps & Pockets",
+          "items": [
+            { "name": "Pita Wrap", "desc": "Pizza, donair, cold cut, club, vegetarian, chicken, turkey or chicken Caesar.", "price": 10.45, "photo": "pita-wrap" },
+            { "name": "Pocket — Pizza, Chicken, Meats or Vegetarian", "desc": "Oven baked or deep fried.", "price": 15.95 },
+            { "name": "Pocket — Donair or Steak", "desc": "Oven baked or deep fried.", "price": 16.45, "tags": ["donair"] }
+          ]
+        },
+        {
+          "id": "chicken",
+          "name": "Chicken",
+          "items": [
+            { "name": "Chicken & Chips — 1 pc", "price": 8.45, "photo": "fried-chicken", "tags": ["chicken"] },
+            { "name": "Chicken & Chips — 2 pc", "price": 12.45, "tags": ["chicken"] },
+            { "name": "Chicken & Chips — 3 pc", "price": 14.95, "tags": ["chicken"] },
+            { "name": "Extra Piece of Chicken", "price": 3.75, "tags": ["chicken"] },
+            { "name": "2 Chicken Legs & Chips", "desc": "Everyday special.", "price": 9.95, "tags": ["chicken"] },
+            { "name": "Chicken Family Pack", "desc": "10 pieces, 2 large fries, gravy and coleslaw.", "price": 39.95, "tags": ["chicken", "popular"] },
+            { "name": "6 Chicken Nuggets & Fries", "price": 7.95, "tags": ["chicken"] },
+            { "name": "12 Chicken Nuggets & Fries", "price": 13.95, "tags": ["chicken"] },
+            { "name": "5 Chicken Fingers & Fries", "price": 14.95, "photo": "chicken-fingers", "tags": ["chicken"] },
+            { "name": "10 Chicken Fingers & Fries", "price": 26.45, "tags": ["chicken"] }
+          ]
+        },
+        {
+          "id": "salads-pasta",
+          "name": "Salads & Pasta",
+          "items": [
+            { "name": "Caesar or Garden Salad", "price": 7.95, "photo": "salad", "tags": ["veg"] },
+            { "name": "Greek Salad", "price": 8.45, "tags": ["veg"] },
+            { "name": "Add Chicken — Crispy or Grilled", "price": 2.30, "tags": ["chicken"] },
+            { "name": "Lasagna with Garlic Bread", "price": 10.45, "photo": "lasagna" },
+            { "name": "Ravioli with Garlic Bread", "price": 10.45 }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "seafood-subs",
+      "name": "Seafood & Subs",
+      "blurb": "Fresh haddock, and subs built to a size that makes sense.",
+      "groups": [
+        {
+          "id": "fish",
+          "name": "Fish & Chips",
+          "note": "Fresh haddock. The reason people drive out here.",
+          "items": [
+            { "name": "Fish & Chips — 1 pc", "price": 8.95, "photo": "fish-and-chips", "tags": ["seafood", "popular"] },
+            { "name": "Fish & Chips — 2 pc", "price": 12.95, "tags": ["seafood"] },
+            { "name": "Fish & Chips — 3 pc", "price": 14.95, "tags": ["seafood"] },
+            { "name": "Extra Piece of Fish", "price": 3.95, "tags": ["seafood"] },
+            { "name": "Fish Family Pack", "desc": "10 pieces of fish, 2 large fries, large gravy, coleslaw and tartar sauce.", "price": 39.95, "tags": ["seafood", "popular"] }
+          ]
+        },
+        {
+          "id": "seafood",
+          "name": "More Seafood",
+          "items": [
+            { "name": "Scallops & Chips", "desc": "10 scallops.", "price": 13.45, "photo": "scallops", "tags": ["seafood"] },
+            { "name": "Clams & Chips", "desc": "Two cups of clams.", "price": 13.45, "tags": ["seafood"] },
+            { "name": "Shrimp & Chips", "desc": "12 shrimp.", "price": 13.45, "photo": "shrimp", "tags": ["seafood"] },
+            { "name": "Seafood Platter", "desc": "A piece of fish, fries, 5 scallops, 5 shrimp and clams.", "price": 17.45, "tags": ["seafood", "popular"] },
+            { "name": "Extra Coleslaw — Small", "price": 1.75 },
+            { "name": "Extra Coleslaw — Large", "price": 2.95 }
+          ]
+        },
+        {
+          "id": "subs",
+          "name": "Subs",
+          "sizes": ["Small", "Large"],
+          "items": [
+            { "name": "Cold Cut", "prices": [9.25, 11.45], "photo": "cold-cut-sub" },
+            { "name": "Salami & Ham", "prices": [9.25, 11.45] },
+            { "name": "Pizza Sub", "prices": [9.25, 11.45] },
+            { "name": "Vegetarian", "prices": [9.25, 11.45], "tags": ["veg"] },
+            { "name": "Real Turkey", "prices": [9.45, 11.45] },
+            { "name": "Bubba", "desc": "The one people ask for by name.", "prices": [9.95, 12.75], "tags": ["popular"] },
+            { "name": "Club", "prices": [10.25, 12.75] },
+            { "name": "Steak", "prices": [10.25, 13.25], "photo": "steak-sub" },
+            { "name": "Donair Sub", "prices": [10.25, 13.25], "tags": ["donair"] },
+            { "name": "Super Sub", "prices": [10.95, 14.75] },
+            { "name": "Garlic Bread", "prices": [4.95, 5.95], "tags": ["veg"] },
+            { "name": "Extra Cheese", "prices": [2.45, 3.45] },
+            { "name": "Extra Meat", "prices": [3.45, 4.45] }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "burritos",
+      "name": "Burritos & Tacos",
+      "blurb": "Built on a pita wrap, which is a Dartmouth thing, and it works.",
+      "groups": [
+        {
+          "id": "burritos",
+          "name": "Burritos",
+          "note": "On a pita wrap with your choice of meat, veg and sauce.",
+          "sizes": ["Small", "Medium", "Large"],
+          "items": [
+            { "name": "Beans & Veggie", "prices": [7.99, 8.99, 10.99], "tags": ["veg"] },
+            { "name": "Spicy Chicken", "prices": [9.99, 10.99, 12.99], "photo": "burrito", "tags": ["chicken", "spicy", "popular"] },
+            { "name": "Ground Beef", "prices": [9.99, 10.99, 12.99] },
+            { "name": "Zesty Grilled Chicken", "prices": [9.99, 10.99, 12.99], "tags": ["chicken"] },
+            { "name": "Fish", "prices": [9.99, 10.99, 12.99], "tags": ["seafood"] },
+            { "name": "Shawarma Chicken", "prices": [10.99, 11.99, 13.99], "tags": ["chicken"] },
+            { "name": "Tequila-Lime Glazed Chicken", "prices": [10.99, 11.99, 13.99], "tags": ["chicken"] },
+            { "name": "Steak", "prices": [10.99, 11.99, 13.99] }
+          ]
+        },
+        {
+          "id": "rice-bowls",
+          "name": "Rice Bowls",
+          "sizes": ["Small", "Large"],
+          "items": [
+            { "name": "Beans & Veggie", "prices": [10.49, 12.49], "photo": "rice-bowl", "tags": ["veg"] },
+            { "name": "Spicy Chicken", "prices": [11.49, 13.49], "tags": ["chicken", "spicy"] },
+            { "name": "Ground Beef", "prices": [11.49, 13.49] },
+            { "name": "Zesty Grilled Chicken", "prices": [11.49, 13.49], "tags": ["chicken"] },
+            { "name": "Fish", "prices": [11.49, 13.49], "tags": ["seafood"] },
+            { "name": "Shawarma Chicken", "prices": [12.49, 14.49], "tags": ["chicken"] },
+            { "name": "Tequila-Lime Glazed Chicken", "prices": [12.49, 14.49], "tags": ["chicken"] },
+            { "name": "Steak", "prices": [12.49, 14.49] }
+          ]
+        },
+        {
+          "id": "quesadillas",
+          "name": "Quesadillas",
+          "items": [
+            { "name": "Beans & Veggie", "price": 10.49, "photo": "quesadilla", "tags": ["veg"] },
+            { "name": "Spicy Chicken", "price": 11.49, "tags": ["chicken", "spicy"] },
+            { "name": "Ground Beef", "price": 11.49 },
+            { "name": "Zesty Grilled Chicken", "price": 11.49, "tags": ["chicken"] },
+            { "name": "Fish", "price": 11.49, "tags": ["seafood"] },
+            { "name": "Shawarma Chicken", "price": 12.49, "tags": ["chicken"] },
+            { "name": "Tequila-Lime Glazed Chicken", "price": 12.49, "tags": ["chicken"] },
+            { "name": "Steak", "price": 12.49 }
+          ]
+        },
+        {
+          "id": "tacos",
+          "name": "Tacos",
+          "note": "Soft or hard shell.",
+          "items": [
+            { "name": "Beans & Veggie", "price": 9.99, "photo": "tacos", "tags": ["veg"] },
+            { "name": "Spicy Chicken", "price": 10.99, "tags": ["chicken", "spicy"] },
+            { "name": "Ground Beef", "price": 10.99 },
+            { "name": "Zesty Grilled Chicken", "price": 10.99, "tags": ["chicken"] },
+            { "name": "Fish", "price": 10.99, "tags": ["seafood"] },
+            { "name": "Shawarma Chicken", "price": 11.99, "tags": ["chicken"] },
+            { "name": "Tequila-Lime Glazed Chicken", "price": 11.99, "tags": ["chicken"] },
+            { "name": "Steak", "price": 11.99 }
+          ]
+        },
+        {
+          "id": "burrito-sides",
+          "name": "Sides",
+          "items": [
+            { "name": "Chips & Salsa — Small", "price": 2.49, "tags": ["veg"] },
+            { "name": "Chips & Salsa — Large", "price": 4.49, "tags": ["veg"] },
+            { "name": "Chips & Queso — Small", "price": 3.49, "tags": ["veg"] },
+            { "name": "Chips & Queso — Large", "price": 6.49, "tags": ["veg"] },
+            { "name": "Chips & Guac — Small", "price": 3.99, "tags": ["veg"] },
+            { "name": "Chips & Guac — Large", "price": 6.99, "tags": ["veg"] },
+            { "name": "Fries Supreme", "price": 9.99 },
+            { "name": "Spicy Fries", "price": 8.99, "tags": ["veg", "spicy"] },
+            { "name": "Deep Fried Pepperoni", "desc": "With honey mustard sauce.", "price": 12.99, "tags": ["popular"] },
+            { "name": "Add Chips & Salsa + a Can of Pop", "price": 3.49 },
+            { "name": "Brownie", "price": 2.99, "tags": ["veg"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

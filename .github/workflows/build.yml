@@ -1,0 +1,65 @@
+name: Build the site
+
+# Runs whenever the menu, prices, offers or code change. Rebuilds docs/ and commits it,
+# which is what GitHub Pages serves. A failing audit blocks the commit, so a typo in
+# menu.json can never take the live site down.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/**'
+      - 'src/**'
+      - 'build.py'
+      - 'audit.py'
+      - 'assets/**'
+      - '.github/workflows/build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-site
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow (image processing only)
+        run: python -m pip install --quiet Pillow
+
+      - name: Check the data files are valid JSON
+        run: |
+          for f in data/*.json; do
+            python -c "import json,sys; json.load(open(sys.argv[1],encoding='utf-8'))" "$f" \
+              || { echo "::error file=$f::$f is not valid JSON — check for a missing or extra comma"; exit 1; }
+          done
+
+      - name: Rebuild photos if any real ones were added
+        run: python scripts/build_photos.py
+
+      - name: Build
+        run: python build.py
+
+      - name: Audit
+        run: python audit.py
+
+      - name: Commit the built site
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          if git diff --staged --quiet; then
+            echo "nothing changed"
+          else
+            git commit -m "Rebuild site from data [skip ci]"
+            git push
+          fi

@@ -1,0 +1,96 @@
+{
+  "_readme": [
+    "DEALS AND OFFERS. These show up on the home page and at the top of the menu.",
+    "",
+    "TO RUN A NEW OFFER:  copy a whole { ... } block, paste it, change the words and the price.",
+    "TO STOP AN OFFER:    change  \"active\": true  to  \"active\": false. It disappears from the site.",
+    "                     (Don't delete it — you'll probably want to run it again.)",
+    "TO REORDER:          move the blocks up or down. Top of the list shows first.",
+    "",
+    "\"badge\" is the little tag on the corner of the card. Leave it as \"\" for none.",
+    "\"compareAt\" is the normal price, used to show 'Save $x'. Leave it out if there's no saving to show.",
+    "\"until\" is optional. Format YYYY-MM-DD. After that date the deal hides itself automatically."
+  ],
+
+  "deals": [
+    {
+      "id": "large-4-topping",
+      "active": true,
+      "badge": "Most ordered",
+      "name": "Large 16\" Pizza, 4 Toppings",
+      "desc": "Any four toppings you like.",
+      "price": 20.95,
+      "compareAt": 22.95,
+      "photo": "all-dressed-pizza",
+      "addOn": { "name": "Add medium garlic fingers with dipping sauce", "price": 12.45 }
+    },
+    {
+      "id": "pizza-and-fingers",
+      "active": true,
+      "badge": "",
+      "name": "Medium Pizza + Medium Garlic Fingers",
+      "desc": "12\" pizza with four toppings, plus 12\" garlic fingers with donair sauce.",
+      "price": 28.95,
+      "compareAt": 31.40,
+      "photo": "garlic-fingers"
+    },
+    {
+      "id": "two-mediums",
+      "active": true,
+      "badge": "Feeds 4",
+      "name": "Two Medium Pizzas",
+      "desc": "Four toppings on each.",
+      "price": 32.95,
+      "compareAt": 34.90,
+      "photo": "meat-lovers-pizza"
+    },
+    {
+      "id": "party-box",
+      "active": true,
+      "badge": "For the room",
+      "name": "Tasty Party Box",
+      "desc": "Onion rings, deep fried pepperoni, 9 mozza sticks, 12 chicken fries and 6 donair egg rolls. Honey mustard, sour cream and donair sauce. 2L pop included.",
+      "price": 47.99,
+      "photo": "mozza-sticks"
+    },
+    {
+      "id": "egg-rolls-6",
+      "active": true,
+      "badge": "",
+      "name": "6 Donair Egg Rolls",
+      "desc": "With donair sauce.",
+      "price": 13.95,
+      "compareAt": 15.00,
+      "photo": "donair-egg-roll"
+    },
+    {
+      "id": "pogos-6",
+      "active": true,
+      "badge": "",
+      "name": "6 Donair Pogos",
+      "desc": "With donair sauce.",
+      "price": 19.50,
+      "compareAt": 20.70,
+      "photo": "donair-pogo"
+    },
+    {
+      "id": "two-large-subs",
+      "active": true,
+      "badge": "",
+      "name": "Two Large Subs",
+      "desc": "Cold cut, pizza or real turkey.",
+      "price": 22.45,
+      "compareAt": 22.90,
+      "photo": "cold-cut-sub"
+    },
+    {
+      "id": "two-can-dine",
+      "active": true,
+      "badge": "",
+      "name": "Two Can Dine",
+      "desc": "Two medium burritos, two small chips & salsa, two cans of pop.",
+      "price": 24.99,
+      "photo": "burrito"
+    }
+  ]
+}
