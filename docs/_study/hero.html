@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en-CA"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Poster direction — hero study</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>/* Tasty Pizza — poster direction.
+   Every section is a three-ink screen print on one paper stock. Scrolling from one
+   to the next cross-fades the whole page between palettes, and the ink plates of
+   each drawing slide into register as it arrives. The misregistration is the
+   design language; it is stated once in the logo and then used everywhere. */
+
+@font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-500.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-800.woff2') format('woff2');font-weight:800;font-display:swap}
+
+:root{
+  /* palette vars are set per-section and interpolated by poster.js */
+  --paper:#F4EFE2; --ink:#12275E; --accent:#B70017; --pop:#EFB02B;
+  --f:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --wrap:1220px; --mast:68px;
+  --ease:cubic-bezier(.22,.7,.28,1);
+  --press:cubic-bezier(.16,.9,.24,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;font:400 clamp(15.5px,.4vw + 14.4px,17px)/1.6 var(--f);
+  background:var(--paper);color:var(--ink);overflow-x:hidden;
+  transition:background-color .7s var(--ease),color .7s var(--ease);
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.022em;line-height:.92}
+p{margin:0}
+
+/* the paper itself — a press leaves a dot screen and a little tooth */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--ink) 30%,transparent) .9px,transparent 1.1px);
+  background-size:6px 6px;opacity:.16;
+  transition:opacity .7s var(--ease);
+}
+body>*{position:relative;z-index:1}
+
+/* ---------------------------------------------------------------- type */
+.display{font-size:clamp(3rem,7.4vw,6.4rem);letter-spacing:-.035em}
+.display em{font-style:normal;color:var(--accent)}
+.kicker{font-size:.72rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1.1rem}
+.sub{font-size:clamp(1rem,.5vw + .88rem,1.18rem);max-width:46ch;margin-top:1.3rem;
+  color:color-mix(in srgb,var(--ink) 82%,transparent)}
+.swatchline{margin-top:1.6rem;font-size:.82rem;max-width:52ch;
+  color:color-mix(in srgb,var(--ink) 62%,transparent);
+  border-top:2px solid color-mix(in srgb,var(--ink) 22%,transparent);padding-top:.7rem}
+.swatchline b{color:var(--ink)}
+
+/* ---------------------------------------------------------------- the mark */
+.lockup{display:inline-flex;align-items:center;gap:.6rem}
+.emblem{flex:none}
+.wordmark{display:inline-grid;grid-auto-flow:row;justify-items:start;line-height:.84;font-weight:800;letter-spacing:-.03em;
+  font-size:1.42rem;text-transform:lowercase}
+.wm-1{color:var(--ink)}
+/* out of register on purpose — the whole language in two words */
+.wm-2{color:var(--accent);transform:translate(3px,-1px)}
+.lockup.is-stacked{flex-direction:column;gap:.35rem}
+
+/* ---------------------------------------------------------------- masthead */
+.mast{position:sticky;top:0;z-index:40;height:var(--mast);display:flex;align-items:center;
+  gap:1.5rem;padding:0 clamp(1rem,3vw,2.2rem);
+  background:color-mix(in srgb,var(--paper) 92%,transparent);
+  backdrop-filter:blur(9px);
+  border-bottom:2px solid color-mix(in srgb,var(--ink) 16%,transparent);
+  transition:background-color .7s var(--ease),border-color .7s var(--ease)}
+.mast nav{display:flex;gap:1.4rem;margin-left:auto;font-weight:600;font-size:.95rem}
+.mast nav a{padding:.3rem 0;border-bottom:2.5px solid transparent}
+.mast nav a:hover{border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  border:2.5px solid var(--ink);border-radius:0;padding:.66rem 1.15rem;font-weight:700;
+  transition:transform .16s var(--ease),background-color .16s,color .16s;
+  font-variant-numeric:tabular-nums}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
+.btn:active{transform:translate(0,0);box-shadow:none}
+.btn-solid{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.btn-solid:hover{box-shadow:4px 4px 0 var(--ink)}
+.acts{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.9rem}
+
+/* ---------------------------------------------------------------- scenes */
+.hero,.scene{position:relative;padding:clamp(3rem,6vw,5.5rem) 0;
+  border-bottom:2px solid color-mix(in srgb,var(--ink) 16%,transparent)}
+.hero{min-height:calc(100svh - var(--mast));display:grid;align-items:center}
+.hero-in,.scene-in{width:min(100% - 2.5rem,var(--wrap));margin-inline:auto;padding-right:clamp(0px,11vw,168px);
+  display:grid;gap:clamp(1.5rem,4vw,3.5rem);align-items:center;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)}
+.scene:nth-of-type(even) .scene-in{direction:rtl}
+.scene:nth-of-type(even) .scene-in>*{direction:ltr}
+
+.runline{position:absolute;left:clamp(1rem,3vw,2.2rem);bottom:1.2rem;
+  font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;
+  color:color-mix(in srgb,var(--ink) 45%,transparent)}
+
+/* ---------------------------------------------------------------- the press run
+   Each drawing is split into ink plates. They arrive off-register and slide home,
+   which is exactly what a screen print does and what a video cannot do responsively. */
+.press{margin:0}
+.illo{width:100%;height:auto}
+.plate{
+  transform:translate3d(var(--ox,0px),var(--oy,0px),0) rotate(var(--orot,0deg));
+  transform-origin:50% 50%;
+  transform-box:fill-box;
+  opacity:var(--op,1);
+  will-change:transform,opacity;
+}
+/* before it prints: each plate holds its authored offset and is invisible */
+.press:not(.is-printed) .plate{--ox:var(--dx);--oy:var(--dy);--orot:var(--rot);--op:0}
+/* the run: staggered, springy, lands in register */
+.press.is-printed .plate{
+  --ox:0px;--oy:0px;--orot:0deg;--op:1;
+  transition:transform .82s var(--press),opacity .42s linear;
+}
+.press.is-printed .plate[data-plate="1"]{transition-delay:.02s}
+.press.is-printed .plate[data-plate="2"]{transition-delay:.17s}
+.press.is-printed .plate[data-plate="3"]{transition-delay:.32s}
+/* after it has printed, scroll nudges the plates a few px out of true again */
+.press.is-printed.is-drifting .plate{transition:opacity .42s linear}
+
+/* ---------------------------------------------------------------- ink rail */
+.rail{position:absolute;right:clamp(.6rem,2vw,1.6rem);top:50%;transform:translateY(-50%);
+  display:grid;gap:.6rem;width:clamp(96px,9vw,132px)}
+.chip{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.14),0 6px 18px rgba(0,0,0,.08);
+  opacity:0;transform:translateY(14px)}
+.is-printed-rail .chip{opacity:1;transform:none;
+  transition:opacity .5s var(--ease),transform .6s var(--press)}
+.is-printed-rail .chip:nth-child(1){transition-delay:.10s}
+.is-printed-rail .chip:nth-child(2){transition-delay:.25s}
+.is-printed-rail .chip:nth-child(3){transition-delay:.40s}
+.chip-ink{display:block;height:clamp(54px,6vw,78px);transition:background-color .7s var(--ease)}
+.chip-lab{display:block;padding:.3rem .45rem .42rem;color:#111;line-height:1.15}
+.chip-lab b{display:block;font-size:.5rem;letter-spacing:.06em;font-weight:800}
+.chip-lab i{display:block;font-style:normal;font-size:.62rem;font-weight:600;opacity:.72;
+  font-variant-numeric:tabular-nums}
+
+/* ---------------------------------------------------------------- marks page */
+.marks{width:min(100% - 2.5rem,var(--wrap));margin:0 auto;padding:clamp(3rem,6vw,5rem) 0}
+.marks h2{font-size:clamp(1.6rem,3vw,2.4rem);margin-bottom:1.8rem}
+.mark-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem}
+.mark-cell{border:2px solid color-mix(in srgb,var(--ink) 18%,transparent);padding:1.4rem;
+  display:grid;justify-items:center;gap:.9rem;text-align:center}
+.mark-cell .big{display:flex;align-items:center;justify-content:center;gap:.7rem;min-height:156px}
+.mark-cell .big .wordmark{font-size:2.9rem}
+.mark-cell .big .lockup .wordmark{font-size:1.7rem}
+.mark-cell span{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;
+  color:color-mix(in srgb,var(--ink) 55%,transparent)}
+
+/* ---------------------------------------------------------------- responsive */
+@media (max-width:900px){
+  .hero-in,.scene-in{grid-template-columns:1fr;gap:1.6rem}
+  .scene:nth-of-type(even) .scene-in{direction:ltr}
+  .rail{position:static;transform:none;width:auto;grid-auto-flow:column;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    width:min(100% - 2.5rem,var(--wrap));margin:1.6rem auto 0}
+  .mast nav{display:none}
+  .hero{min-height:auto}
+  .runline{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+  .press .plate{--ox:0px;--oy:0px;--orot:0deg;--op:1}
+  .chip{opacity:1;transform:none}
+}
+</style>
+</head>
+<body class="study"
+  style="--paper:#F4EFE2;--ink:#12275E;--accent:#B70017;--pop:#EFB02B">
+
+<header class="mast">
+  <a class="brand" href="#"><span class="lockup"><svg class="emblem" width="40" height="40" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tasty Pizza"><circle cx="32" cy="32" r="31" fill="var(--ink)" opacity="0.1"/><path d="M32 32 L32.00 3.00 A29 29 0 0 1 57.11 17.50 Z" fill="var(--accent)"/><path d="M32 32 L57.11 46.50 A29 29 0 0 1 32.00 61.00 Z" fill="var(--accent)"/><path d="M32 32 L32.00 61.00 A29 29 0 0 1 6.89 46.50 Z" fill="var(--pop)"/><path d="M32 32 L6.89 46.50 A29 29 0 0 1 6.89 17.50 Z" fill="var(--accent)"/><path d="M32 32 L6.89 17.50 A29 29 0 0 1 32.00 3.00 Z" fill="var(--pop)"/><g transform="translate(6.50 -3.75)"><path d="M32 32 L57.11 17.50 A29 29 0 0 1 57.11 46.50 Z" fill="var(--pop)"/></g><circle cx="32" cy="32" r="4.2" fill="var(--ink)"/></svg><span class="wordmark " role="img" aria-label="Tasty Pizza"><span class="wm-1">Tasty</span><span class="wm-2" aria-hidden="true">Pizza</span></span></span></a>
+  <nav><a href="#">Menu</a><a href="#">Deals</a><a href="#">Find us</a></nav>
+  <a class="btn" href="#">902-435-5700</a>
+</header>
+
+<section class="hero" data-palette="house">
+  <div class="hero-in">
+    <div class="copy">
+      <p class="kicker">Main Street, Dartmouth &middot; since 2005</p>
+      <h1 class="display">Donairs,<br>pizza and<br><em>garlic fingers.</em></h1>
+      <p class="sub">Dough and sauce made fresh every day. Kitchen&rsquo;s on till 2am Friday.</p>
+      <div class="acts"><a class="btn btn-solid" href="#">See the menu</a>
+        <a class="btn" href="#">902-435-5700</a></div>
+    </div>
+    <figure class="press press-hero"><svg class="illo " data-illo="pizza" viewBox="0 0 520 450" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><defs><pattern id="halftone" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="1.6" cy="1.6" r="1.05" fill="var(--ink)" opacity=".16"/></pattern><pattern id="halftone-fine" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".72" fill="var(--ink)" opacity=".12"/></pattern></defs><g class="plate" data-plate="1" style="--dx:-10px;--dy:7px;--rot:-1.5deg"><path d="M-20 30 h92 a92 92 0 0 1 -92 92 Z" fill="var(--ink)" transform="rotate(0 -20 30)"/><circle cx="354" cy="386" r="21" fill="var(--ink)"/><rect x="-32" y="390" width="92" height="7" fill="var(--ink)"/><rect x="-32" y="406" width="92" height="7" fill="var(--ink)"/><rect x="-32" y="422" width="92" height="7" fill="var(--ink)"/><circle cx="176" cy="236" r="148" fill="var(--ink)" opacity=".12"/></g><g class="plate" data-plate="2" style="--dx:8px;--dy:-6px;--rot:1.2deg"><circle cx="176" cy="236" r="132" fill="var(--accent)"/><g transform="translate(332 86) rotate(-15)"><path d="M0 0 L150 -49 A158 158 0 0 1 150 49 Z" fill="var(--accent)"/><path d="M11 0 L139 -44 A147 147 0 0 1 139 44 Z" fill="var(--pop)"/><circle cx="74" cy="-13" r="13" fill="var(--accent)"/><circle cx="104" cy="17" r="11" fill="var(--accent)"/><circle cx="46" cy="14" r="9" fill="var(--accent)"/><path d="M150 -49 A158 158 0 0 1 150 49" stroke="var(--accent)" stroke-width="17" fill="none" stroke-linecap="round"/></g><path d="M326 128 q -34 44 -58 96" stroke="var(--pop)" stroke-width="7" fill="none" stroke-linecap="round" opacity=".92"/><path d="M344 144 q -30 50 -44 104" stroke="var(--pop)" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/></g><g class="plate" data-plate="3" style="--dx:-5px;--dy:10px;--rot:-0.7deg"><circle cx="176" cy="236" r="111" fill="var(--pop)"/><circle cx="146" cy="158" r="9" fill="var(--accent)" opacity=".2"/><circle cx="248" cy="282" r="7" fill="var(--accent)" opacity=".2"/><circle cx="92" cy="288" r="6" fill="var(--accent)" opacity=".2"/><circle cx="210" cy="214" r="5" fill="var(--accent)" opacity=".2"/><circle cx="135.2" cy="200.5" r="15.0" fill="var(--accent)"/><circle cx="132.7" cy="198.0" r="6.3" fill="var(--pop)" opacity=".34"/><circle cx="184.9" cy="188.1" r="12.9" fill="var(--accent)"/><circle cx="182.4" cy="185.6" r="5.4" fill="var(--pop)" opacity=".34"/><circle cx="218.6" cy="221.8" r="13.8" fill="var(--accent)"/><circle cx="216.1" cy="219.3" r="5.8" fill="var(--pop)" opacity=".34"/><circle cx="167.1" cy="230.7" r="15.9" fill="var(--accent)"/><circle cx="164.6" cy="228.2" r="6.7" fill="var(--pop)" opacity=".34"/><circle cx="128.1" cy="252.0" r="12.6" fill="var(--accent)"/><circle cx="125.6" cy="249.5" r="5.3" fill="var(--pop)" opacity=".34"/><circle cx="199.1" cy="271.5" r="14.4" fill="var(--accent)"/><circle cx="196.6" cy="269.0" r="6.0" fill="var(--pop)" opacity=".34"/><circle cx="152.9" cy="280.4" r="13.2" fill="var(--accent)"/><circle cx="150.4" cy="277.9" r="5.5" fill="var(--pop)" opacity=".34"/></g></svg></figure>
+  </div>
+  <aside class="rail" aria-hidden="true"><div class="chip" data-chip="ink"><span class="chip-ink" style="background:#12275E"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 105-16 C</i></span></div><div class="chip" data-chip="accent"><span class="chip-ink" style="background:#B70017"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 56-16 C</i></span></div><div class="chip" data-chip="pop"><span class="chip-ink" style="background:#EFB02B"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 14-8 C</i></span></div></aside>
+  <span class="runline">4 colour &middot; 1 pass &middot; Tasty Pizza press</span>
+</section>
+
+
+<section class="scene" data-palette="house"
+  style="--paper:#F4EFE2;--ink:#12275E;--accent:#B70017;--pop:#EFB02B">
+  <div class="scene-in">
+    <div class="copy">
+      <p class="kicker">Halifax&rsquo;s official food</p>
+      <h2 class="display">Printed<br>fresh<br><em>daily.</em></h2>
+      <p class="sub">Every section of this site is a three-ink screen print. Scroll and the plates come into register.</p>
+      <p class="swatchline"><b>House Red</b> &mdash; The shop's own red, anchored by cobalt so it reads confident instead of loud.</p>
+    </div>
+    <figure class="press"><svg class="illo " data-illo="pizza" viewBox="0 0 520 450" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><defs><pattern id="halftone" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="1.6" cy="1.6" r="1.05" fill="var(--ink)" opacity=".16"/></pattern><pattern id="halftone-fine" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".72" fill="var(--ink)" opacity=".12"/></pattern></defs><g class="plate" data-plate="1" style="--dx:-10px;--dy:7px;--rot:-1.5deg"><path d="M-20 30 h92 a92 92 0 0 1 -92 92 Z" fill="var(--ink)" transform="rotate(0 -20 30)"/><circle cx="354" cy="386" r="21" fill="var(--ink)"/><rect x="-32" y="390" width="92" height="7" fill="var(--ink)"/><rect x="-32" y="406" width="92" height="7" fill="var(--ink)"/><rect x="-32" y="422" width="92" height="7" fill="var(--ink)"/><circle cx="176" cy="236" r="148" fill="var(--ink)" opacity=".12"/></g><g class="plate" data-plate="2" style="--dx:8px;--dy:-6px;--rot:1.2deg"><circle cx="176" cy="236" r="132" fill="var(--accent)"/><g transform="translate(332 86) rotate(-15)"><path d="M0 0 L150 -49 A158 158 0 0 1 150 49 Z" fill="var(--accent)"/><path d="M11 0 L139 -44 A147 147 0 0 1 139 44 Z" fill="var(--pop)"/><circle cx="74" cy="-13" r="13" fill="var(--accent)"/><circle cx="104" cy="17" r="11" fill="var(--accent)"/><circle cx="46" cy="14" r="9" fill="var(--accent)"/><path d="M150 -49 A158 158 0 0 1 150 49" stroke="var(--accent)" stroke-width="17" fill="none" stroke-linecap="round"/></g><path d="M326 128 q -34 44 -58 96" stroke="var(--pop)" stroke-width="7" fill="none" stroke-linecap="round" opacity=".92"/><path d="M344 144 q -30 50 -44 104" stroke="var(--pop)" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/></g><g class="plate" data-plate="3" style="--dx:-5px;--dy:10px;--rot:-0.7deg"><circle cx="176" cy="236" r="111" fill="var(--pop)"/><circle cx="146" cy="158" r="9" fill="var(--accent)" opacity=".2"/><circle cx="248" cy="282" r="7" fill="var(--accent)" opacity=".2"/><circle cx="92" cy="288" r="6" fill="var(--accent)" opacity=".2"/><circle cx="210" cy="214" r="5" fill="var(--accent)" opacity=".2"/><circle cx="135.2" cy="200.5" r="15.0" fill="var(--accent)"/><circle cx="132.7" cy="198.0" r="6.3" fill="var(--pop)" opacity=".34"/><circle cx="184.9" cy="188.1" r="12.9" fill="var(--accent)"/><circle cx="182.4" cy="185.6" r="5.4" fill="var(--pop)" opacity=".34"/><circle cx="218.6" cy="221.8" r="13.8" fill="var(--accent)"/><circle cx="216.1" cy="219.3" r="5.8" fill="var(--pop)" opacity=".34"/><circle cx="167.1" cy="230.7" r="15.9" fill="var(--accent)"/><circle cx="164.6" cy="228.2" r="6.7" fill="var(--pop)" opacity=".34"/><circle cx="128.1" cy="252.0" r="12.6" fill="var(--accent)"/><circle cx="125.6" cy="249.5" r="5.3" fill="var(--pop)" opacity=".34"/><circle cx="199.1" cy="271.5" r="14.4" fill="var(--accent)"/><circle cx="196.6" cy="269.0" r="6.0" fill="var(--pop)" opacity=".34"/><circle cx="152.9" cy="280.4" r="13.2" fill="var(--accent)"/><circle cx="150.4" cy="277.9" r="5.5" fill="var(--pop)" opacity=".34"/></g></svg></figure>
+  </div>
+  <aside class="rail" aria-hidden="true"><div class="chip" data-chip="ink"><span class="chip-ink" style="background:#12275E"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 105-16 C</i></span></div><div class="chip" data-chip="accent"><span class="chip-ink" style="background:#B70017"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 56-16 C</i></span></div><div class="chip" data-chip="pop"><span class="chip-ink" style="background:#EFB02B"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 14-8 C</i></span></div></aside>
+</section>
+<section class="scene" data-palette="donair"
+  style="--paper:#F3E8D6;--ink:#331A3B;--accent:#D2552A;--pop:#E5A63C">
+  <div class="scene-in">
+    <div class="copy">
+      <p class="kicker">The one we&rsquo;re known for</p>
+      <h2 class="display">Off the<br><em>spit.</em></h2>
+      <p class="sub">Aubergine ground, terracotta meat. The cool ink is the stage; the food always wears the warm ones.</p>
+      <p class="swatchline"><b>Spit & Sauce</b> &mdash; Aubergine and terracotta — the colour of the meat cone and the sauce.</p>
+    </div>
+    <figure class="press"><svg class="illo " data-illo="donair" viewBox="0 0 470 460" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><defs><pattern id="halftone" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="1.6" cy="1.6" r="1.05" fill="var(--ink)" opacity=".16"/></pattern><pattern id="halftone-fine" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".72" fill="var(--ink)" opacity=".12"/></pattern></defs><g class="plate" data-plate="1" style="--dx:-9px;--dy:6px;--rot:-1.2deg"><path d="M44 22 h88 a88 88 0 0 1 -88 88 Z" fill="var(--ink)" transform="rotate(0 44 22)"/><circle cx="408" cy="382" r="20" fill="var(--ink)"/><rect x="336" y="24" width="6" height="76" fill="var(--ink)"/><rect x="350" y="24" width="6" height="76" fill="var(--ink)"/><rect x="364" y="24" width="6" height="76" fill="var(--ink)"/><rect x="378" y="24" width="6" height="76" fill="var(--ink)"/><rect x="225" y="20" width="14" height="392" rx="7" fill="var(--ink)"/><rect x="128" y="398" width="208" height="18" rx="9" fill="var(--ink)"/><g transform="rotate(-9 382 222)"><rect x="374" y="96" width="15" height="150" rx="4" fill="var(--ink)"/><rect x="376" y="246" width="11" height="58" rx="5" fill="var(--ink)" opacity=".62"/></g></g><g class="plate" data-plate="2" style="--dx:9px;--dy:-7px;--rot:1.3deg"><path d="M232 46 c 40 28 66 84 78 158 c 8 46 10 70 6 82 c -30 16 -138 16 -168 0 c -4 -12 -2 -36 6 -82 c 12 -74 38 -130 78 -158 Z" fill="var(--accent)"/></g><g class="plate" data-plate="3" style="--dx:-5px;--dy:9px;--rot:-0.7deg"><path d="M198 76 q 34 14 68 0" stroke="var(--pop)" stroke-width="6.0" fill="none" stroke-linecap="round" opacity="0.92"/><path d="M187 110 q 45 16 90 0" stroke="var(--pop)" stroke-width="6.4" fill="none" stroke-linecap="round" opacity="0.88"/><path d="M176 144 q 56 17 111 0" stroke="var(--pop)" stroke-width="6.8" fill="none" stroke-linecap="round" opacity="0.83"/><path d="M166 178 q 66 19 132 0" stroke="var(--pop)" stroke-width="7.1" fill="none" stroke-linecap="round" opacity="0.79"/><path d="M155 212 q 77 20 154 0" stroke="var(--pop)" stroke-width="7.5" fill="none" stroke-linecap="round" opacity="0.74"/><path d="M144 246 q 88 22 176 0" stroke="var(--pop)" stroke-width="7.9" fill="none" stroke-linecap="round" opacity="0.70"/><path d="M134 280 q 98 24 197 0" stroke="var(--pop)" stroke-width="8.2" fill="none" stroke-linecap="round" opacity="0.65"/><path d="M123 314 q 109 25 218 0" stroke="var(--pop)" stroke-width="8.6" fill="none" stroke-linecap="round" opacity="0.60"/><path d="M112 348 q 120 27 240 0" stroke="var(--pop)" stroke-width="9.0" fill="none" stroke-linecap="round" opacity="0.56"/><path d="M364 170 q 22 6 38 -4" stroke="var(--pop)" stroke-width="6" fill="none" stroke-linecap="round" opacity=".85"/><path d="M374 216 q 22 6 38 -4" stroke="var(--pop)" stroke-width="6" fill="none" stroke-linecap="round" opacity=".6"/><path d="M360 262 q 22 6 38 -4" stroke="var(--pop)" stroke-width="6" fill="none" stroke-linecap="round" opacity=".45"/></g></svg></figure>
+  </div>
+  <aside class="rail" aria-hidden="true"><div class="chip" data-chip="ink"><span class="chip-ink" style="background:#331A3B"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 95-16 C</i></span></div><div class="chip" data-chip="accent"><span class="chip-ink" style="background:#D2552A"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 30-8 C</i></span></div><div class="chip" data-chip="pop"><span class="chip-ink" style="background:#E5A63C"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 14-7 C</i></span></div></aside>
+</section>
+<section class="scene" data-palette="garden"
+  style="--paper:#F2F0E1;--ink:#1C4228;--accent:#D74E1C;--pop:#E9B622">
+  <div class="scene-in">
+    <div class="copy">
+      <p class="kicker">Never served without the sauce</p>
+      <h2 class="display">Garlic<br><em>fingers.</em></h2>
+      <p class="sub">Same drawing, different palette. Nothing was redrawn &mdash; every fill is a CSS variable.</p>
+      <p class="swatchline"><b>Garden</b> &mdash; Forest green and orange — the vegetables, and the fryer.</p>
+    </div>
+    <figure class="press"><svg class="illo " data-illo="garlic-fingers" viewBox="0 0 500 450" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><defs><pattern id="halftone" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="1.6" cy="1.6" r="1.05" fill="var(--ink)" opacity=".16"/></pattern><pattern id="halftone-fine" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".72" fill="var(--ink)" opacity=".12"/></pattern></defs><g class="plate" data-plate="1" style="--dx:-8px;--dy:7px;--rot:-1.1deg"><path d="M2 26 h84 a84 84 0 0 1 -84 84 Z" fill="var(--ink)" transform="rotate(0 2 26)"/><circle cx="28" cy="382" r="20" fill="var(--ink)"/><rect x="324" y="364" width="86" height="7" fill="var(--ink)"/><rect x="324" y="380" width="86" height="7" fill="var(--ink)"/><rect x="324" y="396" width="86" height="7" fill="var(--ink)"/><rect x="36" y="90" width="320" height="230" rx="18" fill="var(--ink)" opacity=".13"/></g><g class="plate" data-plate="2" style="--dx:8px;--dy:-6px;--rot:1.2deg"><rect x="40" y="94" width="312" height="222" rx="16" fill="var(--accent)"/><circle cx="328" cy="364" r="46" fill="var(--accent)"/></g><g class="plate" data-plate="3" style="--dx:-5px;--dy:10px;--rot:-0.7deg"><rect x="44" y="102" width="35" height="206" rx="10" fill="var(--pop)"/><rect x="89" y="102" width="35" height="206" rx="10" fill="var(--pop)"/><rect x="134" y="102" width="35" height="206" rx="10" fill="var(--pop)"/><rect x="179" y="102" width="35" height="206" rx="10" fill="var(--pop)"/><rect x="224" y="102" width="35" height="206" rx="10" fill="var(--pop)"/><rect x="269" y="102" width="35" height="206" rx="10" fill="var(--pop)"/><circle cx="56" cy="122" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="97" cy="189" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="138" cy="256" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="179" cy="153" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="220" cy="220" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="261" cy="287" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="302" cy="184" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="75" cy="251" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="116" cy="148" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="157" cy="215" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="198" cy="282" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="239" cy="179" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="280" cy="246" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="321" cy="143" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="94" cy="210" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="135" cy="277" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="176" cy="174" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="217" cy="241" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="258" cy="138" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="299" cy="205" r="3.6" fill="var(--accent)" opacity=".7"/><g transform="translate(324 46) rotate(24)"><rect x="0" y="0" width="35" height="196" rx="10" fill="var(--pop)"/><circle cx="11" cy="42" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="24" cy="96" r="3.6" fill="var(--accent)" opacity=".7"/><circle cx="13" cy="150" r="3.6" fill="var(--accent)" opacity=".7"/></g><path d="M342 190 q -20 32 -46 52" stroke="var(--pop)" stroke-width="6" fill="none" stroke-linecap="round" opacity=".8"/><circle cx="328" cy="364" r="34" fill="var(--paper)"/><circle cx="328" cy="364" r="26" fill="var(--pop)" opacity=".85"/></g></svg></figure>
+  </div>
+  <aside class="rail" aria-hidden="true"><div class="chip" data-chip="ink"><span class="chip-ink" style="background:#1C4228"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 148-16 C</i></span></div><div class="chip" data-chip="accent"><span class="chip-ink" style="background:#D74E1C"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 34-8 C</i></span></div><div class="chip" data-chip="pop"><span class="chip-ink" style="background:#E9B622"></span><span class="chip-lab"><b>PANTONE&reg;</b><i>P 10-8 C</i></span></div></aside>
+</section>
+
+<section class="marks">
+  <h2>The mark</h2>
+  <div class="mark-grid">
+    <div class="mark-cell"><div class="big"><svg class="emblem" width="150" height="150" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tasty Pizza"><circle cx="32" cy="32" r="31" fill="var(--ink)" opacity="0.1"/><path d="M32 32 L32.00 3.00 A29 29 0 0 1 57.11 17.50 Z" fill="var(--accent)"/><path d="M32 32 L57.11 46.50 A29 29 0 0 1 32.00 61.00 Z" fill="var(--accent)"/><path d="M32 32 L32.00 61.00 A29 29 0 0 1 6.89 46.50 Z" fill="var(--pop)"/><path d="M32 32 L6.89 46.50 A29 29 0 0 1 6.89 17.50 Z" fill="var(--accent)"/><path d="M32 32 L6.89 17.50 A29 29 0 0 1 32.00 3.00 Z" fill="var(--pop)"/><g transform="translate(6.50 -3.75)"><path d="M32 32 L57.11 17.50 A29 29 0 0 1 57.11 46.50 Z" fill="var(--pop)"/></g><circle cx="32" cy="32" r="4.2" fill="var(--ink)"/></svg></div><span>emblem</span></div>
+    <div class="mark-cell"><div class="big"><svg class="emblem" width="150" height="150" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tasty Pizza"><circle cx="32" cy="32" r="31" fill="var(--ink)" opacity="0.1"/><path d="M32 32 L32.00 3.00 A29 29 0 0 1 57.11 17.50 Z" fill="var(--accent)"/><path d="M32 32 L57.11 17.50 A29 29 0 0 1 57.11 46.50 Z" fill="var(--pop)"/><path d="M32 32 L57.11 46.50 A29 29 0 0 1 32.00 61.00 Z" fill="var(--accent)"/><path d="M32 32 L32.00 61.00 A29 29 0 0 1 6.89 46.50 Z" fill="var(--pop)"/><path d="M32 32 L6.89 46.50 A29 29 0 0 1 6.89 17.50 Z" fill="var(--accent)"/><path d="M32 32 L6.89 17.50 A29 29 0 0 1 32.00 3.00 Z" fill="var(--pop)"/><circle cx="32" cy="32" r="4.2" fill="var(--ink)"/></svg></div><span>whole pie, no pull</span></div>
+    <div class="mark-cell"><div class="big"><span class="wordmark " role="img" aria-label="Tasty Pizza"><span class="wm-1">Tasty</span><span class="wm-2" aria-hidden="true">Pizza</span></span></div><span>wordmark, out of register</span></div>
+    <div class="mark-cell"><div class="big"><span class="lockup"><svg class="emblem" width="56" height="56" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tasty Pizza"><circle cx="32" cy="32" r="31" fill="var(--ink)" opacity="0.1"/><path d="M32 32 L32.00 3.00 A29 29 0 0 1 57.11 17.50 Z" fill="var(--accent)"/><path d="M32 32 L57.11 46.50 A29 29 0 0 1 32.00 61.00 Z" fill="var(--accent)"/><path d="M32 32 L32.00 61.00 A29 29 0 0 1 6.89 46.50 Z" fill="var(--pop)"/><path d="M32 32 L6.89 46.50 A29 29 0 0 1 6.89 17.50 Z" fill="var(--accent)"/><path d="M32 32 L6.89 17.50 A29 29 0 0 1 32.00 3.00 Z" fill="var(--pop)"/><g transform="translate(6.50 -3.75)"><path d="M32 32 L57.11 17.50 A29 29 0 0 1 57.11 46.50 Z" fill="var(--pop)"/></g><circle cx="32" cy="32" r="4.2" fill="var(--ink)"/></svg><span class="wordmark " role="img" aria-label="Tasty Pizza"><span class="wm-1">Tasty</span><span class="wm-2" aria-hidden="true">Pizza</span></span></span></div><span>lockup</span></div>
+    <div class="mark-cell"><div class="big"><svg class="emblem" width="150" height="150" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tasty Pizza"><circle cx="32" cy="32" r="31" fill="var(--ink)" opacity="0"/><path d="M32 32 L32.00 3.00 A29 29 0 0 1 57.11 17.50 Z" fill="var(--ink)"/><path d="M32 32 L57.11 46.50 A29 29 0 0 1 32.00 61.00 Z" fill="var(--ink)"/><path d="M32 32 L32.00 61.00 A29 29 0 0 1 6.89 46.50 Z" fill="var(--paper)"/><path d="M32 32 L6.89 46.50 A29 29 0 0 1 6.89 17.50 Z" fill="var(--ink)"/><path d="M32 32 L6.89 17.50 A29 29 0 0 1 32.00 3.00 Z" fill="var(--paper)"/><g transform="translate(6.50 -3.75)"><path d="M32 32 L57.11 17.50 A29 29 0 0 1 57.11 46.50 Z" fill="var(--paper)"/></g><circle cx="32" cy="32" r="4.2" fill="var(--ink)"/></svg></div><span>one ink &mdash; vinyl, stamp, embroidery</span></div>
+    <div class="mark-cell tiny"><div class="big"><svg class="emblem" width="30" height="30" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tasty Pizza"><circle cx="32" cy="32" r="31" fill="var(--ink)" opacity="0.1"/><path d="M32 32 L32.00 3.00 A29 29 0 0 1 57.11 17.50 Z" fill="var(--accent)"/><path d="M32 32 L57.11 46.50 A29 29 0 0 1 32.00 61.00 Z" fill="var(--accent)"/><path d="M32 32 L32.00 61.00 A29 29 0 0 1 6.89 46.50 Z" fill="var(--pop)"/><path d="M32 32 L6.89 46.50 A29 29 0 0 1 6.89 17.50 Z" fill="var(--accent)"/><path d="M32 32 L6.89 17.50 A29 29 0 0 1 32.00 3.00 Z" fill="var(--pop)"/><g transform="translate(6.50 -3.75)"><path d="M32 32 L57.11 17.50 A29 29 0 0 1 57.11 46.50 Z" fill="var(--pop)"/></g><circle cx="32" cy="32" r="4.2" fill="var(--ink)"/></svg><svg class="emblem" width="22" height="22" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tasty Pizza"><circle cx="32" cy="32" r="31" fill="var(--ink)" opacity="0.1"/><path d="M32 32 L32.00 3.00 A29 29 0 0 1 57.11 17.50 Z" fill="var(--accent)"/><path d="M32 32 L57.11 46.50 A29 29 0 0 1 32.00 61.00 Z" fill="var(--accent)"/><path d="M32 32 L32.00 61.00 A29 29 0 0 1 6.89 46.50 Z" fill="var(--pop)"/><path d="M32 32 L6.89 46.50 A29 29 0 0 1 6.89 17.50 Z" fill="var(--accent)"/><path d="M32 32 L6.89 17.50 A29 29 0 0 1 32.00 3.00 Z" fill="var(--pop)"/><g transform="translate(6.50 -3.75)"><path d="M32 32 L57.11 17.50 A29 29 0 0 1 57.11 46.50 Z" fill="var(--pop)"/></g><circle cx="32" cy="32" r="4.2" fill="var(--ink)"/></svg><svg class="emblem" width="16" height="16" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tasty Pizza"><circle cx="32" cy="32" r="31" fill="var(--ink)" opacity="0.1"/><path d="M32 32 L32.00 3.00 A29 29 0 0 1 57.11 17.50 Z" fill="var(--accent)"/><path d="M32 32 L57.11 46.50 A29 29 0 0 1 32.00 61.00 Z" fill="var(--accent)"/><path d="M32 32 L32.00 61.00 A29 29 0 0 1 6.89 46.50 Z" fill="var(--pop)"/><path d="M32 32 L6.89 46.50 A29 29 0 0 1 6.89 17.50 Z" fill="var(--accent)"/><path d="M32 32 L6.89 17.50 A29 29 0 0 1 32.00 3.00 Z" fill="var(--pop)"/><g transform="translate(6.50 -3.75)"><path d="M32 32 L57.11 17.50 A29 29 0 0 1 57.11 46.50 Z" fill="var(--pop)"/></g><circle cx="32" cy="32" r="4.2" fill="var(--ink)"/></svg></div><span>28 / 20 / 16px</span></div>
+  </div>
+</section>
+
+<script>/* Tasty Pizza — poster direction motion.
+
+   Three things happen, all driven by scroll, none of them a video:
+
+   1. THE PRESS RUN. A drawing's ink plates arrive off-register and slide home,
+      staggered, the first time it enters the viewport.
+   2. THE DRIFT. Once printed, scroll position nudges the plates a few pixels out
+      of true again, at different rates per plate. Parallax, but motivated —
+      it is the press losing registration.
+   3. THE PALETTE. The page's four ink variables interpolate between sections, so
+      the whole site changes colour continuously as you move down it.
+
+   Everything is transform and opacity, so it stays on the compositor. */
+(function () {
+  'use strict';
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ------------------------------------------------------------ colour */
+  function parseHex(h) {
+    h = (h || '').trim().replace('#', '');
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var n = parseInt(h, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function mix(a, b, t) {
+    return 'rgb(' + Math.round(a[0] + (b[0] - a[0]) * t) + ',' +
+      Math.round(a[1] + (b[1] - a[1]) * t) + ',' +
+      Math.round(a[2] + (b[2] - a[2]) * t) + ')';
+  }
+  var KEYS = ['paper', 'ink', 'accent', 'pop'];
+
+  function readPalette(el) {
+    var cs = getComputedStyle(el), out = {};
+    KEYS.forEach(function (k) { out[k] = parseHex(cs.getPropertyValue('--' + k)); });
+    return out;
+  }
+
+  /* ------------------------------------------------------------ the press run */
+  var presses = $$('.press');
+  var rails = $$('.rail');
+
+  function printNow(el) {
+    el.classList.add('is-printed');
+  }
+
+  if (calm) {
+    presses.forEach(printNow);
+    rails.forEach(function (r) { r.classList.add('is-printed-rail'); });
+  } else if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        printNow(en.target);
+        io.unobserve(en.target);
+      });
+    }, { threshold: 0.22, rootMargin: '0px 0px -8% 0px' });
+    presses.forEach(function (p) { io.observe(p); });
+
+    var railIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-printed-rail');
+        railIO.unobserve(en.target);
+      });
+    }, { threshold: 0.3 });
+    rails.forEach(function (r) { railIO.observe(r); });
+  } else {
+    presses.forEach(printNow);
+    rails.forEach(function (r) { r.classList.add('is-printed-rail'); });
+  }
+
+  /* ------------------------------------------------------------ drift + palette */
+  var sections = $$('[data-palette]').map(function (el) {
+    return { el: el, pal: readPalette(el) };
+  });
+  var root = document.documentElement;
+  var ticking = false;
+
+  // how far each plate wanders once it has printed, in px per unit of progress
+  var DRIFT = { 1: -16, 2: 11, 3: -7 };
+
+  function frame() {
+    ticking = false;
+    var vh = window.innerHeight;
+
+    // 1. drift: plates ease out of register as their section leaves the middle
+    for (var i = 0; i < presses.length; i++) {
+      var p = presses[i];
+      if (!p.classList.contains('is-printed')) continue;
+      var r = p.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) continue;
+      // -1 above the fold, 0 dead centre, +1 below
+      var t = ((r.top + r.height / 2) - vh / 2) / vh;
+      t = Math.max(-1, Math.min(1, t));
+      var plates = p.querySelectorAll('.plate');
+      for (var j = 0; j < plates.length; j++) {
+        var n = plates[j].getAttribute('data-plate');
+        var d = DRIFT[n] || 0;
+        plates[j].style.setProperty('--ox', (t * d).toFixed(2) + 'px');
+        plates[j].style.setProperty('--oy', (t * d * 0.55).toFixed(2) + 'px');
+        plates[j].style.setProperty('--orot', (t * d * 0.05).toFixed(3) + 'deg');
+      }
+    }
+
+    // 2. palette: find the two sections straddling the viewport middle and blend
+    if (sections.length) {
+      var mid = vh * 0.42, cur = sections[0], next = null, tt = 0;
+      for (var k = 0; k < sections.length; k++) {
+        var box = sections[k].el.getBoundingClientRect();
+        if (box.top <= mid) { cur = sections[k]; next = sections[k + 1] || null; }
+      }
+      if (next) {
+        var b = next.el.getBoundingClientRect();
+        // blend across the last 55% of a viewport before the next section lands
+        var span = vh * 0.55;
+        tt = 1 - Math.max(0, Math.min(1, (b.top - mid) / span));
+      }
+      var from = cur.pal, to = next ? next.pal : cur.pal;
+      for (var m = 0; m < KEYS.length; m++) {
+        root.style.setProperty('--' + KEYS[m], mix(from[KEYS[m]], to[KEYS[m]], tt));
+      }
+    }
+  }
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(frame);
+  }
+
+  if (!calm) {
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    // sections own their own vars for the observer to read; the blended result
+    // lives on :root and each section opts out of its own so it inherits
+    sections.forEach(function (s) {
+      KEYS.forEach(function (k) { s.el.style.setProperty('--' + k, 'inherit'); });
+    });
+    frame();
+  }
+})();
+</script>
+</body></html>

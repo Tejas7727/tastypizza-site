@@ -1,0 +1,134 @@
+{
+  "_readme": [
+    "THE INK PALETTES for the poster design.",
+    "",
+    "Every section of the site is a screen print in three inks on one paper stock.",
+    "Scrolling from one section to the next cross-fades the whole page between palettes,",
+    "which is the colour-theory idea made into the interface.",
+    "",
+    "  paper   the stock everything prints on (page background)",
+    "  ink     the darkest colour — all body text and the heavy shapes",
+    "  accent  the loud one — headlines, the brand voice, big shapes",
+    "  pop     the third ink — small marks, highlights, punctuation",
+    "",
+    "Photographs stay in full colour and get mounted like prints — a paper mat in the",
+    "section's inks, a caption block, a Pantone chip. The frame does the art direction",
+    "so the food can carry on looking edible.",
+    "",
+    "TO RETUNE A SECTION: change its hexes here and re-run  python build_poster.py.",
+    "Nothing else needs touching — the artwork is SVG and takes its colour from CSS.",
+    "",
+    "Pantone codes are the nearest published match, printed on the site as chips.",
+    "",
+    "TWO RULES, both learned the hard way:",
+    "  1. FOOD IS ALWAYS WARM. 'accent' and 'pop' are the warm inks and the food wears them.",
+    "     'ink' is the cool ground it sits on. A cool-inked pizza stops looking edible, and a",
+    "     duotoned photograph of meat looks spoiled — we tried it, it was unusable.",
+    "  2. 'ink' carries every piece of text. 'accent' is display sizes only (it clears 3:1,",
+    "     not 4.5:1, on paper). 'pop' never carries text at all."
+  ],
+
+  "palettes": {
+    "house": {
+      "name": "House Red",
+      "note": "The shop's own red, anchored by cobalt so it reads confident instead of loud.",
+      "paper":  "#F4EFE2",
+      "ink":    "#12275E",
+      "accent": "#B70017",
+      "pop":    "#EFB02B",
+      "pantone": { "paper": "P 12-1 C", "ink": "P 105-16 C", "accent": "P 56-16 C", "pop": "P 14-8 C" }
+    },
+    "donair": {
+      "name": "Spit & Sauce",
+      "note": "Aubergine and terracotta — the colour of the meat cone and the sauce.",
+      "paper":  "#F3E8D6",
+      "ink":    "#331A3B",
+      "accent": "#D2552A",
+      "pop":    "#E5A63C",
+      "pantone": { "paper": "P 15-2 C", "ink": "P 95-16 C", "accent": "P 30-8 C", "pop": "P 14-7 C" }
+    },
+    "harbour": {
+      "name": "Harbour",
+      "note": "Deep Atlantic teal against a coral that only a seafood counter earns.",
+      "paper":  "#E9EFEB",
+      "ink":    "#0D3A4C",
+      "accent": "#E4573A",
+      "pop":    "#F0D49B",
+      "pantone": { "paper": "P 3-9 C", "ink": "P 121-16 C", "accent": "P 40-8 C", "pop": "P 8-5 C" }
+    },
+    "latenight": {
+      "name": "Two AM",
+      "note": "Midnight ground, hot red food, and a magenta that only marks and badges get to wear.",
+      "paper":  "#EFEAE3",
+      "ink":    "#161343",
+      "accent": "#E8482E",
+      "pop":    "#E8155E",
+      "pantone": { "paper": "P 179-1 C", "ink": "P 100-16 C", "accent": "P 42-8 C", "pop": "P 73-7 C" }
+    },
+    "garden": {
+      "name": "Garden",
+      "note": "Forest green and orange — the vegetables, and the fryer.",
+      "paper":  "#F2F0E1",
+      "ink":    "#1C4228",
+      "accent": "#D74E1C",
+      "pop":    "#E9B622",
+      "pantone": { "paper": "P 163-1 C", "ink": "P 148-16 C", "accent": "P 34-8 C", "pop": "P 10-8 C" }
+    }
+  },
+
+  "_sectionReadme": "Which palette each part of the page prints in, top to bottom.",
+  "sections": {
+    "hero": "house",
+    "hits": "donair",
+    "build": "house",
+    "deals": "latenight",
+    "order": "harbour",
+    "find": "garden"
+  },
+
+  "_photoReadme": "Which palette each photo is MOUNTED in — the mat and caption around it, not the photo itself. '_default' catches anything not listed.",
+  "photoPalette": {
+    "_default": "house",
+
+    "donair": "donair",
+    "donair-pizza": "donair",
+    "donair-plate": "donair",
+    "donair-egg-roll": "donair",
+    "donair-pogo": "latenight",
+    "pita-wrap": "donair",
+
+    "meat-lovers-pizza": "house",
+    "all-dressed-pizza": "house",
+    "cheese-pizza": "house",
+    "hawaiian-pizza": "house",
+    "bbq-chicken-pizza": "house",
+    "greek-pizza": "garden",
+    "veggie-pizza": "garden",
+    "garlic-fingers": "house",
+
+    "fish-and-chips": "harbour",
+    "scallops": "harbour",
+    "shrimp": "harbour",
+    "cold-cut-sub": "harbour",
+    "steak-sub": "harbour",
+
+    "poutine": "latenight",
+    "chicken-wings": "latenight",
+    "mozza-sticks": "latenight",
+    "onion-rings": "latenight",
+    "nachos": "latenight",
+    "fries": "latenight",
+    "hamburger": "latenight",
+    "club-sandwich": "latenight",
+    "fried-chicken": "latenight",
+    "chicken-fingers": "latenight",
+    "bread-sticks": "latenight",
+
+    "salad": "garden",
+    "lasagna": "garden",
+    "burrito": "garden",
+    "tacos": "garden",
+    "quesadilla": "garden",
+    "rice-bowl": "garden"
+  }
+}
