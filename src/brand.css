@@ -1,10 +1,14 @@
-/* Tasty Pizza — brand direction.
-   White ground, near-black type, one red, one deep green. Real photographs do the
-   appetite; the graphics are rules, numbers, tags and a ticker, never cartoons.
+/* Tasty Pizza — brand direction, built around the order path.
 
-   Motion is CSS scroll-driven (animation-timeline), so reveals run on the
-   compositor with no library and no main-thread scroll listener. Lenis adds the
-   smooth wheel on top — 3KB, and it is what every site with good scroll feel uses.
+   THE JOB: get a hungry person from landing to ordering with as few decisions as
+   possible. Everything below serves that, and the research it came from:
+
+   * gaze lands centre, then top-right, then top-left ("golden triangle"), so the
+     primary action sits inside that path and never below the fold
+   * 5-7 options per group is the ceiling before decision fatigue sets in
+   * ONE thing highlighted per group. If everything is flagged, nothing is
+   * page speed is a conversion lever, not a nicety (1s load converts ~40%,
+     3s converts ~29%) — hence no framework, no GSAP, CSS-driven motion
 
    COLOUR RULES
      black  every piece of text and all structure
@@ -27,195 +31,394 @@
   --red-hot:#DC0A22;
   --green:#0B5C3F;    /*  8.0:1 both ways */
   --green-soft:#EAF3EE;
-  --line:rgba(17,17,19,.13);
+  --line:rgba(17,17,19,.12);
   --f:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --wrap:1280px; --mast:72px;
+  --wrap:1320px;
+  --bar:70px;         /* header height */
+  --dock:0px;         /* mobile bottom action bar, set in the media query */
+  --r:20px;
+  --sh:0 1px 2px rgba(17,17,19,.06),0 10px 28px rgba(17,17,19,.07);
+  --sh-lift:0 2px 6px rgba(17,17,19,.08),0 20px 46px rgba(17,17,19,.13);
   --ease:cubic-bezier(.22,.7,.28,1);
 }
 
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{margin:0;background:var(--white);color:var(--ink);
-  font:400 clamp(15.5px,.4vw + 14.4px,17px)/1.62 var(--f);overflow-x:hidden}
+  font:400 clamp(15.5px,.4vw + 14.4px,17px)/1.6 var(--f);
+  overflow-x:hidden;padding-bottom:var(--dock)}
 img,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
-h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.03em;line-height:.92}
+h1,h2,h3,h4{margin:0;font-weight:800;letter-spacing:-.03em;line-height:.95}
 p{margin:0}
-.wrap{width:min(100% - 2.6rem,var(--wrap));margin-inline:auto}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--red);outline-offset:3px;border-radius:6px}
+.wrap{width:min(100% - 2.4rem,var(--wrap));margin-inline:auto}
+.skip{position:absolute;left:-9999px;background:var(--red);color:#fff;padding:.7rem 1rem;z-index:99}
+.skip:focus{left:8px;top:8px}
 
 /* ---------------------------------------------------------------- type */
-.display{font-size:clamp(2.9rem,8.2vw,7.2rem);text-transform:uppercase;letter-spacing:-.04em}
+.display{font-size:clamp(2.7rem,6.4vw,5.8rem);text-transform:uppercase;letter-spacing:-.042em;
+  line-height:.88}
 .display em{font-style:normal;color:var(--red)}
-.eyebrow{display:flex;align-items:center;gap:.7rem;font-size:.7rem;font-weight:800;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
-.eyebrow::before{content:'';width:34px;height:2px;background:var(--red);flex:none}
-.lede{font-size:clamp(1rem,.5vw + .88rem,1.16rem);color:var(--ink-2);max-width:48ch}
-.num{font-size:.7rem;font-weight:800;letter-spacing:.18em;color:var(--ink-3);
-  font-variant-numeric:tabular-nums}
+.eyebrow{display:flex;align-items:center;gap:.65rem;font-size:.7rem;font-weight:800;
+  letter-spacing:.19em;text-transform:uppercase;color:var(--ink-3)}
+.eyebrow::before{content:'';width:30px;height:2px;background:var(--red);flex:none}
+.lede{font-size:clamp(1rem,.5vw + .88rem,1.14rem);color:var(--ink-2);max-width:44ch}
+h2.sec{font-size:clamp(1.7rem,3.4vw,2.7rem);text-transform:uppercase}
 
 /* ---------------------------------------------------------------- controls */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
-  padding:.85rem 1.5rem;border:2px solid var(--ink);border-radius:999px;font-weight:700;
-  transition:background-color .18s var(--ease),color .18s,transform .18s var(--ease);
-  font-variant-numeric:tabular-nums}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
+  padding:.92rem 1.6rem;border:2px solid var(--ink);border-radius:999px;font-weight:700;
+  cursor:pointer;background:none;font-variant-numeric:tabular-nums;
+  transition:background-color .18s var(--ease),color .18s,transform .18s var(--ease),
+    box-shadow .18s var(--ease)}
 .btn:hover{transform:translateY(-2px)}
-.btn-red{background:var(--red);border-color:var(--red);color:#fff}
-.btn-red:hover{background:var(--red-hot);border-color:var(--red-hot)}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff;box-shadow:var(--sh)}
+.btn-red:hover{background:var(--red-hot);border-color:var(--red-hot);box-shadow:var(--sh-lift)}
 .btn-line:hover{background:var(--ink);color:#fff}
-.acts{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem}
+.btn-sm{padding:.6rem 1.05rem;font-size:.9rem}
+.acts{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.7rem}
 
-.tag{display:inline-flex;align-items:center;gap:.4rem;font-size:.66rem;font-weight:800;
-  letter-spacing:.09em;text-transform:uppercase;padding:.3rem .6rem;border-radius:3px;
+.tag{display:inline-flex;align-items:center;align-self:flex-start;font-size:.64rem;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;padding:.26rem .55rem;border-radius:999px;
   background:var(--paper);color:var(--ink-2)}
 .tag-veg{background:var(--green-soft);color:var(--green)}
-.tag-hot{background:var(--red);color:#fff}
 
 .openpill{display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:700;
-  padding:.4rem .85rem;border-radius:999px;background:var(--green-soft);color:var(--green)}
+  padding:.38rem .8rem;border-radius:999px;background:var(--green-soft);color:var(--green);
+  white-space:nowrap}
 .openpill::before{content:'';width:7px;height:7px;border-radius:99px;background:currentColor;
   animation:ping 2.4s var(--ease) infinite}
+.openpill[data-shut]{background:#FBEAEC;color:#96101F}
+.openpill[data-shut]::before{animation:none}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(11,92,63,.5)}70%{box-shadow:0 0 0 7px rgba(11,92,63,0)}100%{box-shadow:0 0 0 0 rgba(11,92,63,0)}}
 
-/* ---------------------------------------------------------------- masthead */
-.mast{position:sticky;top:0;z-index:50;height:var(--mast);display:flex;align-items:center;
-  gap:1.6rem;padding:0 clamp(1rem,3vw,2.2rem);background:rgba(255,255,255,.93);
+/* ---------------------------------------------------------------- header */
+.bar{position:sticky;top:0;z-index:60;height:var(--bar);display:flex;align-items:center;
+  gap:1.4rem;padding:0 clamp(1rem,3vw,2rem);background:rgba(255,255,255,.94);
   backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.mast .brand{flex:none;line-height:0}
-.mast .brand img{height:42px;width:auto}
-.mast nav{display:flex;gap:1.5rem;margin-left:auto;font-weight:600;font-size:.94rem}
-.mast nav a{padding:.35rem 0;border-bottom:2px solid transparent}
-.mast nav a:hover{border-color:var(--red)}
-.mast .btn{padding:.6rem 1.1rem}
+.bar .brand{flex:none;line-height:0}
+.bar .brand img{height:42px;width:auto}
+.bar nav{display:flex;gap:1.4rem;margin-left:auto;font-weight:600;font-size:.94rem}
+.bar nav a{padding:.35rem 0;border-bottom:2px solid transparent}
+.bar nav a:hover{border-color:var(--red)}
+
+/* Phone: no chrome but the mark and a dots button. Everything else lives in the
+   sheet it opens, or in the dock at the bottom where a thumb already is. */
+.dots{display:none;margin-left:auto;width:44px;height:44px;border:0;background:none;
+  cursor:pointer;place-items:center;border-radius:999px}
+.dots:hover{background:var(--paper)}
+.dots i{display:block;width:5px;height:5px;border-radius:99px;background:var(--ink);
+  box-shadow:0 -9px 0 var(--ink),0 9px 0 var(--ink)}
+.sheet{position:fixed;left:0;right:0;top:var(--bar);z-index:55;background:var(--white);
+  border-bottom:1px solid var(--line);box-shadow:var(--sh-lift);
+  padding:.5rem 1.1rem 1.2rem;display:grid;gap:0;
+  transform:translateY(-10px);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease),opacity .22s var(--ease)}
+.sheet[data-open]{transform:none;opacity:1;pointer-events:auto}
+.sheet a{display:flex;align-items:center;justify-content:space-between;
+  padding:.92rem .2rem;border-bottom:1px solid var(--line);font-weight:700;font-size:1.05rem}
+.sheet a::after{content:'\2192';color:var(--red);font-weight:400}
+.sheet .openpill{margin:.9rem .2rem 0;justify-self:start}
+
+/* The dock: always within thumb reach, because it is the only thing on the
+   page that makes money. */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:58;display:none;gap:.5rem;
+  padding:.55rem .7rem calc(.55rem + env(safe-area-inset-bottom,0px));
+  background:rgba(255,255,255,.97);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line)}
+.dock a{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  font-weight:700;padding:.85rem .5rem;border-radius:999px;border:2px solid var(--ink);
+  font-size:.95rem}
+.dock a.main{background:var(--red);border-color:var(--red);color:#fff;flex:1.35}
 
 /* ---------------------------------------------------------------- hero */
-/* header + hero fill exactly one screen, so nothing below peeks in */
-.hero{position:relative;display:grid;align-items:center;
-  min-height:calc(100vh - var(--mast));padding:clamp(1.5rem,3vw,3rem) 0}
-@supports (min-height:100svh){.hero{min-height:calc(100svh - var(--mast))}}
-.hero-in{display:grid;gap:clamp(1.8rem,4vw,4rem);align-items:center;
-  grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr)}
-.hero h1{margin:1.1rem 0 1.4rem}
+.hero{position:relative;padding:clamp(1.6rem,3.4vw,3rem) 0 clamp(1.2rem,2.4vw,2rem)}
+.hero-in{display:grid;gap:clamp(1.4rem,3.4vw,3.2rem);align-items:center;
+  grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr)}
+.hero h1{margin:.9rem 0 1.05rem}
+.hero-copy{position:relative;z-index:2}
+.hero-facts{display:flex;flex-wrap:wrap;gap:.5rem 1.3rem;margin-top:1.3rem;
+  font-size:.86rem;font-weight:600;color:var(--ink-2)}
+.hero-facts span{display:inline-flex;align-items:center;gap:.45rem}
+.hero-facts b{color:var(--ink)}
 
-/* the pizza turns on the peel as you scroll. one real photograph, masked round —
-   the shape of the product is the shape of the brand device. */
-.turntable{position:relative;aspect-ratio:1;display:grid;place-items:center}
-.turntable::before{content:'';position:absolute;inset:11%;border-radius:50%;
+/* the pizza turns as you scroll. one real photograph, masked round. */
+.turntable{position:relative;aspect-ratio:1;display:grid;place-items:center;
+  max-width:min(100%,520px);margin-inline:auto}
+.turntable::before{content:'';position:absolute;inset:9%;border-radius:50%;
   border:1px dashed var(--line)}
-.disc{width:78%;aspect-ratio:1;border-radius:50%;overflow:hidden;position:relative;
-  box-shadow:0 26px 60px rgba(17,17,19,.17),0 3px 10px rgba(17,17,19,.08)}
+.disc{width:80%;aspect-ratio:1;border-radius:50%;overflow:hidden;position:relative;
+  box-shadow:0 30px 64px rgba(17,17,19,.18),0 3px 10px rgba(17,17,19,.07)}
 .disc img{width:100%;height:100%;object-fit:cover}
 .disc-spin{animation:turn linear both;animation-timeline:scroll(root);animation-range:0 100%}
-@keyframes turn{from{transform:rotate(0)}to{transform:rotate(58deg)}}
-
-/* the ring of text that orbits the pizza */
+@keyframes turn{from{transform:rotate(0)}to{transform:rotate(52deg)}}
 .orbit{position:absolute;inset:0;animation:turn-slow linear both;
   animation-timeline:scroll(root);animation-range:0 100%}
-@keyframes turn-slow{from{transform:rotate(0)}to{transform:rotate(-34deg)}}
-.orbit text{font-size:4.4px;font-weight:800;letter-spacing:.42em;fill:var(--ink-3);
+@keyframes turn-slow{from{transform:rotate(0)}to{transform:rotate(-30deg)}}
+.orbit text{font-size:4.3px;font-weight:800;letter-spacing:.4em;fill:var(--ink-3);
   text-transform:uppercase}
-
 .badge{position:absolute;z-index:3;background:var(--red);color:#fff;border-radius:50%;
-  width:clamp(88px,10vw,118px);aspect-ratio:1;display:grid;place-items:center;text-align:center;
-  font-weight:800;line-height:1.05;font-size:clamp(.72rem,1.1vw,.86rem);
-  right:-1%;top:3%;transform:rotate(-9deg);box-shadow:0 10px 26px rgba(183,0,23,.3)}
+  width:clamp(82px,8.6vw,108px);aspect-ratio:1;display:grid;place-items:center;text-align:center;
+  font-weight:800;line-height:1.05;font-size:clamp(.7rem,1vw,.82rem);
+  right:0;top:2%;transform:rotate(-9deg);box-shadow:0 10px 26px rgba(183,0,23,.3)}
 .badge b{display:block;font-size:1.5em}
 
+/* ---------------------------------------------------------------- quick pick
+   "Ready, set, go": four doors into the menu, in the gaze path, above the fold
+   on a laptop and one thumb-flick down on a phone. */
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(.6rem,1.4vw,1rem);
+  margin-top:clamp(1.3rem,2.8vw,2.2rem)}
+.qp{position:relative;display:flex;align-items:center;gap:.8rem;padding:.65rem .9rem .65rem .65rem;
+  border:2px solid var(--line);border-radius:var(--r);background:var(--white);
+  transition:border-color .18s,transform .18s var(--ease),box-shadow .18s var(--ease)}
+.qp:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:var(--sh)}
+.qp img{width:54px;height:54px;border-radius:14px;object-fit:cover;flex:none}
+.qp b{display:block;font-size:1rem;letter-spacing:-.01em}
+.qp small{display:block;font-size:.77rem;color:var(--ink-3);font-weight:500}
+.qp.is-deal{border-color:var(--red);background:var(--red);color:#fff}
+.qp.is-deal small{color:rgba(255,255,255,.82)}
+.qp.is-deal:hover{border-color:var(--red-hot);background:var(--red-hot)}
+.qp-mark{width:54px;height:54px;border-radius:14px;flex:none;display:grid;place-items:center;
+  background:rgba(255,255,255,.16);font-size:1.45rem;font-weight:800}
+
 /* ---------------------------------------------------------------- ticker */
-.ticker{background:var(--red);color:#fff;overflow:hidden;padding:.75rem 0;
-  border-block:2px solid var(--red)}
-.ticker-row{display:flex;width:max-content;animation:slide 34s linear infinite}
+.ticker{background:var(--ink);color:#fff;overflow:hidden;padding:.7rem 0}
+.ticker-row{display:flex;width:max-content;animation:slide 38s linear infinite}
 .ticker:hover .ticker-row{animation-play-state:paused}
-.ticker span{display:inline-flex;align-items:center;gap:1.6rem;padding-right:1.6rem;
-  font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.82rem;white-space:nowrap}
-.ticker span::after{content:'';width:7px;height:7px;border-radius:99px;background:#fff;opacity:.75}
+.ticker span{display:inline-flex;align-items:center;gap:1.5rem;padding-right:1.5rem;
+  font-weight:700;letter-spacing:.13em;text-transform:uppercase;font-size:.78rem;white-space:nowrap}
+.ticker span::after{content:'';width:6px;height:6px;border-radius:99px;background:var(--red)}
 @keyframes slide{to{transform:translateX(-50%)}}
 
 /* ---------------------------------------------------------------- sections */
-.band{padding:clamp(3.4rem,6.5vw,6rem) 0}
+.band{padding:clamp(2.8rem,5.5vw,5rem) 0}
 .band-paper{background:var(--paper)}
 .sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
-  gap:1.2rem;padding-bottom:1.2rem;margin-bottom:clamp(1.6rem,3vw,2.4rem);
-  border-bottom:2px solid var(--ink)}
-.sec-head h2{font-size:clamp(1.9rem,4vw,3.1rem);text-transform:uppercase}
+  gap:1rem;margin-bottom:clamp(1.3rem,2.6vw,2rem)}
+.sec-head p{color:var(--ink-3);font-size:.95rem;margin-top:.4rem}
 
-/* ---------------------------------------------------------------- menu cards */
-.hits{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));
-  gap:clamp(1rem,2vw,1.6rem)}
-.hit{position:relative;background:var(--white);display:flex;flex-direction:column}
-.hit-media{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--paper)}
-.hit-media img{width:100%;height:100%;object-fit:cover;
-  transition:transform .7s var(--ease),filter .5s var(--ease)}
-.hit:hover .hit-media img{transform:scale(1.055)}
-.hit-no{position:absolute;left:0;top:0;z-index:2;background:var(--ink);color:#fff;
-  font-size:.68rem;font-weight:800;letter-spacing:.14em;padding:.35rem .6rem}
-.hit-body{padding:.95rem 0 0;display:flex;flex-direction:column;gap:.35rem;flex:1}
-.hit-body h3{font-size:1.16rem;text-transform:uppercase;letter-spacing:-.02em}
-.hit-body p{font-size:.88rem;color:var(--ink-3);flex:1}
-.hit-foot{display:flex;align-items:center;justify-content:space-between;gap:.6rem;
-  margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--line)}
+/* ---------------------------------------------------------------- food cards
+   Rounded, photo on top, details below — the shape people already know from
+   every ordering app, which is exactly why it reads as "tap me". */
+.cards{display:grid;gap:clamp(.85rem,1.8vw,1.4rem);
+  grid-template-columns:repeat(auto-fill,minmax(228px,1fr))}
+.card{position:relative;display:flex;flex-direction:column;background:var(--white);
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--sh-lift);border-color:transparent}
+.card-media{aspect-ratio:16/11;overflow:hidden;background:var(--paper);flex:none}
+.card-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.card:hover .card-media img{transform:scale(1.06)}
+.card-body{padding:.85rem 1rem 1rem;display:flex;flex-direction:column;gap:.3rem;flex:1}
+.card-body h3{font-size:1.04rem;text-transform:uppercase;letter-spacing:-.015em}
+.card-body p{font-size:.85rem;color:var(--ink-3);flex:1;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:.6rem;
+  margin-top:auto;padding-top:.55rem}
 .price{font-weight:800;font-variant-numeric:tabular-nums;font-size:1.05rem}
-.price small{font-weight:600;color:var(--ink-3);font-size:.7rem;text-transform:uppercase;
-  letter-spacing:.1em;margin-right:.3rem}
-.add{border:0;background:var(--ink);color:#fff;border-radius:999px;font:inherit;font-weight:700;
-  font-size:.82rem;padding:.42rem .9rem;cursor:pointer;transition:background-color .18s}
+.price small{font-weight:600;color:var(--ink-3);font-size:.68rem;text-transform:uppercase;
+  letter-spacing:.1em;margin-right:.28rem}
+.add{border:0;background:var(--ink);color:#fff;border-radius:999px;font-weight:700;
+  font-size:.85rem;padding:.48rem 1rem;cursor:pointer;
+  transition:background-color .18s,transform .15s}
 .add:hover{background:var(--red)}
+.add:active{transform:scale(.95)}
+.add[data-done]{background:var(--green)}
+/* exactly one card per group may wear this. If everything is flagged, nothing is. */
+.card-flag{position:absolute;top:.7rem;left:.7rem;z-index:2;background:var(--red);color:#fff;
+  font-size:.64rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  padding:.3rem .6rem;border-radius:999px;box-shadow:0 4px 12px rgba(183,0,23,.3)}
 
-/* ---------------------------------------------------------------- split feature */
-.feature h2{margin:.55rem 0 1rem}
-.feature{display:grid;gap:clamp(1.5rem,4vw,3.5rem);align-items:center;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-.feature-media{position:relative;aspect-ratio:5/6;overflow:hidden}
-.feature-media img{width:100%;height:100%;object-fit:cover}
-.feature:nth-of-type(even) .feature-media{order:2}
-.rule-list{display:grid;gap:0;margin-top:1.6rem;border-top:1px solid var(--line)}
-.rule-list div{display:flex;justify-content:space-between;gap:1rem;padding:.72rem 0;
-  border-bottom:1px solid var(--line);font-size:.95rem}
-.rule-list b{font-weight:700;font-variant-numeric:tabular-nums}
+/* ---------------------------------------------------------------- deals */
+.deals{display:grid;gap:clamp(.85rem,1.8vw,1.4rem);
+  grid-template-columns:repeat(auto-fill,minmax(254px,1fr))}
+.deal{position:relative;border-radius:var(--r);overflow:hidden;background:var(--ink);
+  color:#fff;display:flex;min-height:212px;
+  transition:transform .22s var(--ease),box-shadow .22s var(--ease)}
+.deal:hover{transform:translateY(-4px);box-shadow:var(--sh-lift)}
+.deal img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5;
+  transition:transform .7s var(--ease)}
+.deal:hover img{transform:scale(1.06)}
+.deal-in{position:relative;z-index:2;padding:1.05rem;display:flex;flex-direction:column;
+  width:100%;gap:.28rem;
+  background:linear-gradient(180deg,rgba(17,17,19,.12),rgba(17,17,19,.84))}
+.deal h3{font-size:1.1rem;text-transform:uppercase;margin-top:auto}
+.deal p{font-size:.84rem;color:rgba(255,255,255,.78)}
+.deal-foot{display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+  flex-wrap:wrap;margin-top:.65rem}
+.deal .price{font-size:1.26rem}
+.deal .add{background:#fff;color:var(--ink)}
+.deal .add:hover{background:var(--red);color:#fff}
+.save{background:var(--green-soft);color:var(--green);font-weight:800;font-size:.66rem;
+  padding:.24rem .5rem;border-radius:999px}
 
-/* ---------------------------------------------------------------- reveals
-   Pure CSS scroll-driven animation: off the main thread, no library, and it
-   degrades to "already visible" everywhere it is not supported. */
+/* ---------------------------------------------------------------- builder */
+.build{display:grid;gap:clamp(1.2rem,3vw,2.6rem);
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start}
+/* On a phone the stage pins under the header so the pizza never scrolls away
+   while you choose what goes on it. That was the whole bug. */
+.build-stage{position:sticky;top:calc(var(--bar) + .5rem);z-index:5;
+  display:grid;justify-items:center;gap:.7rem;background:var(--white);padding-bottom:.6rem}
+.peel{position:relative;width:min(100%,320px);aspect-ratio:1;display:grid;place-items:center}
+.peel-board{position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#D6A96E,#B0814A 62%,#94683A);
+  box-shadow:0 20px 44px rgba(17,17,19,.24),inset 0 0 0 3px rgba(255,255,255,.1)}
+.dough{position:relative;width:86%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 42% 38%,#F3DCAE,#E7C58A 70%,#D9AE6B);
+  box-shadow:inset 0 -6px 16px rgba(140,90,40,.3),0 4px 14px rgba(0,0,0,.2);
+  transition:width .45s var(--ease)}
+.sauce{position:absolute;inset:8%;border-radius:50%;
+  background:radial-gradient(circle at 44% 40%,#D33A22,#A8240F);opacity:0;transition:opacity .35s}
+.cheese{position:absolute;inset:10%;border-radius:50%;opacity:0;transition:opacity .4s;
+  background:
+    radial-gradient(circle at 28% 30%,rgba(255,255,255,.5) 0 5%,transparent 6%),
+    radial-gradient(circle at 66% 24%,rgba(255,255,255,.4) 0 4%,transparent 5%),
+    radial-gradient(circle at 74% 62%,rgba(255,255,255,.42) 0 5%,transparent 6%),
+    radial-gradient(circle at 34% 72%,rgba(255,255,255,.38) 0 4%,transparent 5%),
+    radial-gradient(circle at 44% 40%,#F7D882,#EDBF55 62%,#DCA637);
+  box-shadow:inset 0 -4px 12px rgba(160,95,20,.35)}
+.dough[data-topped] .sauce,.dough[data-topped] .cheese{opacity:1}
+.tops{position:absolute;inset:6%;border-radius:50%;overflow:hidden}
+.bit{position:absolute;width:var(--w,20px);height:var(--w,20px);line-height:0;
+  transform:translate(-50%,-50%) rotate(var(--rot,0deg));
+  filter:drop-shadow(0 1.5px 1.5px rgba(96,48,10,.42));
+  animation:drop .46s cubic-bezier(.3,1.5,.5,1) both}
+.bit svg{width:100%;height:100%}
+@keyframes drop{
+  0%{opacity:0;transform:translate(-50%,-340%) rotate(calc(var(--rot,0deg) - 50deg)) scale(1.45)}
+  58%{opacity:1;transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(.82)}
+  78%{transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(1.06)}
+  100%{opacity:1;transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(1)}}
+
+.readout{display:flex;align-items:center;gap:.85rem;padding:.55rem .95rem;border-radius:999px;
+  background:var(--ink);color:#fff;font-weight:700;white-space:nowrap}
+.readout b{font-size:1.3rem;font-variant-numeric:tabular-nums}
+.readout span{font-size:.78rem;color:rgba(255,255,255,.72);font-weight:500}
+.readout b[data-bump]{animation:bump .3s var(--ease)}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.1)}100%{transform:scale(1)}}
+
+.ctrl{margin-bottom:1.25rem}
+.ctrl h3{font-size:.73rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);
+  margin-bottom:.55rem;display:flex;gap:.6rem;align-items:baseline}
+.ctrl h3 em{font-style:normal;color:var(--red);font-size:.72rem}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem}
+.chip{border:2px solid var(--line);background:var(--white);border-radius:999px;
+  padding:.5rem .95rem;font-weight:700;font-size:.9rem;cursor:pointer;
+  transition:border-color .16s,background-color .16s,color .16s,transform .14s}
+.chip:hover{border-color:var(--ink)}
+.chip:active{transform:scale(.96)}
+.chip[data-on]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip em{font-style:normal;opacity:.65;font-size:.76rem;margin-left:.3rem}
+.tops-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.45rem}
+.topbtn{display:flex;align-items:center;gap:.55rem;text-align:left;cursor:pointer;
+  border:2px solid var(--line);background:var(--white);border-radius:12px;
+  padding:.5rem .7rem;font-size:.87rem;font-weight:500;
+  transition:border-color .16s,background-color .16s,transform .14s}
+.topbtn:hover{border-color:var(--ink)}
+.topbtn:active{transform:scale(.97)}
+.topbtn[aria-pressed=true]{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:700}
+.topbtn[data-full]{opacity:.4}
+.tdot{width:14px;height:14px;border-radius:99px;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+
+/* ---------------------------------------------------------------- steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1rem,2.4vw,2rem);counter-reset:s}
+.step{counter-increment:s;position:relative;padding-top:1.05rem;border-top:3px solid var(--ink)}
+.step::before{content:counter(s);position:absolute;top:-1.15rem;right:0;font-size:2.5rem;
+  font-weight:800;color:var(--line);line-height:1}
+.step h3{font-size:1.08rem;text-transform:uppercase;margin-bottom:.3rem}
+.step p{font-size:.92rem;color:var(--ink-2)}
+
+/* ---------------------------------------------------------------- find */
+.find{display:grid;gap:clamp(1.2rem,3vw,2.6rem);grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  align-items:start}
+.hours{display:grid;gap:0;margin:1.1rem 0;border-top:1px solid var(--line)}
+.hours div{display:flex;justify-content:space-between;gap:1rem;padding:.58rem 0;
+  border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;font-size:.95rem}
+.hours div[data-today]{color:var(--red);font-weight:700}
+.hours dt,.hours dd{margin:0}
+.mapcard{position:relative;display:block;border-radius:var(--r);overflow:hidden;
+  aspect-ratio:4/3;background:var(--paper);box-shadow:var(--sh)}
+.mapcard iframe{position:absolute;left:-9%;top:-7%;width:119%;height:119%;border:0;
+  pointer-events:none;filter:saturate(.75) contrast(1.04)}
+.mapcard .pin{position:absolute;left:50%;bottom:1.1rem;transform:translateX(-50%);
+  background:var(--red);color:#fff;font-weight:700;padding:.72rem 1.25rem;border-radius:999px;
+  box-shadow:var(--sh-lift);white-space:nowrap}
+.mapattr{position:absolute;right:.5rem;bottom:.4rem;font-size:.6rem;color:var(--ink-3);
+  background:rgba(255,255,255,.85);padding:.1rem .35rem;border-radius:4px}
+.areas{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.9rem}
+.areas span{font-size:.82rem;font-weight:600;padding:.35rem .7rem;border-radius:999px;
+  background:var(--paper);color:var(--ink-2)}
+
+/* ---------------------------------------------------------------- reveals */
 @media (prefers-reduced-motion:no-preference){
   @supports (animation-timeline:view()){
-    [data-anim]{animation:rise .01s both;animation-timeline:view();
-      animation-range:entry 4% cover 26%}
-    [data-anim="mask"]{animation-name:wipe}
+    [data-anim]{animation:rise .01s both;animation-timeline:view();animation-range:entry 3% cover 24%}
     [data-anim="grow"]{animation-name:grow}
     [data-stagger]>*{animation:rise .01s both;animation-timeline:view();
-      animation-range:entry 2% cover 24%}
-    [data-stagger]>*:nth-child(2){animation-range:entry 5% cover 27%}
-    [data-stagger]>*:nth-child(3){animation-range:entry 8% cover 30%}
-    [data-stagger]>*:nth-child(4){animation-range:entry 11% cover 33%}
-    [data-stagger]>*:nth-child(5){animation-range:entry 14% cover 36%}
-    [data-stagger]>*:nth-child(6){animation-range:entry 17% cover 39%}
+      animation-range:entry 2% cover 22%}
+    [data-stagger]>*:nth-child(2){animation-range:entry 4% cover 24%}
+    [data-stagger]>*:nth-child(3){animation-range:entry 6% cover 26%}
+    [data-stagger]>*:nth-child(4){animation-range:entry 8% cover 28%}
+    [data-stagger]>*:nth-child(5){animation-range:entry 10% cover 30%}
+    [data-stagger]>*:nth-child(6){animation-range:entry 12% cover 32%}
   }
-  /* fallback for browsers without scroll-driven animations: brand.js adds .in */
   @supports not (animation-timeline:view()){
-    [data-anim],[data-stagger]>*{opacity:0;transform:translateY(26px);
+    [data-anim],[data-stagger]>*{opacity:0;transform:translateY(24px);
       transition:opacity .7s var(--ease),transform .8s var(--ease)}
     [data-anim].in,[data-stagger].in>*{opacity:1;transform:none}
-    [data-stagger].in>*:nth-child(2){transition-delay:.07s}
-    [data-stagger].in>*:nth-child(3){transition-delay:.14s}
-    [data-stagger].in>*:nth-child(4){transition-delay:.21s}
-    [data-stagger].in>*:nth-child(5){transition-delay:.28s}
-    [data-stagger].in>*:nth-child(6){transition-delay:.35s}
+    [data-stagger].in>*:nth-child(2){transition-delay:.06s}
+    [data-stagger].in>*:nth-child(3){transition-delay:.12s}
+    [data-stagger].in>*:nth-child(4){transition-delay:.18s}
+    [data-stagger].in>*:nth-child(5){transition-delay:.24s}
+    [data-stagger].in>*:nth-child(6){transition-delay:.3s}
   }
 }
-@keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
-@keyframes wipe{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
-@keyframes grow{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes grow{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
 
-/* ---------------------------------------------------------------- responsive */
-@media (max-width:920px){
-  .hero-in,.feature{grid-template-columns:1fr}
-  .feature:nth-of-type(even) .feature-media{order:0}
-  .mast nav{display:none}
-  .hits{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+/* ---------------------------------------------------------------- responsive
+   Big screens get more per row and more air; small screens lose the decorative
+   layer and keep every piece of content. Nothing that sells is ever hidden. */
+@media (min-width:1500px){
+  .cards,.deals{grid-template-columns:repeat(4,1fr)}
+}
+@media (max-width:1040px){
+  .build,.find{grid-template-columns:1fr}
+  .quick{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:900px){
+  .hero-in{grid-template-columns:1fr;gap:1.3rem}
+  .turntable{max-width:min(76%,380px)}
+  .bar nav,.bar .openpill,.bar .btn{display:none}
+  .dots{display:grid}
+  .dock{display:flex}
+  body{--dock:74px}
+  .steps{grid-template-columns:1fr;gap:1.1rem}
+  .build-stage{box-shadow:0 14px 20px -14px rgba(17,17,19,.25)}
+  .peel{width:min(54vw,220px)}
+}
+@media (max-width:620px){
+  .cards,.deals{grid-template-columns:repeat(2,1fr)}
+  .card-body{padding:.7rem .75rem .8rem}
+  .card-body h3{font-size:.94rem}
+  .card-body p{font-size:.78rem}
+  .card-foot{flex-direction:column;align-items:stretch;gap:.45rem}
+  .add{width:100%;padding:.55rem}
+  .quick{gap:.55rem}
+  .qp{padding:.55rem;gap:.6rem}
+  .qp img,.qp-mark{width:46px;height:46px;border-radius:11px}
+  .qp b{font-size:.9rem}
+  .qp small{display:none}
+  .tops-grid{grid-template-columns:repeat(2,1fr)}
+  .deal{min-height:190px}
 }
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
     transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
   .ticker-row{animation:none}
 }
