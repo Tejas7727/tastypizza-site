@@ -1,0 +1,221 @@
+/* Tasty Pizza — brand direction.
+   White ground, near-black type, one red, one deep green. Real photographs do the
+   appetite; the graphics are rules, numbers, tags and a ticker, never cartoons.
+
+   Motion is CSS scroll-driven (animation-timeline), so reveals run on the
+   compositor with no library and no main-thread scroll listener. Lenis adds the
+   smooth wheel on top — 3KB, and it is what every site with good scroll feel uses.
+
+   COLOUR RULES
+     black  every piece of text and all structure
+     red    one job — the thing you click, and the price
+     green  one job — fresh, open, vegetarian
+     red and green never touch; white or black always separates them */
+
+@font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-500.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-800.woff2') format('woff2');font-weight:800;font-display:swap}
+
+:root{
+  --white:#FFFFFF;
+  --paper:#F8F7F4;
+  --ink:#111113;      /* 18.9:1 on white */
+  --ink-2:#4A4A50;    /*  8.8:1 */
+  --ink-3:#6B6B73;    /*  5.3:1 — passes on white and on paper */
+  --red:#B70017;      /*  6.9:1 both ways, the client's own red */
+  --red-hot:#DC0A22;
+  --green:#0B5C3F;    /*  8.0:1 both ways */
+  --green-soft:#EAF3EE;
+  --line:rgba(17,17,19,.13);
+  --f:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --wrap:1280px; --mast:72px;
+  --ease:cubic-bezier(.22,.7,.28,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--white);color:var(--ink);
+  font:400 clamp(15.5px,.4vw + 14.4px,17px)/1.62 var(--f);overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.03em;line-height:.92}
+p{margin:0}
+.wrap{width:min(100% - 2.6rem,var(--wrap));margin-inline:auto}
+
+/* ---------------------------------------------------------------- type */
+.display{font-size:clamp(2.9rem,8.2vw,7.2rem);text-transform:uppercase;letter-spacing:-.04em}
+.display em{font-style:normal;color:var(--red)}
+.eyebrow{display:flex;align-items:center;gap:.7rem;font-size:.7rem;font-weight:800;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
+.eyebrow::before{content:'';width:34px;height:2px;background:var(--red);flex:none}
+.lede{font-size:clamp(1rem,.5vw + .88rem,1.16rem);color:var(--ink-2);max-width:48ch}
+.num{font-size:.7rem;font-weight:800;letter-spacing:.18em;color:var(--ink-3);
+  font-variant-numeric:tabular-nums}
+
+/* ---------------------------------------------------------------- controls */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.85rem 1.5rem;border:2px solid var(--ink);border-radius:999px;font-weight:700;
+  transition:background-color .18s var(--ease),color .18s,transform .18s var(--ease);
+  font-variant-numeric:tabular-nums}
+.btn:hover{transform:translateY(-2px)}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff}
+.btn-red:hover{background:var(--red-hot);border-color:var(--red-hot)}
+.btn-line:hover{background:var(--ink);color:#fff}
+.acts{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem}
+
+.tag{display:inline-flex;align-items:center;gap:.4rem;font-size:.66rem;font-weight:800;
+  letter-spacing:.09em;text-transform:uppercase;padding:.3rem .6rem;border-radius:3px;
+  background:var(--paper);color:var(--ink-2)}
+.tag-veg{background:var(--green-soft);color:var(--green)}
+.tag-hot{background:var(--red);color:#fff}
+
+.openpill{display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:700;
+  padding:.4rem .85rem;border-radius:999px;background:var(--green-soft);color:var(--green)}
+.openpill::before{content:'';width:7px;height:7px;border-radius:99px;background:currentColor;
+  animation:ping 2.4s var(--ease) infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(11,92,63,.5)}70%{box-shadow:0 0 0 7px rgba(11,92,63,0)}100%{box-shadow:0 0 0 0 rgba(11,92,63,0)}}
+
+/* ---------------------------------------------------------------- masthead */
+.mast{position:sticky;top:0;z-index:50;height:var(--mast);display:flex;align-items:center;
+  gap:1.6rem;padding:0 clamp(1rem,3vw,2.2rem);background:rgba(255,255,255,.93);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.mast .brand{flex:none;line-height:0}
+.mast .brand img{height:42px;width:auto}
+.mast nav{display:flex;gap:1.5rem;margin-left:auto;font-weight:600;font-size:.94rem}
+.mast nav a{padding:.35rem 0;border-bottom:2px solid transparent}
+.mast nav a:hover{border-color:var(--red)}
+.mast .btn{padding:.6rem 1.1rem}
+
+/* ---------------------------------------------------------------- hero */
+/* header + hero fill exactly one screen, so nothing below peeks in */
+.hero{position:relative;display:grid;align-items:center;
+  min-height:calc(100vh - var(--mast));padding:clamp(1.5rem,3vw,3rem) 0}
+@supports (min-height:100svh){.hero{min-height:calc(100svh - var(--mast))}}
+.hero-in{display:grid;gap:clamp(1.8rem,4vw,4rem);align-items:center;
+  grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr)}
+.hero h1{margin:1.1rem 0 1.4rem}
+
+/* the pizza turns on the peel as you scroll. one real photograph, masked round —
+   the shape of the product is the shape of the brand device. */
+.turntable{position:relative;aspect-ratio:1;display:grid;place-items:center}
+.turntable::before{content:'';position:absolute;inset:11%;border-radius:50%;
+  border:1px dashed var(--line)}
+.disc{width:78%;aspect-ratio:1;border-radius:50%;overflow:hidden;position:relative;
+  box-shadow:0 26px 60px rgba(17,17,19,.17),0 3px 10px rgba(17,17,19,.08)}
+.disc img{width:100%;height:100%;object-fit:cover}
+.disc-spin{animation:turn linear both;animation-timeline:scroll(root);animation-range:0 100%}
+@keyframes turn{from{transform:rotate(0)}to{transform:rotate(58deg)}}
+
+/* the ring of text that orbits the pizza */
+.orbit{position:absolute;inset:0;animation:turn-slow linear both;
+  animation-timeline:scroll(root);animation-range:0 100%}
+@keyframes turn-slow{from{transform:rotate(0)}to{transform:rotate(-34deg)}}
+.orbit text{font-size:4.4px;font-weight:800;letter-spacing:.42em;fill:var(--ink-3);
+  text-transform:uppercase}
+
+.badge{position:absolute;z-index:3;background:var(--red);color:#fff;border-radius:50%;
+  width:clamp(88px,10vw,118px);aspect-ratio:1;display:grid;place-items:center;text-align:center;
+  font-weight:800;line-height:1.05;font-size:clamp(.72rem,1.1vw,.86rem);
+  right:-1%;top:3%;transform:rotate(-9deg);box-shadow:0 10px 26px rgba(183,0,23,.3)}
+.badge b{display:block;font-size:1.5em}
+
+/* ---------------------------------------------------------------- ticker */
+.ticker{background:var(--red);color:#fff;overflow:hidden;padding:.75rem 0;
+  border-block:2px solid var(--red)}
+.ticker-row{display:flex;width:max-content;animation:slide 34s linear infinite}
+.ticker:hover .ticker-row{animation-play-state:paused}
+.ticker span{display:inline-flex;align-items:center;gap:1.6rem;padding-right:1.6rem;
+  font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.82rem;white-space:nowrap}
+.ticker span::after{content:'';width:7px;height:7px;border-radius:99px;background:#fff;opacity:.75}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ---------------------------------------------------------------- sections */
+.band{padding:clamp(3.4rem,6.5vw,6rem) 0}
+.band-paper{background:var(--paper)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
+  gap:1.2rem;padding-bottom:1.2rem;margin-bottom:clamp(1.6rem,3vw,2.4rem);
+  border-bottom:2px solid var(--ink)}
+.sec-head h2{font-size:clamp(1.9rem,4vw,3.1rem);text-transform:uppercase}
+
+/* ---------------------------------------------------------------- menu cards */
+.hits{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));
+  gap:clamp(1rem,2vw,1.6rem)}
+.hit{position:relative;background:var(--white);display:flex;flex-direction:column}
+.hit-media{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--paper)}
+.hit-media img{width:100%;height:100%;object-fit:cover;
+  transition:transform .7s var(--ease),filter .5s var(--ease)}
+.hit:hover .hit-media img{transform:scale(1.055)}
+.hit-no{position:absolute;left:0;top:0;z-index:2;background:var(--ink);color:#fff;
+  font-size:.68rem;font-weight:800;letter-spacing:.14em;padding:.35rem .6rem}
+.hit-body{padding:.95rem 0 0;display:flex;flex-direction:column;gap:.35rem;flex:1}
+.hit-body h3{font-size:1.16rem;text-transform:uppercase;letter-spacing:-.02em}
+.hit-body p{font-size:.88rem;color:var(--ink-3);flex:1}
+.hit-foot{display:flex;align-items:center;justify-content:space-between;gap:.6rem;
+  margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--line)}
+.price{font-weight:800;font-variant-numeric:tabular-nums;font-size:1.05rem}
+.price small{font-weight:600;color:var(--ink-3);font-size:.7rem;text-transform:uppercase;
+  letter-spacing:.1em;margin-right:.3rem}
+.add{border:0;background:var(--ink);color:#fff;border-radius:999px;font:inherit;font-weight:700;
+  font-size:.82rem;padding:.42rem .9rem;cursor:pointer;transition:background-color .18s}
+.add:hover{background:var(--red)}
+
+/* ---------------------------------------------------------------- split feature */
+.feature h2{margin:.55rem 0 1rem}
+.feature{display:grid;gap:clamp(1.5rem,4vw,3.5rem);align-items:center;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.feature-media{position:relative;aspect-ratio:5/6;overflow:hidden}
+.feature-media img{width:100%;height:100%;object-fit:cover}
+.feature:nth-of-type(even) .feature-media{order:2}
+.rule-list{display:grid;gap:0;margin-top:1.6rem;border-top:1px solid var(--line)}
+.rule-list div{display:flex;justify-content:space-between;gap:1rem;padding:.72rem 0;
+  border-bottom:1px solid var(--line);font-size:.95rem}
+.rule-list b{font-weight:700;font-variant-numeric:tabular-nums}
+
+/* ---------------------------------------------------------------- reveals
+   Pure CSS scroll-driven animation: off the main thread, no library, and it
+   degrades to "already visible" everywhere it is not supported. */
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    [data-anim]{animation:rise .01s both;animation-timeline:view();
+      animation-range:entry 4% cover 26%}
+    [data-anim="mask"]{animation-name:wipe}
+    [data-anim="grow"]{animation-name:grow}
+    [data-stagger]>*{animation:rise .01s both;animation-timeline:view();
+      animation-range:entry 2% cover 24%}
+    [data-stagger]>*:nth-child(2){animation-range:entry 5% cover 27%}
+    [data-stagger]>*:nth-child(3){animation-range:entry 8% cover 30%}
+    [data-stagger]>*:nth-child(4){animation-range:entry 11% cover 33%}
+    [data-stagger]>*:nth-child(5){animation-range:entry 14% cover 36%}
+    [data-stagger]>*:nth-child(6){animation-range:entry 17% cover 39%}
+  }
+  /* fallback for browsers without scroll-driven animations: brand.js adds .in */
+  @supports not (animation-timeline:view()){
+    [data-anim],[data-stagger]>*{opacity:0;transform:translateY(26px);
+      transition:opacity .7s var(--ease),transform .8s var(--ease)}
+    [data-anim].in,[data-stagger].in>*{opacity:1;transform:none}
+    [data-stagger].in>*:nth-child(2){transition-delay:.07s}
+    [data-stagger].in>*:nth-child(3){transition-delay:.14s}
+    [data-stagger].in>*:nth-child(4){transition-delay:.21s}
+    [data-stagger].in>*:nth-child(5){transition-delay:.28s}
+    [data-stagger].in>*:nth-child(6){transition-delay:.35s}
+  }
+}
+@keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes wipe{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes grow{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
+
+/* ---------------------------------------------------------------- responsive */
+@media (max-width:920px){
+  .hero-in,.feature{grid-template-columns:1fr}
+  .feature:nth-of-type(even) .feature-media{order:0}
+  .mast nav{display:none}
+  .hits{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important}
+  .ticker-row{animation:none}
+}
