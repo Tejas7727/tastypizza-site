@@ -2,9 +2,10 @@
   "_readme": "Business details. Edit anything here and the whole site updates. Times are 24-hour, local Halifax time.",
 
   "name": "Tasty Pizza",
-  "tagline": "Dartmouth's donair and pizza shop for over 20 years",
+  "tagline": "Dartmouth's pizza shop for over 20 years",
+  "owner": "Owned and operated by the Patel family",
   "claim": "Halifax's official food, made on Main Street.",
-  "blurb": "Family-run on Main Street in Dartmouth. Dough and pizza sauce made fresh every day, the best donair in town, and a kitchen that's still on at 2am Friday.",
+  "blurb": "Family-run on Main Street in Dartmouth. Dough and pizza sauce made fresh every day, the best donair in town, and a kitchen that's still on at 1am Friday and Saturday.",
 
   "phone": "902-435-5700",
   "phoneLink": "+19024355700",
@@ -29,7 +30,7 @@
     { "day": "Tuesday",   "open": 11, "close": 23 },
     { "day": "Wednesday", "open": 11, "close": 23 },
     { "day": "Thursday",  "open": 11, "close": 23 },
-    { "day": "Friday",    "open": 11, "close": 26 },
+    { "day": "Friday",    "open": 11, "close": 25 },
     { "day": "Saturday",  "open": 11, "close": 25 }
   ],
 
@@ -43,6 +44,9 @@
     "facebook": "https://www.facebook.com/people/Tasty-Pizza/100091965769509/",
     "instagram": "https://www.instagram.com/tastypizzadartmouth/"
   },
+
+  "_taxReadme": "Nova Scotia HST. Dropped from 15% to 14% on 1 April 2025.",
+  "taxRate": 0.14,
 
   "delivery": {
     "minimum": 10,

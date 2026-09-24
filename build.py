@@ -25,7 +25,7 @@ from kit import (  # noqa: E402
 def collect_hits(site, menu):
     """The six home-page cards, named in site.json so the owner picks them."""
     index = {}
-    for cat in menu["categories"]:
+    for cat in visible(menu["categories"]):
         for g in cat["groups"]:
             for it in visible(g["items"]):
                 index.setdefault(it["name"], (cat, g, it))
@@ -350,7 +350,7 @@ def render_group(g):
 
 def build_menu(site, menu, deals):
     rail = "".join(
-        f'<a class="railitem" href="#{e(c["id"])}">{e(c["name"])}</a>' for c in menu["categories"])
+        f'<a class="railitem" href="#{e(c["id"])}">{e(c["name"])}</a>' for c in visible(menu["categories"]))
     tags = "".join(
         f'<button class="filter" type="button" data-filter="{t}">{lbl}</button>'
         for t, lbl in (("popular", "Popular"), ("donair", "Donair"), ("veg", "Vegetarian"),
@@ -358,7 +358,7 @@ def build_menu(site, menu, deals):
                        ("glutenfree", "Gluten free")))
 
     cats = []
-    for c in menu["categories"]:
+    for c in visible(menu["categories"]):
         groups = "".join(render_group(g) for g in c["groups"])
         cats.append(f"""
     <section class="cat" id="{e(c['id'])}">
@@ -466,10 +466,11 @@ def main():
     (OUT / "index.html").write_text(build_home(site, menu, deals), encoding="utf-8")
     (OUT / "menu.html").write_text(build_menu(site, menu, deals), encoding="utf-8")
 
-    n_items = sum(len(visible(g["items"])) for c in menu["categories"] for g in c["groups"])
+    n_items = sum(len(visible(g["items"]))
+                  for c in visible(menu["categories"]) for g in c["groups"])
     n_deals = len([d for d in deals["deals"] if d.get("active")])
     print(f"built docs/index.html and docs/menu.html")
-    print(f"  {n_items} menu items across {len(menu['categories'])} categories, {n_deals} live deals")
+    print(f"  {n_items} menu items across {len(visible(menu['categories']))} categories, {n_deals} live deals")
 
 
 if __name__ == "__main__":

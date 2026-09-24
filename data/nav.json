@@ -1,0 +1,86 @@
+{
+  "_readme": [
+    "THE ORDERING CATEGORIES — what a customer sees before they see any food.",
+    "",
+    "Nine of them, on purpose. Usability research puts the overwhelm point at about",
+    "ten choices: past that, people stop reading and start scrolling aimlessly.",
+    "150 items in one list is a movie catalogue, and nobody picks a film quickly.",
+    "",
+    "Each category pulls its items from one or more GROUP IDs in menu.json, so",
+    "prices only ever live in one place. Order here is the order on screen.",
+    "",
+    "TO RENAME a category: change 'name'.",
+    "TO REORDER: move the block up or down.",
+    "TO MOVE items between categories: change which group ids are listed.",
+    "TO ADD a category: copy a block, give it a new id, list its groups, pick a photo.",
+    "",
+    "'photo' is any slug from data/photos.json.",
+    "'blurb' shows under the category name once it is open."
+  ],
+
+  "categories": [
+    {
+      "id": "pizza",
+      "name": "Pizza",
+      "blurb": "Dough and sauce made fresh every morning. Build your own or take one we already figured out.",
+      "photo": "meat-lovers-pizza",
+      "groups": ["build-your-own", "gourmet", "pizza-extras"]
+    },
+    {
+      "id": "garlic-fingers",
+      "name": "Garlic Fingers",
+      "blurb": "Served with donair sauce. The Yum Yums are in here too.",
+      "photo": "garlic-fingers",
+      "groups": ["garlic-fingers", "bread-sticks"]
+    },
+    {
+      "id": "donairs",
+      "name": "Donairs",
+      "blurb": "On the pita, on a plate, in an egg roll, or on a stick.",
+      "photo": "donair",
+      "groups": ["donair", "donair-plates", "donair-fried", "donair-sauce"]
+    },
+    {
+      "id": "subs",
+      "name": "Subs & Pockets",
+      "blurb": "Small or large. Oven baked or deep fried.",
+      "photo": "cold-cut-sub",
+      "groups": ["subs", "wraps-pockets"]
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken & Wings",
+      "blurb": "Wings in seven sauces, fingers, nuggets and the family pack.",
+      "photo": "chicken-wings",
+      "groups": ["wings", "chicken"]
+    },
+    {
+      "id": "seafood",
+      "name": "Seafood",
+      "blurb": "Fresh haddock, scallops, clams and shrimp.",
+      "photo": "fish-and-chips",
+      "groups": ["fish", "seafood"]
+    },
+    {
+      "id": "burgers",
+      "name": "Burgers & Poutine",
+      "blurb": "Burger or platter. Every poutine is real curds and homemade gravy.",
+      "photo": "hamburger",
+      "groups": ["burgers", "poutine"]
+    },
+    {
+      "id": "sides",
+      "name": "Sides & Nachos",
+      "blurb": "Fries, rings, mozza sticks, gravy and the loaded nachos.",
+      "photo": "onion-rings",
+      "groups": ["sides", "nachos"]
+    },
+    {
+      "id": "salads",
+      "name": "Salads & Pasta",
+      "blurb": "Something green, or lasagna with garlic bread.",
+      "photo": "salad",
+      "groups": ["salads-pasta"]
+    }
+  ]
+}

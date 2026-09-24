@@ -275,8 +275,8 @@
           "id": "salads-pasta",
           "name": "Salads & Pasta",
           "items": [
-            { "name": "Caesar or Garden Salad", "price": 7.95, "photo": "salad", "tags": ["veg"] },
-            { "name": "Greek Salad", "price": 8.45, "tags": ["veg"] },
+            { "name": "Caesar or Garden Salad", "price": 8.95, "photo": "salad", "tags": ["veg"] },
+            { "name": "Greek Salad", "price": 9.45, "tags": ["veg"] },
             { "name": "Add Chicken — Crispy or Grilled", "price": 2.30, "tags": ["chicken"] },
             { "name": "Lasagna with Garlic Bread", "price": 10.45, "photo": "lasagna" },
             { "name": "Ravioli with Garlic Bread", "price": 10.45 }
@@ -339,6 +339,8 @@
 
     {
       "id": "burritos",
+      "hidden": true,
+      "_hiddenNote": "Not on the printed 2026 menu. Set hidden to false if the shop still sells these.",
       "name": "Burritos & Tacos",
       "blurb": "Built on a pita wrap, which is a Dartmouth thing, and it works.",
       "groups": [

@@ -176,6 +176,8 @@ def check_data():
 
     used, placeholders, no_price = set(), [], []
     for c in menu["categories"]:
+        if c.get("hidden"):
+            continue
         for g in c["groups"]:
             for it in g["items"]:
                 if it.get("photo"):
