@@ -71,6 +71,9 @@ def item_json(it, g):
         out["alt"] = PHOTOS.get(it["photo"], {}).get("alt", it["name"])
     if it.get("tags"):
         out["tags"] = it["tags"]
+    if it.get("builder"):
+        # not a product with a price: a row that opens the configurator
+        out["builder"] = True
     return out
 
 
@@ -105,6 +108,10 @@ def menu_schema():
             for it in visible(g["items"]):
                 d = item_json(it, g)
                 prices = [s["price"] for s in d["sizes"] if s["price"] is not None]
+                if not prices and d.get("builder"):
+                    # the configurator's cheapest possible pizza — this row is the
+                    # one a search result should carry, so it gets a "from" price
+                    prices = [min(MENU["builder"]["priceByToppingCount"][0])]
                 if not prices:
                     continue
                 e = {"@type": "MenuItem", "name": it["name"],
@@ -135,6 +142,7 @@ def topping_art():
 def main():
     css = (ROOT / "src" / "brand.css").read_text(encoding="utf-8")
     js = (ROOT / "src" / "brand.js").read_text(encoding="utf-8")
+    cfgjs = (ROOT / "src" / "config.js").read_text(encoding="utf-8")
     b = MENU["builder"]
     a = SITE["address"]
     cats = categories_json()
@@ -149,18 +157,9 @@ def main():
         f'<small>{sum(len(g["items"]) for g in c["groups"])} to choose from</small></span></button>'
         for c in cats)
 
-    sizes = "".join(
-        f'<button class="chip" type="button" data-size="{i}"{" data-on" if i == 1 else ""}>{s}</button>'
-        for i, s in enumerate(b["sizes"]))
-    crusts = "".join(
-        f'<button class="chip" type="button" data-crust="{c["name"]}" data-sur="{c["surcharge"]}"'
-        f'{" data-on" if i == 0 else ""}>{c["name"]}'
-        + (f'<em>+{money(c["surcharge"])}</em>' if c["surcharge"] else "") + "</button>"
-        for i, c in enumerate(MENU["crusts"]))
-    tops = "".join(
-        f'<button class="topbtn" type="button" data-top="{t}" aria-pressed="false">'
-        f'<i class="tdot" aria-hidden="true"></i>{t}</button>' for t in MENU["toppings"])
-
+    # sizes, crusts and toppings are no longer baked into the page: the
+    # configurator renders itself wherever it is opened, and there is now more
+    # than one place — the build section, a menu row, a slot inside a deal.
     hours = "".join(
         f'<div data-day="{h["day"]}"><dt>{h["day"]}</dt><dd>'
         + ("Closed" if h.get("closed") else
@@ -190,11 +189,13 @@ def main():
     shop = {"img": IMG, "taxRate": SITE["taxRate"], "categories": cats,
             "hours": [{"day": h["day"], "open": h.get("open"), "close": h.get("close"),
                        "closed": h.get("closed", False)} for h in SITE["hours"]],
-            "deals": [{"name": d["name"], "desc": d.get("desc", ""), "price": d["price"],
-                       "compareAt": d.get("compareAt"), "photo": d.get("photo"),
+            "deals": [{"id": d["id"], "name": d["name"], "desc": d.get("desc", ""),
+                       "price": d["price"], "compareAt": d.get("compareAt"),
+                       "photo": d.get("photo"), "slots": d.get("slots", []),
                        "cats": DEAL_CATS.get(d["id"], [])} for d in live]}
     build_data = {"sizes": b["sizes"], "prices": b["priceByToppingCount"],
-                  "max": b["maxToppings"], "special": b["specialName"]}
+                  "max": b["maxToppings"], "special": b["specialName"],
+                  "extra": b["extraToppingPrice"]}
 
     html = f"""<!doctype html>
 <html lang="en-CA"><head><meta charset="utf-8">
@@ -237,11 +238,13 @@ def main():
 <main id="top">
 <section class="hero">
   <div class="wrap hero-in">
-    <div>
+    <div class="hero-copy">
       <p class="eyebrow" data-anim>760 Main Street &middot; Dartmouth</p>
       <h1 class="display" data-anim>Dartmouth&rsquo;s<br><em>pizza.</em></h1>
       <p class="lede" data-anim>Fresh dough every morning, hand-stretched, out of a deck oven.
         {SITE['owner']}.</p>
+    </div>
+    <div class="hero-cta">
       <div class="acts" data-anim>
         <a class="btn btn-red" href="#order">Start your order</a>
         <a class="btn btn-line" href="tel:{SITE['phoneLink']}">Call</a>
@@ -286,26 +289,7 @@ def main():
       <div><h2 class="sec">Build your own</h2>
         <p>Pick a size, tap toppings. The price moves as you go.</p></div>
     </header>
-    <div class="build">
-      <div class="build-stage">
-        <div class="peel">
-          <span class="peel-board" aria-hidden="true"></span>
-          <div class="dough" data-dough>
-            <span class="sauce" aria-hidden="true"></span>
-            <span class="cheese" aria-hidden="true"></span>
-            <div class="tops" data-tops></div>
-          </div>
-        </div>
-        <p class="readout"><b data-price>$12.90</b><span data-note>12&Prime; Medium &middot; just cheese</span></p>
-        <button class="btn btn-red btn-sm" type="button" data-add="Custom pizza" data-price="0">Add to my order</button>
-      </div>
-      <div>
-        <div class="ctrl"><h3>Size</h3><div class="chips" data-sizes>{sizes}</div></div>
-        <div class="ctrl"><h3>Crust</h3><div class="chips" data-crusts>{crusts}</div></div>
-        <div class="ctrl"><h3>Toppings <em data-count>0 of {b['maxToppings']}</em></h3>
-          <div class="tops-grid" data-topgrid>{tops}</div></div>
-      </div>
-    </div>
+    <div data-build-mount></div>
   </div>
 </section>
 
@@ -361,8 +345,14 @@ def main():
     <div class="tot"><span>Subtotal</span><b data-sub>$0.00</b></div>
     <div class="tot"><span data-taxlabel>HST 14%</span><b data-tax>$0.00</b></div>
     <div class="tot grand"><span>Total</span><b data-total>$0.00</b></div>
+    <label class="note-field" data-notefield>
+      <span>Anything we should know?</span>
+      <textarea data-order-note rows="2" maxlength="280"
+        placeholder="Well done, no onions, buzzer is broken &mdash; that sort of thing"></textarea>
+    </label>
     <button class="btn btn-red btn-wide" type="button" data-checkout>Checkout</button>
     <div class="pay" data-pay hidden>
+      <div class="paynote" data-paynote hidden><b>Your note</b><span data-paynote-text></span></div>
       <div class="paybox">
         <h3>Card payment goes here</h3>
         <p>This is where the payment provider drops in &mdash; Square, Stripe or Moneris. It is
@@ -381,8 +371,11 @@ def main():
 <script>
 window.SHOP={json.dumps(shop, separators=(',', ':'))};
 window.BUILD={json.dumps(build_data, separators=(',', ':'))};
+window.TOPPINGS={json.dumps(MENU["toppings"], separators=(',', ':'))};
+window.CRUSTS={json.dumps(MENU["crusts"], separators=(',', ':'))};
 {topping_art()}
 </script>
+<script>{cfgjs}</script>
 <script>{js}</script>
 </body></html>"""
     OUT.write_text(html, encoding="utf-8")

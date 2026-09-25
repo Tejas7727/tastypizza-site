@@ -11,7 +11,6 @@
     "\"compareAt\" is the normal price, used to show 'Save $x'. Leave it out if there's no saving to show.",
     "\"until\" is optional. Format YYYY-MM-DD. After that date the deal hides itself automatically."
   ],
-
   "deals": [
     {
       "id": "large-4-topping",
@@ -22,7 +21,18 @@
       "price": 20.95,
       "compareAt": 22.95,
       "photo": "all-dressed-pizza",
-      "addOn": { "name": "Add medium garlic fingers with dipping sauce", "price": 12.45 }
+      "addOn": {
+        "name": "Add medium garlic fingers with dipping sauce",
+        "price": 12.45
+      },
+      "slots": [
+        {
+          "type": "pizza",
+          "label": "Your 16\" pizza",
+          "size": 2,
+          "included": 4
+        }
+      ]
     },
     {
       "id": "pizza-and-fingers",
@@ -31,8 +41,20 @@
       "name": "Medium Pizza + Medium Garlic Fingers",
       "desc": "12\" pizza with four toppings, plus 12\" garlic fingers with donair sauce.",
       "price": 28.95,
-      "compareAt": 31.40,
-      "photo": "garlic-fingers"
+      "compareAt": 31.4,
+      "photo": "garlic-fingers",
+      "slots": [
+        {
+          "type": "pizza",
+          "label": "Your 12\" pizza",
+          "size": 1,
+          "included": 4
+        },
+        {
+          "type": "fixed",
+          "label": "12\" garlic fingers with donair sauce"
+        }
+      ]
     },
     {
       "id": "two-mediums",
@@ -41,8 +63,22 @@
       "name": "Two Medium Pizzas",
       "desc": "Four toppings on each.",
       "price": 32.95,
-      "compareAt": 34.90,
-      "photo": "meat-lovers-pizza"
+      "compareAt": 34.9,
+      "photo": "meat-lovers-pizza",
+      "slots": [
+        {
+          "type": "pizza",
+          "label": "Pizza 1 — 12\" medium",
+          "size": 1,
+          "included": 4
+        },
+        {
+          "type": "pizza",
+          "label": "Pizza 2 — 12\" medium",
+          "size": 1,
+          "included": 4
+        }
+      ]
     },
     {
       "id": "party-box",
@@ -60,7 +96,7 @@
       "name": "6 Donair Egg Rolls",
       "desc": "With donair sauce.",
       "price": 13.95,
-      "compareAt": 15.00,
+      "compareAt": 15.0,
       "photo": "donair-egg-roll"
     },
     {
@@ -69,8 +105,8 @@
       "badge": "",
       "name": "6 Donair Pogos",
       "desc": "With donair sauce.",
-      "price": 19.50,
-      "compareAt": 20.70,
+      "price": 19.5,
+      "compareAt": 20.7,
       "photo": "donair-pogo"
     },
     {
@@ -84,12 +120,21 @@
     },
     {
       "id": "two-can-dine",
-      "active": true,
+      "active": false,
+      "_activeNote": "Turned off because it is a burrito deal and the printed menu has no burrito section (the burritos category is hidden for the same reason). If the shop does still make them, set active back to true here and remove hidden from the burritos category in menu.json.",
       "badge": "",
       "name": "Two Can Dine",
       "desc": "Two medium burritos, two small chips & salsa, two cans of pop.",
       "price": 24.99,
       "photo": "burrito"
     }
+  ],
+  "_slotsReadme": [
+    "'slots' describes what the customer still has to choose inside a deal.",
+    "  type 'pizza'  opens the topping builder. 'size' is the index into",
+    "                menu.json builder.sizes and is locked. 'included' is how many",
+    "                toppings the deal price covers; past that they pay per topping.",
+    "  type 'fixed'  nothing to choose, just listed so they can see what they get.",
+    "A deal with no 'slots' is added to the basket in one tap."
   ]
 }

@@ -314,7 +314,14 @@ def render_group(g):
         if it.get("photo"):
             media = f'<div class="row-media">{photo_tag(it["photo"], it.get("desc") or it["name"], sizes="(max-width:700px) 30vw, 150px")}</div>'
 
-        if sizes and len(prices) > 1:
+        if it.get("builder"):
+            # not a priced dish: the row that sends you to the pizza builder.
+            # Without this it would render as "Call for price".
+            frm = min(p for p in load("menu")["builder"]["priceByToppingCount"][0] if p is not None)
+            price_block = (f'<div class="row-one">'
+                           f'<span class="price"><small>from</small> {money(frm)}</span>'
+                           f'<a class="add" href="index.html#build">Build it</a></div>')
+        elif sizes and len(prices) > 1:
             cells = "".join(
                 (f'<button class="pcell" type="button" data-add="{e(it["name"])} ({e(sz)})" data-price="{p}">'
                  f'<span class="pcell-sz">{e(sz)}</span><span class="pcell-p">{money(p)}</span></button>')

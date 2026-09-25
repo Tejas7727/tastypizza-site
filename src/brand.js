@@ -4,6 +4,14 @@
    conversion lever on a takeaway site, and the whole of this is smaller than
    the smallest animation library.
 
+   Two ideas hold the funnel together:
+
+   * Nothing opens in a modal. A pizza row expands where it sits, a deal expands
+     into its slots, a slot expands into the builder. You can always see where
+     you came from, so there is never a moment of "how do I get back".
+   * The category rail never leaves. Once you are inside Seafood you are one tap
+     from Pizza, all the way down the list, without hunting for a back button.
+
    Everything the customer builds is kept in localStorage, so closing the tab
    by accident does not throw the order away. */
 (function () {
@@ -20,6 +28,7 @@
   };
 
   var CFG = window.SHOP || {};
+  var BD = window.BUILD;
 
   /* ------------------------------------------------------------ smooth wheel */
   if (!calm && typeof Lenis !== 'undefined') {
@@ -99,18 +108,24 @@
       if (open) sheet.removeAttribute('data-open'); else sheet.setAttribute('data-open', '');
       dots.setAttribute('aria-expanded', String(!open));
     });
-    sheet.addEventListener('click', function (ev) { if (ev.target.closest('a')) close(); });
+    sheet.addEventListener('click', function (ev) { if (ev.target.closest('a')) closeSheet(); });
     document.addEventListener('click', function (ev) {
-      if (!sheet.contains(ev.target) && !dots.contains(ev.target)) close();
+      if (!sheet.contains(ev.target) && !dots.contains(ev.target)) closeSheet();
     });
-    function close() { sheet.removeAttribute('data-open'); dots.setAttribute('aria-expanded', 'false'); }
+  }
+  function closeSheet() {
+    if (!sheet) return;
+    sheet.removeAttribute('data-open');
+    dots.setAttribute('aria-expanded', 'false');
   }
 
   /* ------------------------------------------------------------ the cart */
-  var KEY = 'tp.cart.v1';
+  var KEY = 'tp.cart.v1', NKEY = 'tp.note.v1';
   var cart = [];
   try { cart = JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) { cart = []; }
   if (!Array.isArray(cart)) cart = [];
+  var orderNote = '';
+  try { orderNote = localStorage.getItem(NKEY) || ''; } catch (e) { orderNote = ''; }
 
   function save() { try { localStorage.setItem(KEY, JSON.stringify(cart)); } catch (e) {} }
   function count() { return cart.reduce(function (s, r) { return s + r.qty; }, 0); }
@@ -181,11 +196,77 @@
   }
 
   function showPay(on) {
-    var pay = $('[data-pay]'), list = $('[data-cart-list]'), cta = $('[data-checkout]');
+    var pay = $('[data-pay]'), list = $('[data-cart-list]'), cta = $('[data-checkout]'),
+        nf = $('[data-notefield]');
     if (!pay) return;
     pay.hidden = !on;
     if (list) list.hidden = on;
     if (cta) cta.hidden = on;
+    if (nf) nf.hidden = on;
+    var box = $('[data-paynote]'), txt = $('[data-paynote-text]');
+    if (box) {
+      box.hidden = !on || !orderNote;
+      if (txt) txt.textContent = orderNote;
+    }
+  }
+
+  var noteEl = $('[data-order-note]');
+  if (noteEl) {
+    noteEl.value = orderNote;
+    noteEl.addEventListener('input', function () {
+      orderNote = noteEl.value.slice(0, 280);
+      try { localStorage.setItem(NKEY, orderNote); } catch (e) {}
+    });
+  }
+
+  /* ------------------------------------------------------------ expanding panels
+
+     One mechanism for three jobs: a pizza row, a deal, a slot inside a deal.
+     The 0fr -> 1fr grid trick animates to the content's own height without
+     anyone having to measure anything. */
+  var panelSeq = 0;
+
+  function togglePanel(host, fill) {
+    var open = host.hasAttribute('data-open');
+    if (open) { host.removeAttribute('data-open'); host.removeAttribute('data-grown'); return false; }
+    // only one row open at a time inside the same list — two open accordions
+    // is where a simple page starts feeling like a form
+    var sibs = host.parentNode ? host.parentNode.children : [];
+    Array.prototype.slice.call(sibs).forEach(function (s) {
+      if (s !== host && s.hasAttribute && s.hasAttribute('data-open')) {
+        s.removeAttribute('data-open');
+        s.removeAttribute('data-grown');
+      }
+    });
+    var body = host.querySelector(':scope > .panel > .panel-in');
+    if (body && !body.getAttribute('data-filled')) {
+      body.setAttribute('data-filled', '1');
+      fill(body);
+    }
+    host.setAttribute('data-open', '');
+    // the 0fr -> 1fr height animation needs overflow:hidden, which also kills
+    // position:sticky on the pizza inside. Once the panel has finished growing
+    // the clipping has no more work to do, so it comes off and the pizza can
+    // follow you down the toppings list on a phone.
+    setTimeout(function () { if (host.hasAttribute('data-open')) host.setAttribute('data-grown', ''); }, 460);
+    // a panel that opens below the fold is a panel nobody knows opened
+    setTimeout(function () {
+      var r = host.getBoundingClientRect();
+      var bar = parseFloat(getComputedStyle(document.documentElement)
+        .getPropertyValue('--bar')) || 60;
+      if (r.top < bar + 8 || r.top > window.innerHeight * 0.55) {
+        window.scrollTo({ top: window.scrollY + r.top - bar - 70,
+          behavior: calm ? 'auto' : 'smooth' });
+      }
+    }, 90);
+    return true;
+  }
+
+  function mountBuilder(body, opts, onAdd) {
+    var cfg = new window.PizzaConfig(opts);
+    body.innerHTML = cfg.render();
+    cfg.mount(body, onAdd);
+    return cfg;
   }
 
   /* ------------------------------------------------------------ categories */
@@ -203,6 +284,11 @@
     if (history.replaceState) history.replaceState(null, '', '#c-' + id);
     var anchor = $('#order');
     if (anchor) anchor.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+    // put the category you are in where you can see it on the rail
+    var on = $('.railbtn[data-on]', view);
+    if (on && on.parentNode) {
+      on.parentNode.scrollTo({ left: on.offsetLeft - 16, behavior: calm ? 'auto' : 'smooth' });
+    }
   }
 
   function closeCategory() {
@@ -215,14 +301,36 @@
     if (history.replaceState) history.replaceState(null, '', '#order');
   }
 
-  function itemRow(it, extra) {
-    var media = it.photo
-      ? '<div class="item-media"><img src="' + CFG.img + it.photo + '@sm.webp" width="400" height="300"'
-        + ' loading="lazy" alt="' + esc(it.alt || it.name) + '"></div>' : '';
-    var tags = (it.tags || []).map(function (t) {
-      if (t === 'veg') return '<span class="tag tag-veg">Veg</span>';
-      return '';
+  function tagsOf(it) {
+    return (it.tags || []).map(function (t) {
+      return t === 'veg' ? '<span class="tag tag-veg">Veg</span>' : '';
     }).join('');
+  }
+
+  function media(photo, alt, cls) {
+    if (!photo) return '';
+    return '<div class="item-media' + (cls ? ' ' + cls : '') + '">'
+      + '<img src="' + CFG.img + photo + '@sm.webp" width="400" height="300" loading="lazy"'
+      + ' alt="' + esc(alt || '') + '"></div>';
+  }
+
+  /* a row that opens the configurator rather than carrying a price */
+  function builderRow(it) {
+    var from = BD ? Math.min.apply(null, BD.prices[0]) : 0;
+    return '<li class="item item-x is-build" data-x="build">'
+      + '<button class="item-hit" type="button" data-x-toggle aria-expanded="false">'
+      + media(it.photo, it.alt || it.name)
+      + '<span class="item-body"><span class="h4">' + esc(it.name)
+      + '<span class="flag flag-build">Make it yours</span></span>'
+      + (it.desc ? '<span class="p">' + esc(it.desc) + '</span>' : '') + '</span>'
+      + '<span class="item-side"><span class="price"><small>from</small>' + money(from) + '</span>'
+      + '<span class="add add-ghost">Build it</span></span>'
+      + '</button>'
+      + '<div class="panel"><div class="panel-in"></div></div></li>';
+  }
+
+  function itemRow(it, extra) {
+    if (it.builder) return builderRow(it);
     var side;
     if (it.sizes && it.sizes.length > 1) {
       // picking a size IS adding it — one tap, no modal
@@ -240,8 +348,9 @@
           + '<button class="add" type="button" data-add="' + esc(it.name) + '"'
           + ' data-price="' + p + '">Add</button>';
     }
-    return '<li class="item' + (extra ? ' ' + extra : '') + '">' + media
-      + '<div class="item-body"><h4>' + esc(it.name) + tags + '</h4>'
+    return '<li class="item' + (extra ? ' ' + extra : '') + '">'
+      + media(it.photo, it.alt || it.name)
+      + '<div class="item-body"><h4>' + esc(it.name) + tagsOf(it) + '</h4>'
       + (it.desc ? '<p>' + esc(it.desc) + '</p>' : '') + '</div>'
       + '<div class="item-side">' + side + '</div></li>';
   }
@@ -249,20 +358,123 @@
   function offerRow(d) {
     var was = d.compareAt && d.compareAt > d.price
       ? '<span class="was">' + money(d.compareAt) + '</span>' : '';
-    return '<li class="item offer">'
-      + (d.photo ? '<div class="item-media"><img src="' + CFG.img + d.photo + '@sm.webp" width="400"'
-        + ' height="300" loading="lazy" alt=""></div>' : '')
-      + '<div class="item-body"><h4>' + esc(d.name) + '<span class="flag">Deal</span></h4>'
-      + '<p>' + esc(d.desc || '') + '</p></div>'
-      + '<div class="item-side"><span class="price">' + was + money(d.price) + '</span>'
-      + '<button class="add" type="button" data-add="' + esc(d.name) + '" data-price="' + d.price
-      + '" data-note="deal">Add</button></div></li>';
+    var slots = d.slots || [];
+    if (!slots.length) {
+      return '<li class="item offer">'
+        + media(d.photo, '')
+        + '<div class="item-body"><h4>' + esc(d.name) + '<span class="flag">Deal</span></h4>'
+        + '<p>' + esc(d.desc || '') + '</p></div>'
+        + '<div class="item-side"><span class="price">' + was + money(d.price) + '</span>'
+        + '<button class="add" type="button" data-add="' + esc(d.name) + '" data-price="' + d.price
+        + '" data-note="deal">Add</button></div></li>';
+    }
+    // a deal you have to build: it opens into its slots
+    var n = slots.filter(function (s) { return s.type === 'pizza'; }).length;
+    return '<li class="item item-x offer" data-x="deal" data-deal="' + esc(d.id) + '">'
+      + '<button class="item-hit" type="button" data-x-toggle aria-expanded="false">'
+      + media(d.photo, '')
+      + '<span class="item-body"><span class="h4">' + esc(d.name) + '<span class="flag">Deal</span></span>'
+      + '<span class="p">' + esc(d.desc || '') + '</span></span>'
+      + '<span class="item-side"><span class="price">' + was + money(d.price) + '</span>'
+      + '<span class="add add-ghost">' + (n > 1 ? 'Pick ' + n + ' pizzas' : 'Pick toppings') + '</span>'
+      + '</span></button>'
+      + '<div class="panel"><div class="panel-in"></div></div></li>';
+  }
+
+  function dealPanel(body, d) {
+    var slots = d.slots || [];
+    var cfgs = {};
+    body.innerHTML = '<div class="slots">'
+      + slots.map(function (s, i) {
+        if (s.type !== 'pizza') {
+          return '<div class="slot slot-fixed"><b>' + esc(s.label) + '</b>'
+            + '<span>Included</span></div>';
+        }
+        return '<div class="slot" data-slot="' + i + '">'
+          + '<button class="slot-hit" type="button" data-x-toggle aria-expanded="false">'
+          + '<b>' + esc(s.label) + '</b>'
+          + '<span data-slot-sum>' + (s.included ? s.included + ' toppings included'
+              + ' · tap to choose' : 'Tap to choose toppings') + '</span>'
+          + '<i class="chev" aria-hidden="true"></i></button>'
+          + '<div class="panel"><div class="panel-in"></div></div></div>';
+      }).join('')
+      + '</div>'
+      + '<div class="slots-foot"><p class="slots-note" data-deal-extra hidden></p>'
+      + '<button class="btn btn-red btn-wide" type="button" data-deal-add>'
+      + 'Add the deal · ' + money(d.price) + '</button></div>';
+
+    function extras() {
+      var x = 0;
+      Object.keys(cfgs).forEach(function (k) { x += cfgs[k].price(); });
+      return x;
+    }
+    function repaint() {
+      var x = extras();
+      var btn = body.querySelector('[data-deal-add]');
+      if (btn) btn.textContent = 'Add the deal · ' + money(d.price + x);
+      var note = body.querySelector('[data-deal-extra]');
+      if (note) {
+        note.hidden = x <= 0;
+        note.textContent = x > 0 ? money(x) + ' of extra toppings on top of the deal price.' : '';
+      }
+    }
+
+    body.addEventListener('click', function (ev) {
+      var hit = ev.target.closest('[data-x-toggle]');
+      var slot = hit && hit.closest('[data-slot]');
+      if (slot && body.contains(slot)) {
+        var i = parseInt(slot.getAttribute('data-slot'), 10);
+        var s = slots[i];
+        var opened = togglePanel(slot, function (inner) {
+          cfgs[i] = mountBuilder(inner, { size: s.size, included: s.included,
+            dealPrice: d.price }, function () {
+            slot.removeAttribute('data-open');
+            hit.setAttribute('aria-expanded', 'false');
+            var sum = slot.querySelector('[data-slot-sum]');
+            if (sum) {
+              var c = cfgs[i];
+              sum.textContent = BD.sizes[c.size] + ' · ' + c.label()
+                + (c.price() > 0 ? ' · +' + money(c.price()) : '');
+            }
+            slot.setAttribute('data-set', '');
+            repaint();
+          });
+          cfgs[i].onChange = repaint;
+        });
+        hit.setAttribute('aria-expanded', String(opened));
+        return;
+      }
+      if (ev.target.closest('[data-deal-add]')) {
+        var parts = slots.map(function (s, i) {
+          if (s.type !== 'pizza') return s.label;
+          var c = cfgs[i];
+          return s.label.replace(/^Your |^Pizza \d+ — /, '') + ': '
+            + (c ? c.label() : 'just cheese');
+        });
+        add(d.name, d.price + extras(), parts.join(' · '));
+        openCart(true);
+      }
+    });
+    repaint();
+  }
+
+  function rail(active) {
+    var cats = CFG.categories || [];
+    return '<div class="rail" data-rail>'
+      + '<button class="rail-back" type="button" data-back aria-label="All categories">'
+      + '<i class="chev-l" aria-hidden="true"></i></button>'
+      + '<div class="rail-scroll">'
+      + cats.map(function (c) {
+        return '<button class="railbtn" type="button" data-cat="' + esc(c.id) + '"'
+          + (c.id === active ? ' data-on aria-current="true"' : '') + '>'
+          + esc(c.name) + '</button>';
+      }).join('')
+      + '</div></div>';
   }
 
   function render(c) {
-    var html = '<div class="catview-head">'
-      + '<button class="back" type="button" data-back>&larr; All categories</button>'
-      + '<h2>' + esc(c.name) + '</h2></div>'
+    var html = rail(c.id)
+      + '<div class="catview-head"><h2>' + esc(c.name) + '</h2></div>'
       + (c.blurb ? '<p class="catview-blurb">' + esc(c.blurb) + '</p>' : '');
 
     // offers first — that is the whole point of an offer
@@ -294,6 +506,36 @@
   document.addEventListener('click', function (ev) {
     var t = ev.target;
 
+    // an expanding row. Deal slots are handled by their own panel's listener.
+    var toggle = t.closest('[data-x-toggle]');
+    if (toggle) {
+      // a slot toggle lives inside a deal's panel and is that panel's business.
+      // Without this it would walk up to the deal row and shut the whole thing.
+      if (toggle.closest('.panel-in')) return;
+      var host = toggle.closest('[data-x]');
+      if (host) {
+        ev.preventDefault();
+        var kind = host.getAttribute('data-x');
+        var opened = togglePanel(host, function (body) {
+          if (kind === 'deal') {
+            var id = host.getAttribute('data-deal');
+            var d = (CFG.deals || []).filter(function (x) { return x.id === id; })[0];
+            if (d) dealPanel(body, d);
+          } else {
+            mountBuilder(body, {}, function (cfg) {
+              add(cfg.name(), cfg.price(), cfg.label()
+                + (cfg.crust !== 'White' ? ' · ' + cfg.crust + ' crust' : ''));
+              host.removeAttribute('data-open');
+              toggle.setAttribute('aria-expanded', 'false');
+              openCart(true);
+            });
+          }
+        });
+        toggle.setAttribute('aria-expanded', String(opened));
+      }
+      return;
+    }
+
     var cat = t.closest('[data-cat]');
     if (cat) { ev.preventDefault(); openCategory(cat.getAttribute('data-cat')); return; }
     if (t.closest('[data-back]')) { closeCategory(); return; }
@@ -302,10 +544,7 @@
     if (addBtn) {
       var price = parseFloat(addBtn.getAttribute('data-price'));
       if (isNaN(price)) return;
-      var name = addBtn.getAttribute('data-add');
-      var note = addBtn.getAttribute('data-note') || '';
-      if (name === 'Custom pizza') { var b = buildState(); name = b.name; note = b.note; price = b.price; }
-      add(name, price, note);
+      add(addBtn.getAttribute('data-add'), price, addBtn.getAttribute('data-note') || '');
       addBtn.setAttribute('data-done', '');
       var was = addBtn.innerHTML;
       if (addBtn.classList.contains('add')) addBtn.textContent = 'Added';
@@ -327,113 +566,19 @@
 
   document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') openCart(false); });
 
-  /* ------------------------------------------------------------ the builder */
-  var B = { size: 1, crust: 'White', sur: 0, tops: [] };
-  var BD = window.BUILD;
-
-  function buildState() {
-    var n = Math.min(B.tops.length, BD.prices.length - 1);
-    var price = BD.prices[n][B.size] + (B.sur || 0);
-    var label = !B.tops.length ? 'just cheese'
-      : (B.tops.length >= BD.max ? BD.special : B.tops.join(', '));
-    return { price: price, name: BD.sizes[B.size] + ' pizza',
-      note: label + (B.crust !== 'White' ? ' · ' + B.crust : ''),
-      short: BD.sizes[B.size] + ' · '
-        + (!B.tops.length ? 'just cheese'
-          : (B.tops.length >= BD.max ? BD.special : B.tops.length + ' topping'
-            + (B.tops.length > 1 ? 's' : ''))) };
-  }
-
-  function paintBuild(bump) {
-    if (!BD) return;
-    var st = buildState();
-    var p = $('[data-price]');
-    if (p) {
-      p.textContent = money(st.price);
-      if (bump) { p.setAttribute('data-bump', ''); setTimeout(function () { p.removeAttribute('data-bump'); }, 320); }
-    }
-    var note = $('[data-note]');
-    if (note) note.textContent = st.short;
-    var c = $('[data-count]');
-    if (c) c.textContent = B.tops.length + ' of ' + BD.max;
-    var dough = $('[data-dough]');
-    if (dough) {
-      if (B.tops.length) dough.setAttribute('data-topped', ''); else dough.removeAttribute('data-topped');
-      dough.style.width = [78, 86, 94, 100][B.size] + '%';
-    }
-    $$('.topbtn').forEach(function (btn) {
-      var on = B.tops.indexOf(btn.getAttribute('data-top')) >= 0;
-      btn.setAttribute('aria-pressed', String(on));
-      if (!on && B.tops.length >= BD.max) btn.setAttribute('data-full', '');
-      else btn.removeAttribute('data-full');
-    });
-  }
-
-  function sprinkle(name) {
-    var host = $('[data-tops]'), look = window.TOPPING_LOOK[name];
-    if (!host || !look) return;
-    for (var i = 0; i < 7; i++) {
-      var bit = document.createElement('span');
-      bit.className = 'bit';
-      bit.setAttribute('data-for', name);
-      var ang = i * 2.399 + Math.random() * 0.7, rad = 13 + Math.sqrt((i + 0.55) / 7) * 31;
-      bit.style.left = (50 + Math.cos(ang) * rad) + '%';
-      bit.style.top = (50 + Math.sin(ang) * rad) + '%';
-      bit.style.setProperty('--w', (look.size * (0.86 + Math.random() * 0.28)).toFixed(1) + 'px');
-      bit.style.setProperty('--rot', Math.round(Math.random() * 360) + 'deg');
-      bit.style.animationDelay = (i * 38) + 'ms';
-      bit.innerHTML = '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">' + look.svg + '</svg>';
-      host.appendChild(bit);
-    }
-  }
-  function unsprinkle(name) {
-    $$('[data-tops] .bit').forEach(function (b) {
-      if (b.getAttribute('data-for') === name) b.remove();
-    });
-  }
-
-  function initBuilder() {
-    var grid2 = $('[data-topgrid]');
-    if (!grid2 || !BD) return;
-    $$('.topbtn').forEach(function (b) {
-      var look = window.TOPPING_LOOK[b.getAttribute('data-top')];
-      var dot = b.querySelector('.tdot');
-      if (look && dot) dot.style.background = look.c;
-    });
-    $$('[data-sizes] .chip').forEach(function (b) {
-      b.addEventListener('click', function () {
-        B.size = parseInt(b.getAttribute('data-size'), 10);
-        $$('[data-sizes] .chip').forEach(function (o) {
-          if (o === b) o.setAttribute('data-on', ''); else o.removeAttribute('data-on');
-        });
-        paintBuild(true);
-      });
-    });
-    $$('[data-crusts] .chip').forEach(function (b) {
-      b.addEventListener('click', function () {
-        B.crust = b.getAttribute('data-crust');
-        B.sur = parseFloat(b.getAttribute('data-sur')) || 0;
-        $$('[data-crusts] .chip').forEach(function (o) {
-          if (o === b) o.setAttribute('data-on', ''); else o.removeAttribute('data-on');
-        });
-        paintBuild(true);
-      });
-    });
-    grid2.addEventListener('click', function (ev) {
-      var b = ev.target.closest('.topbtn');
-      if (!b) return;
-      var name = b.getAttribute('data-top'), at = B.tops.indexOf(name);
-      if (at >= 0) { B.tops.splice(at, 1); unsprinkle(name); }
-      else { if (B.tops.length >= BD.max) return; B.tops.push(name); sprinkle(name); }
-      paintBuild(true);
-    });
-    paintBuild(false);
-  }
-
   /* ------------------------------------------------------------ go */
   paintClock();
   setInterval(paintClock, 60000);
   paintCart();
-  initBuilder();
+
+  var mount = $('[data-build-mount]');
+  if (mount && window.PizzaConfig && BD) {
+    mountBuilder(mount, {}, function (cfg) {
+      add(cfg.name(), cfg.price(), cfg.label()
+        + (cfg.crust !== 'White' ? ' · ' + cfg.crust + ' crust' : ''));
+      openCart(true);
+    });
+  }
+
   if (location.hash.indexOf('#c-') === 0) openCategory(location.hash.slice(3));
 })();

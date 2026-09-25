@@ -40,6 +40,9 @@
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{margin:0;background:var(--white);color:var(--ink);
   font:400 clamp(15.5px,.4vw + 14.4px,17px)/1.6 var(--f);overflow-x:hidden}
+/* clip, not hidden: hidden makes body a scroll container and quietly breaks
+   every position:sticky on the page (the rail, the pizza). */
+@supports (overflow:clip){body{overflow-x:clip}}
 img,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 h1,h2,h3,h4{margin:0;font-weight:800;letter-spacing:-.03em;line-height:.95}
@@ -135,8 +138,15 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .hero{min-height:calc(100vh - var(--bar));display:grid;align-items:center;
   padding:clamp(1rem,2.5vw,2.4rem) 0}
 @supports (min-height:100svh){.hero{min-height:calc(100svh - var(--bar))}}
+/* Three blocks, not two, so the phone can slot the pizza between the sentence
+   and the buttons: read what we are, see the thing, act. On a wide screen the
+   copy and the buttons stack back up in the left column. */
 .hero-in{display:grid;gap:clamp(1rem,3vw,3rem);align-items:center;
-  grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr)}
+  grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);
+  grid-template-rows:auto auto}
+.hero-copy{grid-column:1;grid-row:1;align-self:end}
+.hero-cta{grid-column:1;grid-row:2;align-self:start}
+.turntable{grid-column:2;grid-row:1 / span 2}
 .hero h1{margin:.7rem 0 .8rem}
 .hero-facts{display:flex;flex-wrap:wrap;gap:.35rem .95rem;margin-top:1rem;
   font-size:.82rem;font-weight:600;color:var(--ink-2)}
@@ -290,10 +300,11 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .paybox p{font-size:.84rem;color:var(--ink-3)}
 
 /* ---------------------------------------------------------------- builder */
-.build{display:grid;gap:clamp(1rem,2.6vw,2.4rem);
+.cfg{display:grid;gap:clamp(1rem,2.6vw,2.4rem);
   grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start}
-.build-stage{position:sticky;top:calc(var(--bar) + .4rem);z-index:5;display:grid;
+.cfg-stage{position:sticky;top:calc(var(--bar) + .4rem);z-index:5;display:grid;
   justify-items:center;gap:.6rem;background:var(--white);padding-bottom:.5rem}
+.cfg .btn-wide{margin-top:.2rem}
 .peel{position:relative;width:min(100%,300px);aspect-ratio:1;display:grid;place-items:center}
 .peel-board{position:absolute;inset:0;border-radius:50%;
   background:radial-gradient(circle at 38% 32%,#D6A96E,#B0814A 62%,#94683A);
@@ -340,14 +351,114 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .chip:hover{border-color:var(--ink)}
 .chip[data-on]{background:var(--ink);border-color:var(--ink);color:#fff}
 .chip em{font-style:normal;opacity:.65;font-size:.74rem;margin-left:.25rem}
-.tops-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:.4rem}
-.topbtn{display:flex;align-items:center;gap:.5rem;text-align:left;cursor:pointer;
-  border:2px solid var(--line);border-radius:12px;padding:.46rem .65rem;font-size:.85rem;
-  font-weight:500;transition:border-color .16s,background-color .16s}
+.ctrl-hint{font-size:.78rem;color:var(--ink-3);margin:-.3rem 0 .55rem}
+
+/* A topping is a row you can tap once, or step up and down. Nothing is ever
+   disabled: past the allowance the price simply appears on every topping, so
+   the choice stays the customer's and the cost stops being a surprise. */
+.tops-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(152px,1fr));gap:.4rem}
+.topbtn{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.5rem;
+  text-align:left;cursor:pointer;border:2px solid var(--line);border-radius:12px;
+  padding:.36rem .4rem .36rem .6rem;font-size:.85rem;font-weight:500;
+  transition:border-color .16s,background-color .16s,color .16s}
 .topbtn:hover{border-color:var(--ink)}
-.topbtn[aria-pressed=true]{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:700}
-.topbtn[data-full]{opacity:.4}
+.topbtn.is-on{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:700}
+.topname{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topcost{grid-column:2;grid-row:2;font-size:.68rem;font-weight:800;color:var(--red);
+  letter-spacing:.02em;margin-top:-.2rem}
+.topbtn.is-on .topcost{color:#FF9AA6}
+.topq{grid-column:3;grid-row:1 / span 2;display:flex;align-items:center;gap:.1rem}
+.topq button{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  cursor:pointer;font-weight:800;font-size:.95rem;line-height:1;
+  border:1.5px solid var(--line);transition:background-color .14s,border-color .14s}
+.topbtn.is-on .topq button{border-color:rgba(255,255,255,.34)}
+.topq button:hover{background:var(--red);border-color:var(--red);color:#fff}
+.topq b{min-width:1.1ch;text-align:center;font-variant-numeric:tabular-nums;font-size:.86rem}
 .tdot{width:13px;height:13px;border-radius:99px;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+
+/* ---------------------------------------------------------------- expanding rows
+   A pizza is not a thing you pick, it is a thing you build, so the row opens
+   where it stands instead of throwing a dialog over the menu. Same mechanism
+   for a deal opening into its pizzas. */
+.item-x{display:block;padding:0;overflow:visible}
+.item-hit{display:flex;align-items:center;gap:.85rem;width:100%;text-align:left;
+  padding:.65rem;cursor:pointer;border-radius:var(--r)}
+.item-x .item-body{display:flex;flex-direction:column;gap:.15rem;flex:1;min-width:0}
+.item-body .h4{font-size:1rem;font-weight:700;letter-spacing:-.01em;display:flex;
+  align-items:center;gap:.4rem;flex-wrap:wrap}
+.item-body .p{font-size:.84rem;color:var(--ink-3);font-weight:400;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.item-x .item-side{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;flex:none}
+.add-ghost{background:var(--ink);color:#fff;border-radius:999px;font-weight:700;font-size:.84rem;
+  padding:.44rem 1rem;white-space:nowrap;transition:background-color .18s}
+.item-x:hover .add-ghost{background:var(--red)}
+.item-x[data-open] .add-ghost{background:var(--red)}
+.flag-build{background:var(--green-soft);color:var(--green)}
+
+.panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s var(--ease)}
+.panel>.panel-in{overflow:hidden}
+[data-open]>.panel{grid-template-rows:1fr}
+[data-grown]>.panel>.panel-in{overflow:visible}
+.item-x[data-open]{border-color:transparent;box-shadow:var(--sh)}
+.item-x>.panel>.panel-in>*{padding:.2rem .75rem 1rem}
+.item-x[data-open]>.panel>.panel-in{border-top:1px solid var(--line);margin-top:.1rem}
+
+/* a deal's slots: Pizza 1, Pizza 2, each opening the same builder */
+.slots{display:grid;gap:.45rem;padding-top:.8rem!important}
+.slot{border:2px solid var(--line);border-radius:14px;overflow:visible;background:var(--white)}
+.slot[data-set]{border-color:var(--green)}
+.slot-hit{display:grid;grid-template-columns:1fr auto;align-items:center;gap:.2rem .7rem;
+  width:100%;text-align:left;padding:.62rem .8rem;cursor:pointer}
+.slot-hit b{font-size:.95rem;font-weight:800;letter-spacing:-.01em}
+.slot-hit span{grid-column:1;font-size:.78rem;color:var(--ink-3);font-weight:500}
+.slot[data-set] .slot-hit span{color:var(--green);font-weight:700}
+.chev,.chev-l{width:9px;height:9px;border-right:2.4px solid currentColor;
+  border-bottom:2.4px solid currentColor;transform:rotate(45deg);
+  transition:transform .28s var(--ease);opacity:.5}
+.slot-hit .chev{grid-column:2;grid-row:1 / span 2}
+.slot[data-open] .chev{transform:rotate(-135deg);opacity:1}
+.chev-l{transform:rotate(135deg);opacity:.75}
+.slot-fixed{display:flex;align-items:center;justify-content:space-between;gap:.7rem;
+  border:2px dashed var(--line);border-radius:14px;padding:.62rem .8rem}
+.slot-fixed b{font-size:.95rem;font-weight:800;letter-spacing:-.01em}
+.slot-fixed span{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--green)}
+.slot>.panel>.panel-in>*{padding:.1rem .7rem .9rem}
+.slots-foot{display:grid;gap:.45rem;padding:.9rem 0 0!important}
+.slots-note{font-size:.8rem;color:var(--red);font-weight:700}
+
+/* ---------------------------------------------------------------- category rail
+   Once you are inside a category the way out and the way sideways have to be
+   permanently visible, or every change of mind costs a scroll to the top. */
+.rail{position:sticky;top:var(--bar);z-index:20;display:flex;align-items:center;gap:.5rem;
+  padding:.55rem 0;background:var(--paper);
+  box-shadow:0 1px 0 var(--line),0 10px 14px -14px rgba(17,17,19,.4)}
+.rail-back{flex:none;width:36px;height:36px;border-radius:999px;display:grid;place-items:center;
+  border:2px solid var(--line);cursor:pointer;background:var(--white)}
+.rail-back:hover{border-color:var(--ink)}
+.rail-scroll{display:flex;gap:.35rem;overflow-x:auto;scroll-behavior:smooth;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:.15rem 0;
+  mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent)}
+.rail-scroll::-webkit-scrollbar{display:none}
+.railbtn{flex:none;border:2px solid var(--line);border-radius:999px;padding:.34rem .8rem;
+  font-size:.83rem;font-weight:700;cursor:pointer;white-space:nowrap;background:var(--white);
+  transition:border-color .16s,background-color .16s,color .16s}
+.railbtn:hover{border-color:var(--ink)}
+.railbtn[data-on]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* ---------------------------------------------------------------- order note */
+.note-field{display:grid;gap:.35rem;margin-bottom:.2rem}
+.note-field>span{font-size:.7rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3)}
+.note-field textarea{font:inherit;font-size:.88rem;width:100%;resize:vertical;
+  border:2px solid var(--line);border-radius:12px;padding:.55rem .7rem;background:var(--white);
+  color:inherit;transition:border-color .16s}
+.note-field textarea:focus{border-color:var(--ink);outline:none}
+.paynote{display:grid;gap:.15rem;border-left:3px solid var(--green);padding:.2rem .7rem;
+  margin-bottom:.7rem}
+.paynote b{font-size:.68rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--green)}
+.paynote span{font-size:.86rem;color:var(--ink-2)}
 
 /* ---------------------------------------------------------------- steps + find */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.9rem,2.2vw,1.8rem);counter-reset:s}
@@ -399,9 +510,15 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 
 /* ---------------------------------------------------------------- responsive */
 @media (min-width:1500px){ .cats{grid-template-columns:repeat(3,1fr)} }
-@media (max-width:1040px){ .build,.find{grid-template-columns:1fr} }
+@media (max-width:1040px){ .cfg,.find{grid-template-columns:1fr} }
 @media (max-width:900px){
-  .hero-in{grid-template-columns:1fr;gap:.9rem;text-align:left}
+  /* On a phone the pizza goes between the sentence and the buttons: you read
+     what the place is, you see the food, and the buttons are the last thing
+     under your thumb. */
+  .hero-in{grid-template-columns:1fr;grid-template-rows:auto auto auto;gap:.9rem;text-align:left}
+  .hero-copy{grid-column:1;grid-row:1}
+  .turntable{grid-column:1;grid-row:2}
+  .hero-cta{grid-column:1;grid-row:3}
   .turntable{max-width:min(62%,300px)}
   /* the bar earns its 60px: mark, basket, dots. Phone and open-status live in
      the sheet, where they are not competing with the order button. */
@@ -409,7 +526,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .dots{display:grid}
   .bar{gap:.5rem}
   .steps{grid-template-columns:1fr;gap:1rem}
-  .build-stage{box-shadow:0 14px 20px -14px rgba(17,17,19,.25)}
+  .cfg-stage{box-shadow:0 14px 20px -14px rgba(17,17,19,.25)}
   .peel{width:min(52vw,210px)}
   .cats{grid-template-columns:repeat(2,1fr)}
   .hero .acts{margin-top:1rem}
@@ -420,12 +537,30 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .hero{padding:.6rem 0 1rem}
   .turntable{max-width:min(72%,260px)}
   .hero .lede{font-size:.93rem}
+  /* On a laptop the price column sits beside the description. On a phone that
+     column steals the width the food name needs and leaves a ragged gutter
+     down the left. So the prices drop to their own full-width line and spread
+     out — the row uses all of the screen instead of a third of it. */
   .item-media{width:64px;height:64px}
-  .item{padding:.55rem;gap:.65rem}
-  .item-body h4{font-size:.93rem}
-  .item-body p{font-size:.78rem;-webkit-line-clamp:2}
-  .sizes{justify-content:flex-start}
-  .sizebtn{min-width:54px;padding:.28rem .4rem}
+  .item,.item-hit{display:grid;grid-template-columns:auto minmax(0,1fr);
+    grid-template-areas:"media body" "side side";column-gap:.7rem;row-gap:.5rem;
+    align-items:center;padding:.6rem}
+  .item-x{padding:0}
+  .item-media{grid-area:media}
+  .item-body{grid-area:body}
+  .item-side{grid-area:side}
+  .item-body h4,.item-body .h4{font-size:.95rem}
+  .item-body p,.item-body .p{font-size:.79rem;-webkit-line-clamp:2}
+  .item-side,.item-x .item-side{flex-direction:row;align-items:center;
+    justify-content:space-between;gap:.5rem;width:100%}
+  .sizes{flex:1;flex-wrap:nowrap;justify-content:stretch;gap:.3rem}
+  .sizebtn{flex:1;min-width:0;padding:.34rem .3rem}
+  .item-side>.price{order:-1}
+  .add,.add-ghost{flex:none}
+  .item-x .item-side .add-ghost{flex:1;text-align:center}
+  .tops-grid{grid-template-columns:repeat(auto-fill,minmax(146px,1fr))}
+  /* the rail runs to both edges on a phone so it reads as a bar, not a widget */
+  .rail{margin:0 -1.1rem;padding:.5rem 1.1rem}
   .cat{aspect-ratio:4/3}
   .cat b{font-size:.96rem}
   .cat small{display:none}

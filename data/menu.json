@@ -47,7 +47,15 @@
       [13.50, 18.75, 24.45, 28.45]
     ],
     "maxToppings": 5,
-    "specialName": "Tasty Pizza Special"
+    "specialName": "Tasty Pizza Special",
+
+    "_extraReadme": [
+      "What each topping past the included count costs, per size.",
+      "The printed menu stops at five toppings, so a sixth has no published price.",
+      "These are the AVERAGE step between the menu's own topping prices (0.80 / 1.17 /",
+      "1.51 / 1.50), rounded. CONFIRM WITH THE SHOP before going live."
+    ],
+    "extraToppingPrice": [0.80, 1.20, 1.50, 1.50]
   },
 
   "categories": [
@@ -62,12 +70,9 @@
           "note": "Pick your size, pick your toppings. Whole wheat, white or gluten free crust.",
           "sizes": ["9\" S", "12\" M", "16\" L", "18\" XL"],
           "items": [
-            { "name": "Cheese", "desc": "Our sauce, a lot of mozzarella, nothing in the way.", "prices": [9.50, 12.90, 16.90, 20.95], "photo": "cheese-pizza", "tags": ["veg"] },
-            { "name": "1 Topping", "desc": "Any one from the topping list.", "prices": [10.70, 13.80, 17.90, 22.25] },
-            { "name": "2 Toppings", "desc": "Any two from the topping list.", "prices": [11.20, 15.75, 19.75, 23.95] },
-            { "name": "3 Toppings", "desc": "Any three from the topping list.", "prices": [11.95, 16.45, 20.45, 25.35] },
-            { "name": "4 Toppings", "desc": "Any four from the topping list.", "prices": [12.80, 17.45, 22.95, 27.45] },
-            { "name": "Tasty Pizza Special", "desc": "Five toppings, your pick. The one most people land on.", "prices": [13.50, 18.75, 24.45, 28.45], "tags": ["popular"] }
+            { "name": "Build Your Own Pizza", "builder": true,
+              "desc": "Pick your size, then tap toppings. Five toppings makes it a Tasty Pizza Special.",
+              "photo": "cheese-pizza", "tags": ["popular"] }
           ]
         },
         {

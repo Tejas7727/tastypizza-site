@@ -187,7 +187,10 @@ def check_data():
                 if "PLACEHOLDER" in (it.get("desc") or ""):
                     placeholders.append(it["name"])
                 ps = it.get("prices") or ([it["price"]] if "price" in it else [])
-                if "tier" not in it and not any(p is not None for p in ps):
+                # a builder row has no price of its own on purpose: the price
+                # comes from the size and toppings the customer picks
+                if "tier" not in it and not it.get("builder") \
+                        and not any(p is not None for p in ps):
                     no_price.append(it["name"])
     for d in deals["deals"]:
         if d.get("active") and d.get("photo"):
