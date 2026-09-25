@@ -23,11 +23,6 @@ PHOTOS = json.loads((ROOT / "data" / "photos.json").read_text(encoding="utf-8"))
 
 IMG = "../assets/img/"
 
-# The home page draws these as circles on a board, so they are the slugs that
-# get a square crop out of build_photos.py. Only these can ride the wheel.
-ROUND = {"all-dressed-pizza", "meat-lovers-pizza", "donair-pizza",
-         "veggie-pizza", "cheese-pizza"}
-
 
 def e(s):
     return (str(s).replace("&", "&amp;").replace("<", "&lt;")
@@ -292,7 +287,7 @@ def main():
   <div class="wrap hero-in">
     <div class="hero-copy">
       <p class="eyebrow" data-anim>760 Main Street &middot; Dartmouth</p>
-      <h1 class="display" data-anim>Get<br><em>Tasty.</em></h1>
+      <h1 class="display" data-anim>Fresh daily.<br>Hot nightly.<br><em>Always tasty.</em></h1>
       <p class="lede" data-anim>Fresh dough every morning, hand-stretched, out of a deck oven.
         {SITE['owner']}.</p>
     </div>
@@ -310,9 +305,15 @@ def main():
     <div class="herofig" data-anim="grow">
       <div class="turntable" data-wheelstage tabindex="0" role="group"
            aria-roledescription="carousel" aria-label="Tonight&rsquo;s offers">
-        <div class="boardclip" aria-hidden="true">
-          <span class="board"></span>
-          <div class="pies">{pies}</div>
+        <div class="pieclip" aria-hidden="true"><div class="pies">{pies}</div></div>
+        <div class="orbit" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <defs><path id="ring"
+              d="M60,60 m-49,0 a49,49 0 1,1 98,0 a49,49 0 1,1 -98,0"/></defs>
+            <g><text><textPath href="#ring" startOffset="0">
+              Fresh dough daily &middot; Hand stretched &middot; Deck oven &middot; 760 Main St &middot;
+            </textPath></text></g>
+          </svg>
         </div>
         <span class="badge" data-badge aria-hidden="true">
           <i data-badge-kick>Deal</i><b data-badge-price>&nbsp;</b><s data-badge-was></s></span>

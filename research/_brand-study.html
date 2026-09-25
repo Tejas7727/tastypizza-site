@@ -161,65 +161,54 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .herofig{grid-column:2;grid-row:1 / span 2;min-width:0;display:grid;justify-items:center}
 @media (min-width:901px){.hero{--pie:min(40vw,56svh)}}
 .hero h1{margin:.5rem 0 .5rem}
-.hero .display{font-size:min(clamp(2.3rem,7.6vw,5rem),10svh)}
+.hero .display{font-size:min(clamp(1.85rem,6.5vw,3.7rem),7.4svh)}
 .hero .lede{font-size:min(clamp(.95rem,.4vw + .86rem,1.08rem),2.5svh)}
 .hero-facts{display:flex;flex-wrap:wrap;gap:.3rem .95rem;margin-top:.7rem;
   font-size:.82rem;font-weight:600;color:var(--ink-2)}
 .hero-facts span{display:inline-flex;align-items:center;gap:.35rem}
 .hero-facts b{color:var(--ink)}
 
-/* A wooden board that never moves, and pizzas that slide across it right to
-   left. The pies are cut out of their background with a real alpha edge
-   (scripts/build_hero_pies.py), so the grain shows around the crust instead of
-   a white disc sitting on top of the wood. */
+/* No board, no plate. The pies are cut out on transparency, so they sit
+   straight on the page's own white — which is the cleanest this has looked.
+   What moves is the pizza; the ring of words and the price stay put. */
 .turntable{position:relative;width:var(--pie,430px);max-width:100%;aspect-ratio:1;
   margin-inline:auto;touch-action:pan-y;cursor:grab;
   -webkit-user-select:none;user-select:none}
 .turntable:active{cursor:grabbing}
 
-/* The clip box is wider than the board so a pizza can leave the frame before
-   it reaches the column edge, and taller at the bottom so the board's shadow
-   is not sliced off. The board and the pies are both sized from --pie rather
-   than from percentages of this box, which is what keeps the board a circle
-   instead of an oval. */
-.boardclip{position:absolute;inset:-6% -26%;overflow:hidden;
+/* wide enough that a pizza leaves the frame before it reaches the text column */
+.pieclip{position:absolute;inset:0 -28%;overflow:hidden;
   display:grid;place-items:center;pointer-events:none}
-.boardclip>*{grid-area:1/1;width:var(--pie,430px);max-width:none;aspect-ratio:1}
-
-.board{border-radius:50%;
-  background:
-    repeating-linear-gradient(93deg,rgba(60,30,6,.10) 0 2px,transparent 2px 11px),
-    repeating-linear-gradient(87deg,rgba(255,236,200,.07) 0 1px,transparent 1px 17px),
-    radial-gradient(circle at 36% 30%,#D2A468,#AC7C42 58%,#7E5730);
-  /* the shadow stays inside the clip box's 6% of vertical bleed, so the
-     board can cast one without it being sliced off at the bottom */
-  box-shadow:0 12px 22px -10px rgba(17,17,19,.45),
-    inset 0 0 0 4px rgba(255,241,214,.08),inset 0 -12px 26px rgba(80,44,10,.34)}
-.board::after{content:'';position:absolute;inset:5%;border-radius:50%;
-  box-shadow:inset 0 0 0 2px rgba(255,241,214,.09)}
-
-/* the pie is deliberately smaller than the board, or the board never shows
-   and the wood may as well not be there */
-.pies{position:relative;width:calc(var(--pie,430px) * .8)}
+.pieclip>*{grid-area:1/1;width:calc(var(--pie,430px) * .78);aspect-ratio:1}
+.pies{position:relative}
 .disc{position:absolute;inset:0;opacity:0;
   transition:transform .72s var(--slide),opacity .4s var(--ease)}
 .disc img{width:100%;height:100%;object-fit:contain;
-  filter:drop-shadow(0 14px 16px rgba(60,30,6,.42))}
+  filter:drop-shadow(0 20px 24px rgba(17,17,19,.20))}
 .disc.is-cur{opacity:1;transform:none}
 /* right to left: the one on show leaves to the left, the next arrives from the
-   right. A little rotation and a dip in scale so it reads as a hand sliding it
-   across rather than a slideshow cutting. */
-.disc.out-next{transform:translateX(-138%) rotate(-13deg) scale(.8);opacity:0}
-.disc.in-next{transform:translateX(138%) rotate(13deg) scale(.8);opacity:0}
-.disc.out-prev{transform:translateX(138%) rotate(13deg) scale(.8);opacity:0}
-.disc.in-prev{transform:translateX(-138%) rotate(-13deg) scale(.8);opacity:0}
+   right, with a little rotation so it reads as a hand sliding it across */
+.disc.out-next{transform:translateX(-142%) rotate(-14deg) scale(.8);opacity:0}
+.disc.in-next{transform:translateX(142%) rotate(14deg) scale(.8);opacity:0}
+.disc.out-prev{transform:translateX(142%) rotate(14deg) scale(.8);opacity:0}
+.disc.in-prev{transform:translateX(-142%) rotate(-14deg) scale(.8);opacity:0}
 .turntable.is-drag .disc{transition:none}
+
+/* the ring of words, turning slowly around the pizza. The viewBox is padded
+   well past the circle so no ascender is ever clipped, and the ring sits
+   outside the pie so the two never collide. */
+.orbit{position:absolute;inset:-9%;pointer-events:none;z-index:2}
+.orbit svg{width:100%;height:100%;overflow:visible}
+.orbit text{font-size:4.6px;font-weight:800;letter-spacing:.34em;fill:var(--ink-3);
+  text-transform:uppercase}
+.orbit g{transform-origin:60px 60px;animation:orbit 54s linear infinite}
+@keyframes orbit{to{transform:rotate(360deg)}}
 
 /* the price, stuck on the rim. It belongs to the pizza, not to a card. */
 .badge{position:absolute;z-index:5;background:var(--red);color:#fff;border-radius:50%;
   width:clamp(74px,calc(var(--pie,430px) * .3),116px);aspect-ratio:1;
   display:grid;place-content:center;gap:.05rem;text-align:center;
-  right:-3%;bottom:1%;rotate:-7deg;box-shadow:0 12px 26px -6px rgba(183,0,23,.45)}
+  right:-4%;top:1%;rotate:-7deg;box-shadow:0 12px 26px -6px rgba(183,0,23,.45)}
 .badge i{font-style:normal;font-size:.56rem;font-weight:800;letter-spacing:.1em;
   text-transform:uppercase;opacity:.9}
 .badge b{font-size:clamp(1rem,calc(var(--pie,430px) * .092),1.5rem);font-weight:800;
@@ -258,6 +247,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 
 @media (prefers-reduced-motion:reduce){
   .disc{transition:opacity .2s linear!important}
+  .orbit g{animation:none}
   .disc[class*="out-"],.disc[class*="in-"]{transform:none!important}
   .ticks button[data-run]::after{animation:none;transform:scaleX(1)}
 }
@@ -628,7 +618,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .hero .acts .btn{flex:1;min-width:0}
 }
 @media (max-width:620px){
-  .display{font-size:min(clamp(2.2rem,10vw,3rem),9.4svh)}
+  .display{font-size:min(clamp(1.8rem,8vw,2.4rem),7.2svh)}
   /* On a laptop the price column sits beside the description. On a phone that
      column steals the width the food name needs and leaves a ragged gutter
      down the left. So the prices drop to their own full-width line and spread
@@ -713,7 +703,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   <div class="wrap hero-in">
     <div class="hero-copy">
       <p class="eyebrow" data-anim>760 Main Street &middot; Dartmouth</p>
-      <h1 class="display" data-anim>Get<br><em>Tasty.</em></h1>
+      <h1 class="display" data-anim>Fresh daily.<br>Hot nightly.<br><em>Always tasty.</em></h1>
       <p class="lede" data-anim>Fresh dough every morning, hand-stretched, out of a deck oven.
         Owned and operated by the Patel family.</p>
     </div>
@@ -731,9 +721,15 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
     <div class="herofig" data-anim="grow">
       <div class="turntable" data-wheelstage tabindex="0" role="group"
            aria-roledescription="carousel" aria-label="Tonight&rsquo;s offers">
-        <div class="boardclip" aria-hidden="true">
-          <span class="board"></span>
-          <div class="pies"><div class="disc is-cur"><img src="../assets/img/pie-pepperoni.webp" width="680" height="680" alt="Large 16&quot; Pizza, 4 Toppings" fetchpriority="high"></div><div class="disc"><img src="../assets/img/pie-meat-lovers.webp" width="680" height="680" alt="Medium Pizza + Medium Garlic Fingers" loading="lazy"></div><div class="disc"><img src="../assets/img/pie-greek.webp" width="680" height="680" alt="Two Medium Pizzas" loading="lazy"></div><div class="disc"><img src="../assets/img/pie-veggie.webp" width="680" height="680" alt="Vegetarian" loading="lazy"></div><div class="disc"><img src="../assets/img/pie-build-your-own.webp" width="680" height="680" alt="Tasty Pizza Special" loading="lazy"></div></div>
+        <div class="pieclip" aria-hidden="true"><div class="pies"><div class="disc is-cur"><img src="../assets/img/pie-pepperoni.webp" width="680" height="680" alt="Large 16&quot; Pizza, 4 Toppings" fetchpriority="high"></div><div class="disc"><img src="../assets/img/pie-meat-lovers.webp" width="680" height="680" alt="Medium Pizza + Medium Garlic Fingers" loading="lazy"></div><div class="disc"><img src="../assets/img/pie-greek.webp" width="680" height="680" alt="Two Medium Pizzas" loading="lazy"></div><div class="disc"><img src="../assets/img/pie-veggie.webp" width="680" height="680" alt="Vegetarian" loading="lazy"></div><div class="disc"><img src="../assets/img/pie-build-your-own.webp" width="680" height="680" alt="Tasty Pizza Special" loading="lazy"></div></div></div>
+        <div class="orbit" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <defs><path id="ring"
+              d="M60,60 m-49,0 a49,49 0 1,1 98,0 a49,49 0 1,1 -98,0"/></defs>
+            <g><text><textPath href="#ring" startOffset="0">
+              Fresh dough daily &middot; Hand stretched &middot; Deck oven &middot; 760 Main St &middot;
+            </textPath></text></g>
+          </svg>
         </div>
         <span class="badge" data-badge aria-hidden="true">
           <i data-badge-kick>Deal</i><b data-badge-price>&nbsp;</b><s data-badge-was></s></span>
