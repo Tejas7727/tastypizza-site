@@ -23,6 +23,13 @@ WIDE = (1600, 900)
 HERO_SLUGS = {"donair", "meat-lovers-pizza", "garlic-fingers", "poutine",
               "fish-and-chips", "all-dressed-pizza", "donair-pogo", "chicken-wings"}
 
+# The home page turns these into circles on a board, so they need a square crop.
+# A 4:3 card would slice the top and bottom off the pie and take the crust with
+# it, and the crust is the part that says the dough was made here.
+SQUARE = (620, 620)
+ROUND_SLUGS = {"all-dressed-pizza", "meat-lovers-pizza", "donair-pizza",
+               "veggie-pizza", "cheese-pizza"}
+
 # One grade for everything. Deliberately gentle: the copy should stay the brightest
 # thing on the page, and over-saturated food photography reads as a stock library.
 SATURATION = 0.96
@@ -95,10 +102,12 @@ def main():
         targets = dict(SIZES)
         if slug in HERO_SLUGS:
             targets["@wide"] = WIDE
+        if slug in ROUND_SLUGS:
+            targets["@sq"] = SQUARE
         for suffix, size in targets.items():
             out = OUT / f"{slug}{suffix}.webp"
             g = grade(crop(im, size, spec))
-            q = {"": 76, "@sm": 70, "@wide": 52}[suffix]
+            q = {"": 76, "@sm": 70, "@wide": 52, "@sq": 72}[suffix]
             g.save(out, "WEBP", quality=q, method=6)
             made += 1
         flag = " (REAL PHOTO)" if is_real else ""

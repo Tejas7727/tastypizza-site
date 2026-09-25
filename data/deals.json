@@ -54,7 +54,9 @@
           "type": "fixed",
           "label": "12\" garlic fingers with donair sauce"
         }
-      ]
+      ],
+      "heroPhoto": "cheese-pizza",
+      "_heroPhotoNote": "Which photo this deal uses on the home page wheel. The wheel draws everything as a circle, so it needs one of the square-cropped pizza slugs; the garlic fingers photo is not round. Menu rows still use 'photo'."
     },
     {
       "id": "two-mediums",

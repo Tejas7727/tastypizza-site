@@ -135,43 +135,117 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 /* ---------------------------------------------------------------- hero
    One screen. Everything needed to start an order, nothing that needs scrolling
    to make sense. What comes next is a new thing, not the rest of this one. */
-.hero{min-height:calc(100vh - var(--bar));display:grid;align-items:center;
-  padding:clamp(1rem,2.5vw,2.4rem) 0}
-@supports (min-height:100svh){.hero{min-height:calc(100svh - var(--bar))}}
+/* height, not min-height: one screen is the brief, so the hero is told exactly
+   how tall it is and everything inside is measured against that same height —
+   hence --pie and the display size both carrying an svh term. Nothing of the
+   next section is ever visible until you scroll. */
+.hero{height:calc(100vh - var(--bar));display:grid;align-content:center;overflow:hidden;
+  padding:clamp(.5rem,1.6vh,1.8rem) 0;--pie:min(72vw,33svh)}
+@supports (height:100svh){.hero{height:calc(100svh - var(--bar))}}
 /* Three blocks, not two, so the phone can slot the pizza between the sentence
    and the buttons: read what we are, see the thing, act. On a wide screen the
    copy and the buttons stack back up in the left column. */
-.hero-in{display:grid;gap:clamp(1rem,3vw,3rem);align-items:center;
+.hero-in{display:grid;gap:clamp(.5rem,1.6vh,1rem) clamp(1rem,3vw,3rem);align-items:center;
   grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);
   grid-template-rows:auto auto}
 .hero-copy{grid-column:1;grid-row:1;align-self:end}
 .hero-cta{grid-column:1;grid-row:2;align-self:start}
-.turntable{grid-column:2;grid-row:1 / span 2}
-.hero h1{margin:.7rem 0 .8rem}
-.hero-facts{display:flex;flex-wrap:wrap;gap:.35rem .95rem;margin-top:1rem;
+.herofig{grid-column:2;grid-row:1 / span 2;min-width:0;display:grid;justify-items:center}
+@media (min-width:901px){.hero{--pie:min(40vw,56svh)}}
+.hero h1{margin:.5rem 0 .5rem}
+.hero .display{font-size:min(clamp(2.3rem,7.6vw,5rem),10svh)}
+.hero .lede{font-size:min(clamp(.95rem,.4vw + .86rem,1.08rem),2.5svh)}
+.hero-facts{display:flex;flex-wrap:wrap;gap:.3rem .95rem;margin-top:.7rem;
   font-size:.82rem;font-weight:600;color:var(--ink-2)}
 .hero-facts span{display:inline-flex;align-items:center;gap:.35rem}
 .hero-facts b{color:var(--ink)}
 
+/* The pizzas ride the rim of one big wheel. Turning the wheel counter-clockwise
+   carries the one on show off to the left and brings the next up from the
+   right, so the movement reads as a swipe but travels on an arc.
+
+   Two bits of geometry make it work:
+   * the wheel's radius equals the plate's width and its topmost point sits on
+     the plate's centre, so a pizza lands ON the plate instead of above it. The
+     wheel's own centre hangs a plate-width below, off screen.
+   * every pizza counter-turns by exactly what the wheel turns, on the same
+     duration and easing, so it arrives level instead of upside down. */
 .turntable{position:relative;aspect-ratio:1;display:grid;place-items:center;
-  max-width:min(100%,470px);margin-inline:auto}
-.turntable::before{content:'';position:absolute;inset:9%;border-radius:50%;
+  width:min(100%,var(--pie,430px));margin-inline:auto;touch-action:pan-y;
+  cursor:grab;-webkit-user-select:none;user-select:none}
+.turntable:active{cursor:grabbing}
+.turntable::before{content:'';position:absolute;inset:-4%;border-radius:50%;
   border:1px dashed var(--line)}
-.disc{width:80%;aspect-ratio:1;border-radius:50%;overflow:hidden;position:relative;
-  box-shadow:0 26px 58px rgba(17,17,19,.18),0 3px 10px rgba(17,17,19,.07)}
+/* only a rim of board shows — the pizza is the hero, not the plate */
+.plate{position:absolute;inset:3%;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#D6A96E,#B0814A 64%,#8E6336);
+  box-shadow:0 26px 52px -18px rgba(17,17,19,.42)}
+.wheel{position:absolute;left:50%;top:50%;width:200%;aspect-ratio:1;translate:-50% 0;
+  transition:transform .8s cubic-bezier(.38,.02,.2,1)}
+.spoke{position:absolute;inset:0;transform:rotate(var(--a))}
+.disc{position:absolute;left:50%;top:0;width:45%;aspect-ratio:1;translate:-50% -50%;
+  border-radius:50%;overflow:hidden;opacity:0;
+  box-shadow:0 20px 44px -14px rgba(17,17,19,.5);
+  transition:transform .8s cubic-bezier(.38,.02,.2,1),opacity .44s var(--ease)}
 .disc img{width:100%;height:100%;object-fit:cover}
-.disc-spin{animation:turn linear both;animation-timeline:scroll(root);animation-range:0 100%}
-@keyframes turn{from{transform:rotate(0)}to{transform:rotate(52deg)}}
-.orbit{position:absolute;inset:0;animation:turn-slow linear both;
-  animation-timeline:scroll(root);animation-range:0 100%}
-@keyframes turn-slow{from{transform:rotate(0)}to{transform:rotate(-30deg)}}
-.orbit text{font-size:4.3px;font-weight:800;letter-spacing:.4em;fill:var(--ink-3);
+.disc.is-cur{opacity:1}
+.turntable.is-drag .wheel,.turntable.is-drag .disc{transition:none}
+
+/* the ring of words, kept. The viewBox is padded well past the circle so no
+   ascender can be clipped at any size — that was the cropping you spotted. */
+.orbit{position:absolute;inset:-4%;pointer-events:none;z-index:4}
+.orbit svg{width:100%;height:100%;overflow:visible}
+.orbit text{font-size:5px;font-weight:800;letter-spacing:.36em;fill:var(--ink-3);
   text-transform:uppercase}
-.badge{position:absolute;z-index:3;background:var(--red);color:#fff;border-radius:50%;
-  width:clamp(72px,7.6vw,98px);aspect-ratio:1;display:grid;place-items:center;text-align:center;
-  font-weight:800;line-height:1.05;font-size:clamp(.64rem,.9vw,.76rem);
-  right:0;top:2%;transform:rotate(-9deg);box-shadow:0 10px 26px rgba(183,0,23,.3)}
-.badge b{display:block;font-size:1.45em}
+.orbit g{transform-origin:60px 60px;animation:orbit 46s linear infinite}
+@keyframes orbit{to{transform:rotate(360deg)}}
+
+/* the price, stuck on the rim. It belongs to the pizza, not to a card. */
+.badge{position:absolute;z-index:5;background:var(--red);color:#fff;border-radius:50%;
+  width:clamp(74px,calc(var(--pie,430px) * .3),116px);aspect-ratio:1;
+  display:grid;place-content:center;gap:.05rem;text-align:center;
+  right:-3%;bottom:1%;rotate:-7deg;box-shadow:0 12px 26px -6px rgba(183,0,23,.45)}
+.badge i{font-style:normal;font-size:.56rem;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;opacity:.9}
+.badge b{font-size:clamp(1rem,calc(var(--pie,430px) * .092),1.5rem);font-weight:800;
+  letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums}
+.badge s{font-size:.66rem;opacity:.74;font-weight:600}
+.badge[data-pop]{animation:pop .5s var(--ease)}
+@keyframes pop{0%{transform:scale(.62);opacity:0}60%{transform:scale(1.07)}100%{transform:none}}
+
+/* the timer bars: where you are, and that it is about to move on */
+.ticks{display:flex;gap:.3rem;justify-content:center;margin-top:.7rem}
+.ticks button{width:24px;height:4px;border-radius:99px;background:var(--line);cursor:pointer;
+  position:relative;overflow:hidden;flex:none;padding:0;border:0}
+.ticks button::after{content:'';position:absolute;inset:0;background:var(--ink);
+  transform-origin:left;transform:scaleX(0)}
+.ticks button[data-on]::after{transform:scaleX(1);transition:transform .22s var(--ease)}
+.ticks button[data-run]::after{animation:fill 2000ms linear forwards}
+@keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* the offer, set on the page itself rather than boxed off from it */
+.deal{display:grid;gap:.2rem;min-width:0;margin-top:.9rem}
+.deal[data-flash] .dealin{animation:dealin .46s var(--ease)}
+@keyframes dealin{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.dealin{display:grid;gap:.22rem;min-width:0}
+.kicker{display:flex;align-items:center;gap:.45rem;font-size:.6rem;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--red)}
+.kicker.is-green{color:var(--green)}
+.kicker.is-grey{color:var(--ink-3)}
+.kicker::after{content:'';height:1px;flex:1;background:var(--line);min-width:12px}
+.deal h2{font-size:min(clamp(1.1rem,4.2vw,1.7rem),4.4svh);letter-spacing:-.028em;
+  text-transform:none}
+.deal .sub{font-size:min(.86rem,2.2svh);color:var(--ink-3)}
+.saveline{display:flex;align-items:baseline;gap:.45rem;flex-wrap:wrap;font-size:.84rem}
+.saveline .was{color:var(--ink-3);text-decoration:line-through;font-weight:600;margin:0}
+.saveline .save{color:var(--green);font-weight:800}
+.saveline .unit{color:var(--ink-3);font-weight:600}
+
+@media (prefers-reduced-motion:reduce){
+  .wheel,.disc{transition:opacity .2s linear!important}
+  .orbit g{animation:none}
+  .ticks button[data-run]::after{animation:none;transform:scaleX(1)}
+}
 
 /* ---------------------------------------------------------------- ordering */
 .order-wrap{min-height:100vh}
@@ -200,7 +274,12 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .cat.is-deals .cat-in{background:linear-gradient(180deg,rgba(183,0,23,.25),rgba(140,0,18,.9))}
 
 /* the category view swaps in where the grid was */
-.catview{display:grid;gap:1rem}
+/* A flex item defaults to min-width:auto, which means it refuses to shrink
+   below its own content. The rail's nine pills measure about 1000px, so on a
+   phone they forced this grid wide, which forced the page wide, and the phone
+   zoomed the whole site out to fit. Every link in that chain needs a floor of
+   zero before the strip will scroll inside itself instead of stretching. */
+.catview{display:grid;gap:1rem;grid-template-columns:minmax(0,1fr)}
 .catview-head{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
 .back{display:inline-flex;align-items:center;gap:.45rem;font-weight:700;cursor:pointer;
   padding:.5rem .95rem;border:2px solid var(--line);border-radius:999px;font-size:.9rem}
@@ -431,12 +510,13 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
    Once you are inside a category the way out and the way sideways have to be
    permanently visible, or every change of mind costs a scroll to the top. */
 .rail{position:sticky;top:var(--bar);z-index:20;display:flex;align-items:center;gap:.5rem;
-  padding:.55rem 0;background:var(--paper);
+  padding:.55rem 0;background:var(--paper);min-width:0;max-width:100%;
   box-shadow:0 1px 0 var(--line),0 10px 14px -14px rgba(17,17,19,.4)}
 .rail-back{flex:none;width:36px;height:36px;border-radius:999px;display:grid;place-items:center;
   border:2px solid var(--line);cursor:pointer;background:var(--white)}
 .rail-back:hover{border-color:var(--ink)}
-.rail-scroll{display:flex;gap:.35rem;overflow-x:auto;scroll-behavior:smooth;
+.rail-scroll{flex:1 1 0%;min-width:0;display:flex;gap:.35rem;overflow-x:auto;
+  overscroll-behavior-x:contain;scroll-behavior:smooth;
   scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:.15rem 0;
   mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent)}
 .rail-scroll::-webkit-scrollbar{display:none}
@@ -515,11 +595,11 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   /* On a phone the pizza goes between the sentence and the buttons: you read
      what the place is, you see the food, and the buttons are the last thing
      under your thumb. */
-  .hero-in{grid-template-columns:1fr;grid-template-rows:auto auto auto;gap:.9rem;text-align:left}
+  .hero-in{grid-template-columns:1fr;grid-template-rows:auto auto auto;
+    gap:clamp(.4rem,1.4vh,.9rem);text-align:left}
   .hero-copy{grid-column:1;grid-row:1}
-  .turntable{grid-column:1;grid-row:2}
+  .herofig{grid-column:1;grid-row:2}
   .hero-cta{grid-column:1;grid-row:3}
-  .turntable{max-width:min(62%,300px)}
   /* the bar earns its 60px: mark, basket, dots. Phone and open-status live in
      the sheet, where they are not competing with the order button. */
   .bar nav,.bar .openpill,.bar .btn-sm{display:none}
@@ -533,10 +613,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .hero .acts .btn{flex:1;min-width:0}
 }
 @media (max-width:620px){
-  .display{font-size:clamp(2.3rem,10.5vw,3rem)}
-  .hero{padding:.6rem 0 1rem}
-  .turntable{max-width:min(72%,260px)}
-  .hero .lede{font-size:.93rem}
+  .display{font-size:min(clamp(2.2rem,10vw,3rem),9.4svh)}
   /* On a laptop the price column sits beside the description. On a phone that
      column steals the width the food name needs and leaves a ragged gutter
      down the left. So the prices drop to their own full-width line and spread
@@ -564,6 +641,20 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .cat{aspect-ratio:4/3}
   .cat b{font-size:.96rem}
   .cat small{display:none}
+}
+
+/* Short screens give up the address line and the pickup facts before they give
+   up anything you would actually order with. The pizza shrinks rather than
+   pushing the buttons past the fold. */
+@media (max-height:680px){
+  .hero{--pie:min(58vw,29svh)}
+  .hero .eyebrow,.hero-facts{display:none}
+  .hero .lede{display:none}
+  .deal .sub{display:none}
+}
+@media (max-height:560px){
+  .hero{--pie:min(46vw,26svh)}
+  .ticks{display:none}
 }
 
 @media (prefers-reduced-motion:reduce){

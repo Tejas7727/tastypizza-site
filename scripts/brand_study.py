@@ -23,6 +23,16 @@ PHOTOS = json.loads((ROOT / "data" / "photos.json").read_text(encoding="utf-8"))
 
 IMG = "../assets/img/"
 
+# The home page draws these as circles on a board, so they are the slugs that
+# get a square crop out of build_photos.py. Only these can ride the wheel.
+ROUND = {"all-dressed-pizza", "meat-lovers-pizza", "donair-pizza",
+         "veggie-pizza", "cheese-pizza"}
+
+
+def e(s):
+    return (str(s).replace("&", "&amp;").replace("<", "&lt;")
+            .replace(">", "&gt;").replace('"', "&quot;"))
+
 # which categories each running deal belongs inside
 DEAL_CATS = {
     "large-4-topping": ["pizza"], "pizza-and-fingers": ["pizza", "garlic-fingers"],
@@ -160,6 +170,40 @@ def main():
     # sizes, crusts and toppings are no longer baked into the page: the
     # configurator renders itself wherever it is opened, and there is now more
     # than one place — the build section, a menu row, a slot inside a deal.
+
+    # What rides the wheel on the home page. Deals first, because that is what
+    # a hero is for, then two pizzas people actually order. All of it comes
+    # from deals.json and menu.json, so the shop edits one file and the home
+    # page follows.
+    slides = []
+    for d in live:
+        if d.get("photo") in ROUND or (d.get("slots") and d.get("heroPhoto")):
+            slides.append({"photo": d.get("heroPhoto") or d["photo"],
+                           "kick": "Tonight’s deal", "name": d["name"],
+                           "desc": d.get("desc", ""), "price": d["price"],
+                           "was": d.get("compareAt")})
+    gourmet = {g["id"]: g for c in visible(MENU["categories"]) for g in c["groups"]}.get("gourmet")
+    if gourmet:
+        # no repeats: five of the same pie going round would make the wheel look
+        # like it is not turning at all
+        used = {s["photo"] for s in slides}
+        for it in gourmet["items"]:
+            if it.get("photo") in ROUND and it["photo"] not in used and len(slides) < 5:
+                used.add(it["photo"])
+                med = gourmet["tiers"][str(it["tier"])][1]
+                slides.append({"photo": it["photo"],
+                               "kick": "Made without meat" if "veg" in it.get("tags", [])
+                                       else "Most ordered",
+                               "cls": "is-green" if "veg" in it.get("tags", []) else "is-grey",
+                               "name": it["name"], "desc": it.get("desc", ""),
+                               "price": med, "unit": gourmet["sizes"][1]})
+    spokes = "".join(
+        f'<div class="spoke" style="--a:{i * 360 / len(slides):.4f}deg">'
+        f'<div class="disc{" is-cur" if not i else ""}">'
+        f'<img src="{IMG}{s["photo"]}@sq.webp" width="620" height="620" alt="{e(s["name"])}"'
+        f'{" fetchpriority=\"high\"" if not i else " loading=\"lazy\""}></div></div>'
+        for i, s in enumerate(slides))
+
     hours = "".join(
         f'<div data-day="{h["day"]}"><dt>{h["day"]}</dt><dd>'
         + ("Closed" if h.get("closed") else
@@ -239,8 +283,8 @@ def main():
 <section class="hero">
   <div class="wrap hero-in">
     <div class="hero-copy">
-      <p class="eyebrow" data-anim>760 Main Street &middot; Dartmouth</p>
-      <h1 class="display" data-anim>Dartmouth&rsquo;s<br><em>pizza.</em></h1>
+      <p class="eyebrow" data-anim>760 Main Street &middot; Open 7 days</p>
+      <h1 class="display" data-anim>Tasty Pizza<br><em>Dartmouth.</em></h1>
       <p class="lede" data-anim>Fresh dough every morning, hand-stretched, out of a deck oven.
         {SITE['owner']}.</p>
     </div>
@@ -255,19 +299,34 @@ def main():
         <span><b>Free</b> parking</span>
       </p>
     </div>
-    <figure class="turntable" data-anim="grow">
-      <span class="badge"><span><b>1am</b>Fri &amp; Sat</span></span>
-      <div class="disc disc-spin">
-        <img src="{IMG}meat-lovers-pizza.webp" width="800" height="600"
-             alt="A pepperoni pizza straight out of the deck oven" fetchpriority="high">
+    <div class="herofig" data-anim="grow">
+      <div class="turntable" data-wheelstage tabindex="0" role="group"
+           aria-roledescription="carousel" aria-label="Tonight&rsquo;s offers">
+        <span class="plate" aria-hidden="true"></span>
+        <div class="wheel" data-wheel>{spokes}</div>
+        <div class="orbit" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <defs><path id="ring"
+              d="M60,60 m-49,0 a49,49 0 1,1 98,0 a49,49 0 1,1 -98,0"/></defs>
+            <g><text><textPath href="#ring" startOffset="0">
+              Fresh dough daily &middot; Hand stretched &middot; Deck oven &middot; 760 Main St &middot;
+            </textPath></text></g>
+          </svg>
+        </div>
+        <span class="badge" data-badge aria-hidden="true">
+          <i data-badge-kick>Deal</i><b data-badge-price>&nbsp;</b><s data-badge-was></s></span>
       </div>
-      <svg class="orbit" viewBox="0 0 100 100" aria-hidden="true">
-        <defs><path id="ring" d="M50,50 m-48.4,0 a48.4,48.4 0 1,1 96.8,0 a48.4,48.4 0 1,1 -96.8,0"/></defs>
-        <text><textPath href="#ring" startOffset="0">
-          Fresh dough daily &middot; Hand stretched &middot; Deck oven &middot; 760 Main St &middot;
-        </textPath></text>
-      </svg>
-    </figure>
+      <div class="ticks" data-ticks role="tablist" aria-label="Choose an offer"></div>
+      <div class="deal" data-deal aria-live="polite">
+        <div class="dealin">
+          <p class="kicker" data-kicker>Tonight&rsquo;s deal</p>
+          <h2 data-dealname>&nbsp;</h2>
+          <p class="sub" data-dealdesc>&nbsp;</p>
+          <p class="saveline"><span class="was" data-dealwas hidden></span>
+            <span class="save" data-dealsave hidden></span></p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -371,6 +430,7 @@ def main():
 <script>
 window.SHOP={json.dumps(shop, separators=(',', ':'))};
 window.BUILD={json.dumps(build_data, separators=(',', ':'))};
+window.SLIDES={json.dumps(slides, separators=(',', ':'))};
 window.TOPPINGS={json.dumps(MENU["toppings"], separators=(',', ':'))};
 window.CRUSTS={json.dumps(MENU["crusts"], separators=(',', ':'))};
 {topping_art()}
