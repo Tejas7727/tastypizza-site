@@ -272,23 +272,43 @@
   /* ------------------------------------------------------------ categories */
   var grid = $('[data-cats]'), view = $('[data-catview]');
 
-  function openCategory(id) {
+  function openCategory(id, keepScroll) {
     if (!view) return;
     var data = (CFG.categories || []).filter(function (c) { return c.id === id; })[0];
     if (!data) return;
-    view.innerHTML = render(data);
+
+    // The rail is built once and then left alone. Re-rendering it on every
+    // category change is what made it snap back to the first pill: a brand new
+    // strip starts at scrollLeft 0, so whatever you had scrolled to was gone.
+    if (!$('[data-rail]', view)) view.innerHTML = rail() + '<div data-catbody></div>';
+    $$('.railbtn', view).forEach(function (b) {
+      var on = b.getAttribute('data-cat') === id;
+      if (on) { b.setAttribute('data-on', ''); b.setAttribute('aria-current', 'true'); }
+      else { b.removeAttribute('data-on'); b.removeAttribute('aria-current'); }
+    });
+    $('[data-catbody]', view).innerHTML = catBody(data);
+
     view.hidden = false;
     if (grid) grid.hidden = true;
     var head = $('[data-order-head]');
     if (head) head.hidden = true;
     if (history.replaceState) history.replaceState(null, '', '#c-' + id);
-    var anchor = $('#order');
-    if (anchor) anchor.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
-    // put the category you are in where you can see it on the rail
-    var on = $('.railbtn[data-on]', view);
-    if (on && on.parentNode) {
-      on.parentNode.scrollTo({ left: on.offsetLeft - 16, behavior: calm ? 'auto' : 'smooth' });
+    if (!keepScroll) {
+      var anchor = $('#order');
+      if (anchor) anchor.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
     }
+    centreRail();
+  }
+
+  /* slide the active pill into view, clear of the back button, without
+     yanking the strip back to the start */
+  function centreRail() {
+    var on = $('.railbtn[data-on]', view), track = $('.rail-scroll', view);
+    if (!on || !track) return;
+    var want = on.offsetLeft - (track.clientWidth - on.offsetWidth) / 2;
+    want = Math.max(0, Math.min(want, track.scrollWidth - track.clientWidth));
+    if (Math.abs(track.scrollLeft - want) < 4) return;
+    track.scrollTo({ left: want, behavior: calm ? 'auto' : 'smooth' });
   }
 
   function closeCategory() {
@@ -308,7 +328,10 @@
   }
 
   function media(photo, alt, cls) {
-    if (!photo) return '';
+    // An invisible spacer when there is no photo, so every name in a group
+    // starts at the same x. Without it the list edge zig-zags between the
+    // dishes that have a picture and the ones that do not.
+    if (!photo) return cls === 'keep' ? '<div class="item-media is-empty"></div>' : '';
     return '<div class="item-media' + (cls ? ' ' + cls : '') + '">'
       + '<img src="' + CFG.img + photo + '@sm.webp" width="400" height="300" loading="lazy"'
       + ' alt="' + esc(alt || '') + '"></div>';
@@ -329,7 +352,7 @@
       + '<div class="panel"><div class="panel-in"></div></div></li>';
   }
 
-  function itemRow(it, extra) {
+  function itemRow(it, extra, slot) {
     if (it.builder) return builderRow(it);
     var side;
     if (it.sizes && it.sizes.length > 1) {
@@ -349,7 +372,7 @@
           + ' data-price="' + p + '">Add</button>';
     }
     return '<li class="item' + (extra ? ' ' + extra : '') + '">'
-      + media(it.photo, it.alt || it.name)
+      + media(it.photo, it.alt || it.name, slot ? 'keep' : '')
       + '<div class="item-body"><h4>' + esc(it.name) + tagsOf(it) + '</h4>'
       + (it.desc ? '<p>' + esc(it.desc) + '</p>' : '') + '</div>'
       + '<div class="item-side">' + side + '</div></li>';
@@ -458,23 +481,27 @@
     repaint();
   }
 
-  function rail(active) {
+  function rail() {
     var cats = CFG.categories || [];
     return '<div class="rail" data-rail>'
       + '<button class="rail-back" type="button" data-back aria-label="All categories">'
       + '<i class="chev-l" aria-hidden="true"></i></button>'
       + '<div class="rail-scroll">'
       + cats.map(function (c) {
-        return '<button class="railbtn" type="button" data-cat="' + esc(c.id) + '"'
-          + (c.id === active ? ' data-on aria-current="true"' : '') + '>'
+        return '<button class="railbtn" type="button" data-cat="' + esc(c.id) + '">'
           + esc(c.name) + '</button>';
       }).join('')
       + '</div></div>';
   }
 
-  function render(c) {
-    var html = rail(c.id)
-      + '<div class="catview-head"><h2>' + esc(c.name) + '</h2></div>'
+  function catBody(c) {
+    // One decision for the whole category, not per group: if anything in here
+    // has a photo, every row reserves the slot. Deciding it per group left the
+    // list edge stepping in and out at each heading.
+    var slot = c.groups.some(function (g) {
+      return g.items.some(function (it) { return !!it.photo; });
+    });
+    var html = '<div class="catview-head"><h2>' + esc(c.name) + '</h2></div>'
       + (c.blurb ? '<p class="catview-blurb">' + esc(c.blurb) + '</p>' : '');
 
     // offers first — that is the whole point of an offer
@@ -490,14 +517,15 @@
     });
     if (pop.length) {
       html += '<h3 class="grouphead">Most ordered</h3><ul class="items">'
-        + pop.map(function (it) { return itemRow(it); }).join('') + '</ul>';
+        + pop.map(function (it) { return itemRow(it, '', slot); }).join('') + '</ul>';
     }
     // then everything, in the shop's own groupings
     c.groups.forEach(function (g) {
       if (!g.items.length) return;
       html += '<h3 class="grouphead">' + esc(g.name) + '</h3>'
         + (g.note ? '<p class="groupnote">' + esc(g.note) + '</p>' : '')
-        + '<ul class="items">' + g.items.map(function (it) { return itemRow(it); }).join('') + '</ul>';
+        + '<ul class="items">'
+        + g.items.map(function (it) { return itemRow(it, '', slot); }).join('') + '</ul>';
     });
     return html;
   }
@@ -598,12 +626,10 @@
       var k = $('[data-kicker]', dealEl);
       if (k) { k.textContent = s.kick; k.className = 'kicker ' + (s.cls || ''); }
       var name = $('[data-dealname]', dealEl);
-      if (name) {
-        // the builder slide is a door, so it gets a link rather than a label
-        name.innerHTML = s.build
-          ? '<a href="#build" data-build-jump>' + esc(s.name) + '</a>'
-          : esc(s.name);
-      }
+      if (name) name.textContent = s.name;
+      if (dealEl && s.href) dealEl.setAttribute('href', s.href);
+      var cta = $('[data-dealcta]', dealEl);
+      if (cta) cta.textContent = s.build ? 'Build it now' : 'See it on the menu';
       var desc = $('[data-dealdesc]', dealEl);
       if (desc) desc.textContent = s.desc || '';
       var was = $('[data-dealwas]', dealEl), save = $('[data-dealsave]', dealEl);
@@ -699,7 +725,24 @@
       stage.classList.remove('is-drag');
       discs[cur].style.transform = '';
       if (Math.abs(moved) > 40) go(cur + (moved < 0 ? 1 : -1), moved < 0 ? 1 : -1);
+      // barely moved, so that was a tap, not a swipe: follow the offer
+      else if (Math.abs(moved) < 6 && S[cur].href) jump(S[cur].href);
       start();
+    }
+
+    /* the hash alone would not open a category — the router only runs on load */
+    function jump(href) {
+      if (href.indexOf('#c-') === 0) openCategory(href.slice(3));
+      else {
+        var el = $(href);
+        if (el) el.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+      }
+    }
+    if (dealEl) {
+      dealEl.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        jump(dealEl.getAttribute('href') || '#order');
+      });
     }
     stage.addEventListener('pointerup', release);
     stage.addEventListener('pointercancel', release);

@@ -228,7 +228,17 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 @keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
 /* the offer, set on the page itself rather than boxed off from it */
-.deal{display:grid;gap:.2rem;min-width:0;margin-top:.9rem}
+.deal{display:grid;gap:.2rem;min-width:0;margin-top:.9rem;color:inherit;
+  text-decoration:none;cursor:pointer;border-radius:14px;
+  transition:background-color .18s var(--ease)}
+.deal:hover{background:var(--paper)}
+.dealgo{display:inline-flex;align-items:center;gap:.3rem;font-size:.76rem;font-weight:800;
+  letter-spacing:.02em;color:var(--red);margin-top:.15rem}
+.dealgo::after{content:'';width:6px;height:6px;border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;transform:rotate(-45deg);
+  transition:transform .18s var(--ease)}
+.deal:hover .dealgo::after{transform:rotate(-45deg) translate(2px,2px)}
+.turntable{cursor:pointer}
 .deal[data-flash] .dealin{animation:dealin .46s var(--ease)}
 @keyframes dealin{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 .dealin{display:grid;gap:.22rem;min-width:0}
@@ -296,14 +306,19 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .grouphead:first-of-type{margin-top:.4rem}
 .groupnote{font-size:.86rem;color:var(--ink-3);margin:-.2rem 0 .7rem}
 
-/* an item row: photo, name, description, price, add */
-.items{display:grid;gap:.55rem}
-.item{display:flex;align-items:center;gap:.85rem;padding:.65rem;border:1px solid var(--line);
-  border-radius:var(--r);background:var(--white);
-  transition:border-color .18s,box-shadow .18s var(--ease),transform .18s var(--ease)}
-.item:hover{border-color:transparent;box-shadow:var(--sh);transform:translateY(-2px)}
-.item-media{width:76px;height:76px;border-radius:13px;overflow:hidden;flex:none;background:var(--paper)}
+/* An item row. No card, no border, no fill — a hairline between neighbours is
+   enough to separate them, and the food photo does the rest. Boxes around
+   every dish make a menu look like a spreadsheet. */
+.items{display:grid;list-style:none;margin:0;padding:0}
+.item{display:flex;align-items:center;gap:.9rem;padding:.7rem 0;
+  border-bottom:1px solid var(--line);background:none;
+  transition:background-color .16s var(--ease)}
+.item:last-child{border-bottom:0}
+.item:hover{background:var(--paper)}
+.item-media{width:72px;height:72px;border-radius:14px;overflow:hidden;flex:none;
+  background:var(--paper)}
 .item-media img{width:100%;height:100%;object-fit:cover}
+.item-media.is-empty{background:none}
 .item-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:.15rem}
 .item-body h4{font-size:1rem;font-weight:700;letter-spacing:-.01em;display:flex;
   align-items:center;gap:.4rem;flex-wrap:wrap}
@@ -323,8 +338,8 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 
 /* sizes as a row of buttons, so picking a size IS adding to the cart */
 .sizes{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:flex-end}
-.sizebtn{border:2px solid var(--line);border-radius:11px;padding:.32rem .55rem;cursor:pointer;
-  display:grid;gap:.05rem;text-align:center;min-width:62px;
+.sizebtn{border:1.5px solid var(--line);border-radius:11px;padding:.32rem .55rem;cursor:pointer;
+  display:grid;gap:.05rem;text-align:center;min-width:62px;background:var(--white);
   transition:border-color .16s,background-color .16s,transform .14s}
 .sizebtn:hover{border-color:var(--red);background:var(--paper)}
 .sizebtn:active{transform:scale(.95)}
@@ -333,9 +348,9 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   text-transform:uppercase;color:var(--ink-3)}
 .sizebtn b{font-size:.86rem;font-weight:800;font-variant-numeric:tabular-nums}
 
-/* the one offer allowed to sit on top of a category */
-.offer{border:2px solid var(--red);background:#fff}
-.offer .item-media{border-radius:11px}
+/* an offer is marked by its flag and its price, not by a red box round it */
+.offer{background:none}
+.offer .item-media{border-radius:14px}
 .flag{background:var(--red);color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.09em;
   text-transform:uppercase;padding:.2rem .45rem;border-radius:999px}
 .flag-save{background:var(--green-soft);color:var(--green)}
@@ -465,8 +480,8 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
    where it stands instead of throwing a dialog over the menu. Same mechanism
    for a deal opening into its pizzas. */
 .item-x{display:block;padding:0;overflow:visible}
-.item-hit{display:flex;align-items:center;gap:.85rem;width:100%;text-align:left;
-  padding:.65rem;cursor:pointer;border-radius:var(--r)}
+.item-hit{display:flex;align-items:center;gap:.9rem;width:100%;text-align:left;
+  padding:.7rem 0;cursor:pointer;border-radius:var(--r)}
 .item-x .item-body{display:flex;flex-direction:column;gap:.15rem;flex:1;min-width:0}
 .item-body .h4{font-size:1rem;font-weight:700;letter-spacing:-.01em;display:flex;
   align-items:center;gap:.4rem;flex-wrap:wrap}
@@ -483,7 +498,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .panel>.panel-in{overflow:hidden}
 [data-open]>.panel{grid-template-rows:1fr}
 [data-grown]>.panel>.panel-in{overflow:visible}
-.item-x[data-open]{border-color:transparent;box-shadow:var(--sh)}
+.item-x[data-open]{background:var(--paper);border-radius:var(--r)}
 .item-x>.panel>.panel-in>*{padding:.2rem .75rem 1rem}
 .item-x[data-open]>.panel>.panel-in{border-top:1px solid var(--line);margin-top:.1rem}
 
@@ -515,7 +530,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
    Once you are inside a category the way out and the way sideways have to be
    permanently visible, or every change of mind costs a scroll to the top. */
 .rail{position:sticky;top:var(--bar);z-index:20;display:flex;align-items:center;gap:.5rem;
-  padding:.55rem 0;background:var(--paper);min-width:0;max-width:100%;
+  padding:.55rem 0;background:var(--white);min-width:0;max-width:100%;
   box-shadow:0 1px 0 var(--line),0 10px 14px -14px rgba(17,17,19,.4)}
 .rail-back{flex:none;width:36px;height:36px;border-radius:999px;display:grid;place-items:center;
   border:2px solid var(--line);cursor:pointer;background:var(--white)}
@@ -600,11 +615,18 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   /* On a phone the pizza goes between the sentence and the buttons: you read
      what the place is, you see the food, and the buttons are the last thing
      under your thumb. */
-  .hero-in{grid-template-columns:1fr;grid-template-rows:auto auto auto;
+  .hero-in{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;
     gap:clamp(.4rem,1.4vh,.9rem);text-align:left}
   .hero-copy{grid-column:1;grid-row:1}
-  .herofig{grid-column:1;grid-row:2}
+  .herofig{grid-column:1;grid-row:2;align-self:center}
   .hero-cta{grid-column:1;grid-row:3}
+  /* On a phone the paragraph is the first thing to go. The slogan already
+     says what this is; the space is worth more to the pizza and the price. */
+  .hero .lede{display:none}
+  .hero{--pie:min(86vw,42svh)}
+  .deal h2{font-size:min(1.32rem,4.6svh)}
+  .deal .sub{font-size:.9rem}
+  .saveline{font-size:.92rem}
   /* the bar earns its 60px: mark, basket, dots. Phone and open-status live in
      the sheet, where they are not competing with the order button. */
   .bar nav,.bar .openpill,.bar .btn-sm{display:none}
@@ -643,6 +665,10 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .tops-grid{grid-template-columns:repeat(auto-fill,minmax(146px,1fr))}
   /* the rail runs to both edges on a phone so it reads as a bar, not a widget */
   .rail{margin:0 -1.1rem;padding:.5rem 1.1rem}
+  /* the rows run to the gutter on a phone; the old card padding
+     left a dead strip down the left of every dish */
+  .item{padding:.65rem 0}
+  .item-media{width:66px;height:66px}
   .cat{aspect-ratio:4/3}
   .cat b{font-size:.96rem}
   .cat small{display:none}
@@ -735,15 +761,16 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
           <i data-badge-kick>Deal</i><b data-badge-price>&nbsp;</b><s data-badge-was></s></span>
       </div>
       <div class="ticks" data-ticks role="tablist" aria-label="Choose an offer"></div>
-      <div class="deal" data-deal aria-live="polite">
+      <a class="deal" data-deal data-dealgo href="#order" aria-live="polite">
         <div class="dealin">
           <p class="kicker" data-kicker>Tonight&rsquo;s deal</p>
           <h2 data-dealname>&nbsp;</h2>
           <p class="sub" data-dealdesc>&nbsp;</p>
           <p class="saveline"><span class="was" data-dealwas hidden></span>
             <span class="save" data-dealsave hidden></span></p>
+          <span class="dealgo" data-dealcta>See it on the menu</span>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -848,7 +875,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 <script>
 window.SHOP={"img":"../assets/img/","taxRate":0.14,"categories":[{"id":"pizza","name":"Pizza","blurb":"Dough and sauce made fresh every morning. Build your own or take one we already figured out.","groups":[{"name":"Build Your Own","note":"Pick your size, pick your toppings. Whole wheat, white or gluten free crust.","items":[{"name":"Build Your Own Pizza","sizes":[{"label":"","price":null}],"desc":"Pick your size, then tap toppings. Five toppings makes it a Tasty Pizza Special.","photo":"cheese-pizza","alt":"A whole cheese pizza","tags":["popular"],"builder":true}]},{"name":"Gourmet Specialty Pizza","note":"Built for you, already figured out. Whole wheat, white or gluten free crust.","items":[{"name":"All Dressed","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Pepperoni, salami, mushrooms, green peppers, onions, bacon, hamburger.","photo":"all-dressed-pizza","alt":"An all dressed pizza loaded with toppings","tags":["popular"]},{"name":"Donair Pizza","sizes":[{"label":"9\" S","price":14.95},{"label":"12\" M","price":21.5},{"label":"16\" L","price":27.45},{"label":"18\" XL","price":32.95}],"desc":"Donair meat, onions, tomatoes, donair sauce.","photo":"donair-pizza","alt":"A loaded donair pizza","tags":["donair","popular"]},{"name":"Bubba","sizes":[{"label":"9\" S","price":14.95},{"label":"12\" M","price":21.5},{"label":"16\" L","price":27.45},{"label":"18\" XL","price":32.95}],"desc":"Garlic spread, donair meat, onions, tomatoes, donair sauce.","tags":["donair"]},{"name":"Meat Lovers","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Pepperoni, salami, bacon, hamburger, ham, donair meat, Italian sausage.","photo":"meat-lovers-pizza","alt":"A meat lovers pizza covered in pepperoni","tags":["popular"]},{"name":"Hawaiian","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Ham, pineapple, mozzarella.","photo":"hawaiian-pizza","alt":"A Hawaiian pizza with ham and pineapple"},{"name":"Greek","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Tomatoes, red onions, black olives, feta and mozzarella, oregano and olive oil.","photo":"greek-pizza","alt":"A Greek pizza with feta and olives","tags":["veg"]},{"name":"Cheese Lovers","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Feta, cheddar, mozzarella and parmesan.","tags":["veg"]},{"name":"BBQ Chicken","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Chicken, zesty sauce, tomatoes, green peppers, red onions, mushrooms, mozzarella and cheddar.","photo":"bbq-chicken-pizza","alt":"A BBQ chicken pizza with red onion","tags":["chicken"]},{"name":"Vegetarian","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Mushrooms, green peppers, onions, tomatoes, hot peppers, olives, pineapple.","photo":"veggie-pizza","alt":"A vegetarian pizza with fresh greens","tags":["veg"]},{"name":"Canadian Classic","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Pepperoni, mushrooms, bacon, mozzarella and cheddar on a garlic crust."},{"name":"Cheeseburger","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Hamburger, cheddar and mozzarella, your choice of four vegetables."},{"name":"Philly Cheese Steak","sizes":[{"label":"9\" S","price":14.95},{"label":"12\" M","price":21.5},{"label":"16\" L","price":27.45},{"label":"18\" XL","price":32.95}],"desc":"Zesty sauce, sliced steak, red onions, tomatoes, green peppers, mushrooms, mozzarella and cheddar."}]},{"name":"Pizza Extras","note":"","items":[{"name":"Special Topping","sizes":[{"label":"9\" S","price":1.95},{"label":"12\" M","price":2.85},{"label":"16\" L","price":3.95},{"label":"18\" XL","price":4.95}],"desc":"Zesty chicken, sliced steak, parmesan, cheddar or feta."},{"name":"Gluten Free Crust","sizes":[{"label":"","price":4.99}],"desc":"Any size.","tags":["glutenfree"]}]}]},{"id":"garlic-fingers","name":"Garlic Fingers","blurb":"Served with donair sauce. The Yum Yums are in here too.","groups":[{"name":"Garlic Fingers","note":"Served with donair sauce, the way it's meant to be.","items":[{"name":"Garlic Fingers","sizes":[{"label":"9\" S","price":10.25},{"label":"12\" M","price":13.95},{"label":"16\" L","price":17.95},{"label":"18\" XL","price":22.45}],"desc":"Garlic butter, mozzarella, pulled apart by hand.","photo":"garlic-fingers","alt":"Garlic fingers with a pot of donair dipping sauce","tags":["veg","popular"]},{"name":"With Bacon","sizes":[{"label":"9\" S","price":11.25},{"label":"12\" M","price":14.95},{"label":"16\" L","price":19.95},{"label":"18\" XL","price":24.45}],"desc":"Same, with bacon through it."},{"name":"With Donair","sizes":[{"label":"9\" S","price":14.95},{"label":"12\" M","price":17.95},{"label":"16\" L","price":21.95},{"label":"18\" XL","price":26.95}],"desc":"Same, loaded with donair meat.","tags":["donair"]},{"name":"Honey Garlic Fingers","sizes":[{"label":"","price":null}]}]},{"name":"Bread Sticks (\"Yum Yums\")","note":"Tossed in parmesan, served with donair dipping sauce.","items":[{"name":"Small Yum Yums","sizes":[{"label":"","price":12.95}],"photo":"bread-sticks","alt":"Bread sticks with a pot of dipping sauce","tags":["veg"]},{"name":"Large Yum Yums","sizes":[{"label":"","price":16.45}],"tags":["veg"]}]}]},{"id":"donairs","name":"Donairs","blurb":"On the pita, on a plate, in an egg roll, or on a stick.","groups":[{"name":"Donair","note":"On pita bread with tomatoes, onions and donair sauce.","items":[{"name":"Donair","sizes":[{"label":"Small","price":9.25},{"label":"Medium","price":11.35},{"label":"Large","price":13.45},{"label":"Super","price":15.55}],"desc":"Spiced beef off the spit, sweet sauce, warm pita. The one we're known for.","photo":"donair","alt":"A donair in pita bread with tomato, onion and donair sauce","tags":["donair","popular"]},{"name":"Add Cheese","sizes":[{"label":"Small","price":2.0},{"label":"Medium","price":2.3},{"label":"Large","price":2.85},{"label":"Super","price":3.35}],"desc":"Melted through the meat."},{"name":"Add Extra Meat","sizes":[{"label":"Small","price":3.35},{"label":"Medium","price":4.35},{"label":"Large","price":5.35},{"label":"Super","price":6.35}],"desc":"For when a large isn't a large."}]},{"name":"Donair Plates","note":"Donair meat over fries with mozzarella, tomatoes, onions and donair sauce.","items":[{"name":"Small Donair Plate","sizes":[{"label":"","price":11.95}],"photo":"donair-plate","alt":"A donair plate with fries and donair sauce","tags":["donair"]},{"name":"Large Donair Plate","sizes":[{"label":"","price":15.95}],"tags":["donair"]}]},{"name":"Donair, Deep Fried","note":"Served with donair sauce. Nowhere else does these properly.","items":[{"name":"Donair Egg Roll","sizes":[{"label":"","price":2.5}],"desc":"Donair, rolled and fried. Order more than one.","photo":"donair-egg-roll","alt":"Crispy donair egg rolls on a plate","tags":["donair","popular"]},{"name":"Donair Egg Rolls \u2014 Dozen","sizes":[{"label":"","price":28.0}],"tags":["donair"]},{"name":"Donair Pogo","sizes":[{"label":"","price":3.45}],"desc":"Donair on a stick in batter. Yes, really.","photo":"donair-pogo","alt":"Donair pogos on sticks","tags":["donair","popular"]},{"name":"Donair Pogos \u2014 Dozen","sizes":[{"label":"","price":38.95}],"tags":["donair"]}]},{"name":"Donair Sauce","note":"Take some home. People do.","items":[{"name":"Small Donair Sauce","sizes":[{"label":"","price":2.25}],"tags":["donair"]},{"name":"Large Donair Sauce","sizes":[{"label":"","price":3.25}],"tags":["donair"]},{"name":"Extra Large Donair Sauce","sizes":[{"label":"","price":4.95}],"tags":["donair"]}]}]},{"id":"subs","name":"Subs & Pockets","blurb":"Small or large. Oven baked or deep fried.","groups":[{"name":"Subs","note":"","items":[{"name":"Cold Cut","sizes":[{"label":"Small","price":9.25},{"label":"Large","price":11.45}],"photo":"cold-cut-sub","alt":"A loaded cold cut submarine sandwich"},{"name":"Salami & Ham","sizes":[{"label":"Small","price":9.25},{"label":"Large","price":11.45}]},{"name":"Pizza Sub","sizes":[{"label":"Small","price":9.25},{"label":"Large","price":11.45}]},{"name":"Vegetarian","sizes":[{"label":"Small","price":9.25},{"label":"Large","price":11.45}],"tags":["veg"]},{"name":"Real Turkey","sizes":[{"label":"Small","price":9.45},{"label":"Large","price":11.45}]},{"name":"Bubba","sizes":[{"label":"Small","price":9.95},{"label":"Large","price":12.75}],"desc":"The one people ask for by name.","tags":["popular"]},{"name":"Club","sizes":[{"label":"Small","price":10.25},{"label":"Large","price":12.75}]},{"name":"Steak","sizes":[{"label":"Small","price":10.25},{"label":"Large","price":13.25}],"photo":"steak-sub","alt":"A steak sub with cheese and peppers"},{"name":"Donair Sub","sizes":[{"label":"Small","price":10.25},{"label":"Large","price":13.25}],"tags":["donair"]},{"name":"Super Sub","sizes":[{"label":"Small","price":10.95},{"label":"Large","price":14.75}]},{"name":"Garlic Bread","sizes":[{"label":"Small","price":4.95},{"label":"Large","price":5.95}],"tags":["veg"]},{"name":"Extra Cheese","sizes":[{"label":"Small","price":2.45},{"label":"Large","price":3.45}]},{"name":"Extra Meat","sizes":[{"label":"Small","price":3.45},{"label":"Large","price":4.45}]}]},{"name":"Wraps & Pockets","note":"","items":[{"name":"Pita Wrap","sizes":[{"label":"","price":10.45}],"desc":"Pizza, donair, cold cut, club, vegetarian, chicken, turkey or chicken Caesar.","photo":"pita-wrap","alt":"A pita wrap on a plate"},{"name":"Pocket \u2014 Pizza, Chicken, Meats or Vegetarian","sizes":[{"label":"","price":15.95}],"desc":"Oven baked or deep fried."},{"name":"Pocket \u2014 Donair or Steak","sizes":[{"label":"","price":16.45}],"desc":"Oven baked or deep fried.","tags":["donair"]}]}]},{"id":"chicken","name":"Chicken & Wings","blurb":"Wings in seven sauces, fingers, nuggets and the family pack.","groups":[{"name":"Chicken Wings","note":"Sauces: hot, mild, honey garlic, honey mustard, ranch, sweet & sour, BBQ.","items":[{"name":"10 Wings","sizes":[{"label":"","price":12.99}],"photo":"chicken-wings","alt":"Chicken wings with celery and dipping sauce","tags":["chicken","popular"]},{"name":"15 Wings","sizes":[{"label":"","price":18.95}],"tags":["chicken"]},{"name":"20 Wings","sizes":[{"label":"","price":24.95}],"tags":["chicken"]},{"name":"30 Wings","sizes":[{"label":"","price":36.95}],"desc":"For the room.","tags":["chicken"]}]},{"name":"Chicken","note":"","items":[{"name":"Chicken & Chips \u2014 1 pc","sizes":[{"label":"","price":8.45}],"photo":"fried-chicken","alt":"Pieces of golden fried chicken","tags":["chicken"]},{"name":"Chicken & Chips \u2014 2 pc","sizes":[{"label":"","price":12.45}],"tags":["chicken"]},{"name":"Chicken & Chips \u2014 3 pc","sizes":[{"label":"","price":14.95}],"tags":["chicken"]},{"name":"Extra Piece of Chicken","sizes":[{"label":"","price":3.75}],"tags":["chicken"]},{"name":"2 Chicken Legs & Chips","sizes":[{"label":"","price":9.95}],"desc":"Everyday special.","tags":["chicken"]},{"name":"Chicken Family Pack","sizes":[{"label":"","price":39.95}],"desc":"10 pieces, 2 large fries, gravy and coleslaw.","tags":["chicken","popular"]},{"name":"6 Chicken Nuggets & Fries","sizes":[{"label":"","price":7.95}],"tags":["chicken"]},{"name":"12 Chicken Nuggets & Fries","sizes":[{"label":"","price":13.95}],"tags":["chicken"]},{"name":"5 Chicken Fingers & Fries","sizes":[{"label":"","price":14.95}],"photo":"chicken-fingers","alt":"Chicken fingers and fries in a basket","tags":["chicken"]},{"name":"10 Chicken Fingers & Fries","sizes":[{"label":"","price":26.45}],"tags":["chicken"]}]}]},{"id":"seafood","name":"Seafood","blurb":"Fresh haddock, scallops, clams and shrimp.","groups":[{"name":"Fish & Chips","note":"Fresh haddock. The reason people drive out here.","items":[{"name":"Fish & Chips \u2014 1 pc","sizes":[{"label":"","price":8.95}],"photo":"fish-and-chips","alt":"Battered haddock with chips and tartar sauce","tags":["seafood","popular"]},{"name":"Fish & Chips \u2014 2 pc","sizes":[{"label":"","price":12.95}],"tags":["seafood"]},{"name":"Fish & Chips \u2014 3 pc","sizes":[{"label":"","price":14.95}],"tags":["seafood"]},{"name":"Extra Piece of Fish","sizes":[{"label":"","price":3.95}],"tags":["seafood"]},{"name":"Fish Family Pack","sizes":[{"label":"","price":39.95}],"desc":"10 pieces of fish, 2 large fries, large gravy, coleslaw and tartar sauce.","tags":["seafood","popular"]}]},{"name":"More Seafood","note":"","items":[{"name":"Scallops & Chips","sizes":[{"label":"","price":13.45}],"desc":"10 scallops.","photo":"scallops","alt":"Fried scallops and chips in a basket","tags":["seafood"]},{"name":"Clams & Chips","sizes":[{"label":"","price":13.45}],"desc":"Two cups of clams.","tags":["seafood"]},{"name":"Shrimp & Chips","sizes":[{"label":"","price":13.45}],"desc":"12 shrimp.","photo":"shrimp","alt":"A plate of golden fried shrimp","tags":["seafood"]},{"name":"Seafood Platter","sizes":[{"label":"","price":17.45}],"desc":"A piece of fish, fries, 5 scallops, 5 shrimp and clams.","tags":["seafood","popular"]},{"name":"Extra Coleslaw \u2014 Small","sizes":[{"label":"","price":1.75}]},{"name":"Extra Coleslaw \u2014 Large","sizes":[{"label":"","price":2.95}]}]}]},{"id":"burgers","name":"Burgers & Poutine","blurb":"Burger or platter. Every poutine is real curds and homemade gravy.","groups":[{"name":"Burgers","note":"Platter comes with fries.","items":[{"name":"Hamburger","sizes":[{"label":"Burger","price":6.45},{"label":"Platter","price":9.95}],"photo":"hamburger","alt":"A hamburger with a side of fries"},{"name":"Cheeseburger","sizes":[{"label":"Burger","price":6.95},{"label":"Platter","price":9.95}]},{"name":"Chicken Burger","sizes":[{"label":"Burger","price":6.95},{"label":"Platter","price":9.95}],"tags":["chicken"]},{"name":"Donair Burger","sizes":[{"label":"Burger","price":7.25},{"label":"Platter","price":10.45}],"desc":"Donair meat and sauce on a burger. A Dartmouth idea.","tags":["donair"]},{"name":"Pizza Burger","sizes":[{"label":"Burger","price":6.95},{"label":"Platter","price":10.45}]},{"name":"Add Bacon","sizes":[{"label":"Burger","price":1.0},{"label":"Platter","price":1.0}]}]},{"name":"Poutine","note":"Real cheese curds and homemade gravy. Always.","items":[{"name":"Classic Poutine","sizes":[{"label":"Small","price":8.55},{"label":"Large","price":12.25}],"desc":"Curds, gravy, fries. Done right.","photo":"poutine","alt":"Poutine with cheese curds and gravy","tags":["popular"]},{"name":"Donair Poutine","sizes":[{"label":"Small","price":null},{"label":"Large","price":14.25}],"desc":"With donair meat and a line of donair sauce.","tags":["donair","popular"]},{"name":"Chicken Poutine","sizes":[{"label":"Small","price":null},{"label":"Large","price":13.95}],"tags":["chicken"]},{"name":"Hamburger Poutine","sizes":[{"label":"Small","price":null},{"label":"Large","price":13.95}]},{"name":"Greek Poutine","sizes":[{"label":"Small","price":null},{"label":"Large","price":13.95}],"desc":"Feta, tomato, red onion, olives."},{"name":"Extra Cheese","sizes":[{"label":"Small","price":2.25},{"label":"Large","price":2.95}]},{"name":"Extra Gravy","sizes":[{"label":"Small","price":1.75},{"label":"Large","price":2.75}]}]}]},{"id":"sides","name":"Sides & Nachos","blurb":"Fries, rings, mozza sticks, gravy and the loaded nachos.","groups":[{"name":"Sides & Plates","note":"","items":[{"name":"Club House Sandwich with Fries","sizes":[{"label":"","price":14.45}],"desc":"Real turkey.","photo":"club-sandwich","alt":"A club sandwich with a side of fries"},{"name":"Hot Hamburger with Gravy & Fries","sizes":[{"label":"","price":12.3}],"tags":["popular"]},{"name":"Hot Turkey with Gravy & Fries","sizes":[{"label":"","price":12.3}]},{"name":"Large Fries","sizes":[{"label":"","price":5.45}],"photo":"fries","alt":"A pile of golden french fries","tags":["veg"]},{"name":"Large Onion Rings","sizes":[{"label":"","price":5.45}],"photo":"onion-rings","alt":"Golden onion rings with dipping sauce","tags":["veg"]},{"name":"12 Chicken Fries","sizes":[{"label":"","price":9.45}],"tags":["chicken"]},{"name":"9 Mozza Sticks","sizes":[{"label":"","price":10.95}],"photo":"mozza-sticks","alt":"Mozzarella sticks with marinara sauce","tags":["veg"]},{"name":"Cup of Gravy \u2014 Small","sizes":[{"label":"","price":1.65}]},{"name":"Cup of Gravy \u2014 Large","sizes":[{"label":"","price":2.85}]}]},{"name":"Nachos","note":"","items":[{"name":"Nachos","sizes":[{"label":"","price":15.45}],"desc":"Green onion, tomato, black olives, jalape\u00f1o, mozzarella and cheddar. Salsa and sour cream on the side.","photo":"nachos","alt":"Loaded nachos with cheese, tomato and olives","tags":["veg","spicy"]},{"name":"Add Chicken, Hamburger or Bacon","sizes":[{"label":"","price":3.65}]},{"name":"Extra Cheese","sizes":[{"label":"","price":3.95}]}]}]},{"id":"salads","name":"Salads & Pasta","blurb":"Something green, or lasagna with garlic bread.","groups":[{"name":"Salads & Pasta","note":"","items":[{"name":"Caesar or Garden Salad","sizes":[{"label":"","price":8.95}],"photo":"salad","alt":"A fresh Caesar salad in a bowl","tags":["veg"]},{"name":"Greek Salad","sizes":[{"label":"","price":9.45}],"tags":["veg"]},{"name":"Add Chicken \u2014 Crispy or Grilled","sizes":[{"label":"","price":2.3}],"tags":["chicken"]},{"name":"Lasagna with Garlic Bread","sizes":[{"label":"","price":10.45}],"photo":"lasagna","alt":"A slice of lasagna showing its layers"},{"name":"Ravioli with Garlic Bread","sizes":[{"label":"","price":10.45}]}]}]}],"hours":[{"day":"Sunday","open":14,"close":22,"closed":false},{"day":"Monday","open":11,"close":23,"closed":false},{"day":"Tuesday","open":11,"close":23,"closed":false},{"day":"Wednesday","open":11,"close":23,"closed":false},{"day":"Thursday","open":11,"close":23,"closed":false},{"day":"Friday","open":11,"close":25,"closed":false},{"day":"Saturday","open":11,"close":25,"closed":false}],"deals":[{"id":"large-4-topping","name":"Large 16\" Pizza, 4 Toppings","desc":"Any four toppings you like.","price":20.95,"compareAt":22.95,"photo":"all-dressed-pizza","slots":[{"type":"pizza","label":"Your 16\" pizza","size":2,"included":4}],"cats":["pizza"]},{"id":"pizza-and-fingers","name":"Medium Pizza + Medium Garlic Fingers","desc":"12\" pizza with four toppings, plus 12\" garlic fingers with donair sauce.","price":28.95,"compareAt":31.4,"photo":"garlic-fingers","slots":[{"type":"pizza","label":"Your 12\" pizza","size":1,"included":4},{"type":"fixed","label":"12\" garlic fingers with donair sauce"}],"cats":["pizza","garlic-fingers"]},{"id":"two-mediums","name":"Two Medium Pizzas","desc":"Four toppings on each.","price":32.95,"compareAt":34.9,"photo":"meat-lovers-pizza","slots":[{"type":"pizza","label":"Pizza 1 \u2014 12\" medium","size":1,"included":4},{"type":"pizza","label":"Pizza 2 \u2014 12\" medium","size":1,"included":4}],"cats":["pizza"]},{"id":"party-box","name":"Tasty Party Box","desc":"Onion rings, deep fried pepperoni, 9 mozza sticks, 12 chicken fries and 6 donair egg rolls. Honey mustard, sour cream and donair sauce. 2L pop included.","price":47.99,"compareAt":null,"photo":"mozza-sticks","slots":[],"cats":["sides","chicken"]},{"id":"egg-rolls-6","name":"6 Donair Egg Rolls","desc":"With donair sauce.","price":13.95,"compareAt":15.0,"photo":"donair-egg-roll","slots":[],"cats":["donairs"]},{"id":"pogos-6","name":"6 Donair Pogos","desc":"With donair sauce.","price":19.5,"compareAt":20.7,"photo":"donair-pogo","slots":[],"cats":["donairs"]},{"id":"two-large-subs","name":"Two Large Subs","desc":"Cold cut, pizza or real turkey.","price":22.45,"compareAt":null,"photo":"cold-cut-sub","slots":[],"cats":["subs"]}]};
 window.BUILD={"sizes":["9\" Small","12\" Medium","16\" Large","18\" X-Large"],"prices":[[9.5,12.9,16.9,20.95],[10.7,13.8,17.9,22.25],[11.2,15.75,19.75,23.95],[11.95,16.45,20.45,25.35],[12.8,17.45,22.95,27.45],[13.5,18.75,24.45,28.45]],"max":5,"special":"Tasty Pizza Special","extra":[0.8,1.2,1.5,1.5]};
-window.SLIDES=[{"pie":"pepperoni","kick":"Tonight\u2019s deal","name":"Large 16\" Pizza, 4 Toppings","desc":"Any four toppings you like.","price":20.95,"was":22.95},{"pie":"meat-lovers","kick":"Tonight\u2019s deal","name":"Medium Pizza + Medium Garlic Fingers","desc":"12\" pizza with four toppings, plus 12\" garlic fingers with donair sauce.","price":28.95,"was":31.4},{"pie":"greek","kick":"Tonight\u2019s deal","name":"Two Medium Pizzas","desc":"Four toppings on each.","price":32.95,"was":34.9},{"pie":"veggie","kick":"Made without meat","cls":"is-green","name":"Vegetarian","desc":"Mushrooms, green peppers, onions, tomatoes, hot peppers, olives, pineapple.","price":19.75,"unit":"12\" M"},{"pie":"build-your-own","kick":"Make it yours","cls":"is-grey","name":"Tasty Pizza Special","build":true,"desc":"Pick your size, tap 5 toppings, watch it land.","price":18.75,"unit":"12\" Medium"}];
+window.SLIDES=[{"pie":"pepperoni","kick":"Tonight\u2019s deal","name":"Large 16\" Pizza, 4 Toppings","desc":"Any four toppings you like.","price":20.95,"was":22.95,"href":"#c-pizza"},{"pie":"meat-lovers","kick":"Tonight\u2019s deal","name":"Medium Pizza + Medium Garlic Fingers","desc":"12\" pizza with four toppings, plus 12\" garlic fingers with donair sauce.","price":28.95,"was":31.4,"href":"#c-pizza"},{"pie":"greek","kick":"Tonight\u2019s deal","name":"Two Medium Pizzas","desc":"Four toppings on each.","price":32.95,"was":34.9,"href":"#c-pizza"},{"pie":"veggie","kick":"Made without meat","cls":"is-green","name":"Vegetarian","desc":"Mushrooms, green peppers, onions, tomatoes, hot peppers, olives, pineapple.","price":19.75,"unit":"12\" M","href":"#c-pizza"},{"pie":"build-your-own","kick":"Make it yours","cls":"is-grey","name":"Tasty Pizza Special","build":true,"href":"#build","desc":"Pick your size, tap 5 toppings, watch it land.","price":18.75,"unit":"12\" Medium"}];
 window.TOPPINGS=["Pepperoni","Salami","Mushrooms","Green Peppers","Red Peppers","Onions","Red Onions","Bacon","Hamburger","Tomatoes","Pineapple","Italian Sausage","Hot Peppers","Black Olives","Green Olives","Donair Meat","Ham"];
 window.CRUSTS=[{"name":"White","surcharge":0},{"name":"Whole Wheat","surcharge":0},{"name":"Gluten Free","surcharge":4.99,"tags":["glutenfree"]}];
 window.TOPPING_LOOK = {
@@ -1508,23 +1535,43 @@ window.TOPPING_LOOK = {
   /* ------------------------------------------------------------ categories */
   var grid = $('[data-cats]'), view = $('[data-catview]');
 
-  function openCategory(id) {
+  function openCategory(id, keepScroll) {
     if (!view) return;
     var data = (CFG.categories || []).filter(function (c) { return c.id === id; })[0];
     if (!data) return;
-    view.innerHTML = render(data);
+
+    // The rail is built once and then left alone. Re-rendering it on every
+    // category change is what made it snap back to the first pill: a brand new
+    // strip starts at scrollLeft 0, so whatever you had scrolled to was gone.
+    if (!$('[data-rail]', view)) view.innerHTML = rail() + '<div data-catbody></div>';
+    $$('.railbtn', view).forEach(function (b) {
+      var on = b.getAttribute('data-cat') === id;
+      if (on) { b.setAttribute('data-on', ''); b.setAttribute('aria-current', 'true'); }
+      else { b.removeAttribute('data-on'); b.removeAttribute('aria-current'); }
+    });
+    $('[data-catbody]', view).innerHTML = catBody(data);
+
     view.hidden = false;
     if (grid) grid.hidden = true;
     var head = $('[data-order-head]');
     if (head) head.hidden = true;
     if (history.replaceState) history.replaceState(null, '', '#c-' + id);
-    var anchor = $('#order');
-    if (anchor) anchor.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
-    // put the category you are in where you can see it on the rail
-    var on = $('.railbtn[data-on]', view);
-    if (on && on.parentNode) {
-      on.parentNode.scrollTo({ left: on.offsetLeft - 16, behavior: calm ? 'auto' : 'smooth' });
+    if (!keepScroll) {
+      var anchor = $('#order');
+      if (anchor) anchor.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
     }
+    centreRail();
+  }
+
+  /* slide the active pill into view, clear of the back button, without
+     yanking the strip back to the start */
+  function centreRail() {
+    var on = $('.railbtn[data-on]', view), track = $('.rail-scroll', view);
+    if (!on || !track) return;
+    var want = on.offsetLeft - (track.clientWidth - on.offsetWidth) / 2;
+    want = Math.max(0, Math.min(want, track.scrollWidth - track.clientWidth));
+    if (Math.abs(track.scrollLeft - want) < 4) return;
+    track.scrollTo({ left: want, behavior: calm ? 'auto' : 'smooth' });
   }
 
   function closeCategory() {
@@ -1544,7 +1591,10 @@ window.TOPPING_LOOK = {
   }
 
   function media(photo, alt, cls) {
-    if (!photo) return '';
+    // An invisible spacer when there is no photo, so every name in a group
+    // starts at the same x. Without it the list edge zig-zags between the
+    // dishes that have a picture and the ones that do not.
+    if (!photo) return cls === 'keep' ? '<div class="item-media is-empty"></div>' : '';
     return '<div class="item-media' + (cls ? ' ' + cls : '') + '">'
       + '<img src="' + CFG.img + photo + '@sm.webp" width="400" height="300" loading="lazy"'
       + ' alt="' + esc(alt || '') + '"></div>';
@@ -1565,7 +1615,7 @@ window.TOPPING_LOOK = {
       + '<div class="panel"><div class="panel-in"></div></div></li>';
   }
 
-  function itemRow(it, extra) {
+  function itemRow(it, extra, slot) {
     if (it.builder) return builderRow(it);
     var side;
     if (it.sizes && it.sizes.length > 1) {
@@ -1585,7 +1635,7 @@ window.TOPPING_LOOK = {
           + ' data-price="' + p + '">Add</button>';
     }
     return '<li class="item' + (extra ? ' ' + extra : '') + '">'
-      + media(it.photo, it.alt || it.name)
+      + media(it.photo, it.alt || it.name, slot ? 'keep' : '')
       + '<div class="item-body"><h4>' + esc(it.name) + tagsOf(it) + '</h4>'
       + (it.desc ? '<p>' + esc(it.desc) + '</p>' : '') + '</div>'
       + '<div class="item-side">' + side + '</div></li>';
@@ -1694,23 +1744,27 @@ window.TOPPING_LOOK = {
     repaint();
   }
 
-  function rail(active) {
+  function rail() {
     var cats = CFG.categories || [];
     return '<div class="rail" data-rail>'
       + '<button class="rail-back" type="button" data-back aria-label="All categories">'
       + '<i class="chev-l" aria-hidden="true"></i></button>'
       + '<div class="rail-scroll">'
       + cats.map(function (c) {
-        return '<button class="railbtn" type="button" data-cat="' + esc(c.id) + '"'
-          + (c.id === active ? ' data-on aria-current="true"' : '') + '>'
+        return '<button class="railbtn" type="button" data-cat="' + esc(c.id) + '">'
           + esc(c.name) + '</button>';
       }).join('')
       + '</div></div>';
   }
 
-  function render(c) {
-    var html = rail(c.id)
-      + '<div class="catview-head"><h2>' + esc(c.name) + '</h2></div>'
+  function catBody(c) {
+    // One decision for the whole category, not per group: if anything in here
+    // has a photo, every row reserves the slot. Deciding it per group left the
+    // list edge stepping in and out at each heading.
+    var slot = c.groups.some(function (g) {
+      return g.items.some(function (it) { return !!it.photo; });
+    });
+    var html = '<div class="catview-head"><h2>' + esc(c.name) + '</h2></div>'
       + (c.blurb ? '<p class="catview-blurb">' + esc(c.blurb) + '</p>' : '');
 
     // offers first — that is the whole point of an offer
@@ -1726,14 +1780,15 @@ window.TOPPING_LOOK = {
     });
     if (pop.length) {
       html += '<h3 class="grouphead">Most ordered</h3><ul class="items">'
-        + pop.map(function (it) { return itemRow(it); }).join('') + '</ul>';
+        + pop.map(function (it) { return itemRow(it, '', slot); }).join('') + '</ul>';
     }
     // then everything, in the shop's own groupings
     c.groups.forEach(function (g) {
       if (!g.items.length) return;
       html += '<h3 class="grouphead">' + esc(g.name) + '</h3>'
         + (g.note ? '<p class="groupnote">' + esc(g.note) + '</p>' : '')
-        + '<ul class="items">' + g.items.map(function (it) { return itemRow(it); }).join('') + '</ul>';
+        + '<ul class="items">'
+        + g.items.map(function (it) { return itemRow(it, '', slot); }).join('') + '</ul>';
     });
     return html;
   }
@@ -1834,12 +1889,10 @@ window.TOPPING_LOOK = {
       var k = $('[data-kicker]', dealEl);
       if (k) { k.textContent = s.kick; k.className = 'kicker ' + (s.cls || ''); }
       var name = $('[data-dealname]', dealEl);
-      if (name) {
-        // the builder slide is a door, so it gets a link rather than a label
-        name.innerHTML = s.build
-          ? '<a href="#build" data-build-jump>' + esc(s.name) + '</a>'
-          : esc(s.name);
-      }
+      if (name) name.textContent = s.name;
+      if (dealEl && s.href) dealEl.setAttribute('href', s.href);
+      var cta = $('[data-dealcta]', dealEl);
+      if (cta) cta.textContent = s.build ? 'Build it now' : 'See it on the menu';
       var desc = $('[data-dealdesc]', dealEl);
       if (desc) desc.textContent = s.desc || '';
       var was = $('[data-dealwas]', dealEl), save = $('[data-dealsave]', dealEl);
@@ -1935,7 +1988,24 @@ window.TOPPING_LOOK = {
       stage.classList.remove('is-drag');
       discs[cur].style.transform = '';
       if (Math.abs(moved) > 40) go(cur + (moved < 0 ? 1 : -1), moved < 0 ? 1 : -1);
+      // barely moved, so that was a tap, not a swipe: follow the offer
+      else if (Math.abs(moved) < 6 && S[cur].href) jump(S[cur].href);
       start();
+    }
+
+    /* the hash alone would not open a category — the router only runs on load */
+    function jump(href) {
+      if (href.indexOf('#c-') === 0) openCategory(href.slice(3));
+      else {
+        var el = $(href);
+        if (el) el.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+      }
+    }
+    if (dealEl) {
+      dealEl.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        jump(dealEl.getAttribute('href') || '#order');
+      });
     }
     stage.addEventListener('pointerup', release);
     stage.addEventListener('pointercancel', release);

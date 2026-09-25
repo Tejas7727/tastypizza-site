@@ -180,9 +180,12 @@ def main():
     for did, pie in PIE.items():
         d = by_id.get(did)
         if d:
+            # where tapping this offer should land; "cats" up top is the
+            # whole category list, so do not reuse that name here
+            dcats = DEAL_CATS.get(did) or ["pizza"]
             slides.append({"pie": pie, "kick": "Tonight’s deal", "name": d["name"],
                            "desc": d.get("desc", ""), "price": d["price"],
-                           "was": d.get("compareAt")})
+                           "was": d.get("compareAt"), "href": "#c-" + dcats[0]})
 
     gourmet = {g["id"]: g for c in visible(MENU["categories"]) for g in c["groups"]}.get("gourmet")
     # several pizzas carry the veg tag; this slide is fronted by the vegetarian
@@ -192,11 +195,11 @@ def main():
         slides.append({"pie": "veggie", "kick": "Made without meat", "cls": "is-green",
                        "name": veg["name"], "desc": veg.get("desc", ""),
                        "price": gourmet["tiers"][str(veg["tier"])][1],
-                       "unit": gourmet["sizes"][1]})
+                       "unit": gourmet["sizes"][1], "href": "#c-pizza"})
 
     # the builder, on the board. Tapping it drops you straight into the toy.
     slides.append({"pie": "build-your-own", "kick": "Make it yours", "cls": "is-grey",
-                   "name": b["specialName"], "build": True,
+                   "name": b["specialName"], "build": True, "href": "#build",
                    "desc": f'Pick your size, tap {b["maxToppings"]} toppings, watch it land.',
                    "price": b["priceByToppingCount"][b["maxToppings"]][1],
                    "unit": b["sizes"][1]})
@@ -319,15 +322,16 @@ def main():
           <i data-badge-kick>Deal</i><b data-badge-price>&nbsp;</b><s data-badge-was></s></span>
       </div>
       <div class="ticks" data-ticks role="tablist" aria-label="Choose an offer"></div>
-      <div class="deal" data-deal aria-live="polite">
+      <a class="deal" data-deal data-dealgo href="#order" aria-live="polite">
         <div class="dealin">
           <p class="kicker" data-kicker>Tonight&rsquo;s deal</p>
           <h2 data-dealname>&nbsp;</h2>
           <p class="sub" data-dealdesc>&nbsp;</p>
           <p class="saveline"><span class="was" data-dealwas hidden></span>
             <span class="save" data-dealsave hidden></span></p>
+          <span class="dealgo" data-dealcta>See it on the menu</span>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </section>

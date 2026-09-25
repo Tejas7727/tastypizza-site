@@ -221,7 +221,17 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 @keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
 /* the offer, set on the page itself rather than boxed off from it */
-.deal{display:grid;gap:.2rem;min-width:0;margin-top:.9rem}
+.deal{display:grid;gap:.2rem;min-width:0;margin-top:.9rem;color:inherit;
+  text-decoration:none;cursor:pointer;border-radius:14px;
+  transition:background-color .18s var(--ease)}
+.deal:hover{background:var(--paper)}
+.dealgo{display:inline-flex;align-items:center;gap:.3rem;font-size:.76rem;font-weight:800;
+  letter-spacing:.02em;color:var(--red);margin-top:.15rem}
+.dealgo::after{content:'';width:6px;height:6px;border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;transform:rotate(-45deg);
+  transition:transform .18s var(--ease)}
+.deal:hover .dealgo::after{transform:rotate(-45deg) translate(2px,2px)}
+.turntable{cursor:pointer}
 .deal[data-flash] .dealin{animation:dealin .46s var(--ease)}
 @keyframes dealin{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 .dealin{display:grid;gap:.22rem;min-width:0}
@@ -289,14 +299,19 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .grouphead:first-of-type{margin-top:.4rem}
 .groupnote{font-size:.86rem;color:var(--ink-3);margin:-.2rem 0 .7rem}
 
-/* an item row: photo, name, description, price, add */
-.items{display:grid;gap:.55rem}
-.item{display:flex;align-items:center;gap:.85rem;padding:.65rem;border:1px solid var(--line);
-  border-radius:var(--r);background:var(--white);
-  transition:border-color .18s,box-shadow .18s var(--ease),transform .18s var(--ease)}
-.item:hover{border-color:transparent;box-shadow:var(--sh);transform:translateY(-2px)}
-.item-media{width:76px;height:76px;border-radius:13px;overflow:hidden;flex:none;background:var(--paper)}
+/* An item row. No card, no border, no fill — a hairline between neighbours is
+   enough to separate them, and the food photo does the rest. Boxes around
+   every dish make a menu look like a spreadsheet. */
+.items{display:grid;list-style:none;margin:0;padding:0}
+.item{display:flex;align-items:center;gap:.9rem;padding:.7rem 0;
+  border-bottom:1px solid var(--line);background:none;
+  transition:background-color .16s var(--ease)}
+.item:last-child{border-bottom:0}
+.item:hover{background:var(--paper)}
+.item-media{width:72px;height:72px;border-radius:14px;overflow:hidden;flex:none;
+  background:var(--paper)}
 .item-media img{width:100%;height:100%;object-fit:cover}
+.item-media.is-empty{background:none}
 .item-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:.15rem}
 .item-body h4{font-size:1rem;font-weight:700;letter-spacing:-.01em;display:flex;
   align-items:center;gap:.4rem;flex-wrap:wrap}
@@ -316,8 +331,8 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 
 /* sizes as a row of buttons, so picking a size IS adding to the cart */
 .sizes{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:flex-end}
-.sizebtn{border:2px solid var(--line);border-radius:11px;padding:.32rem .55rem;cursor:pointer;
-  display:grid;gap:.05rem;text-align:center;min-width:62px;
+.sizebtn{border:1.5px solid var(--line);border-radius:11px;padding:.32rem .55rem;cursor:pointer;
+  display:grid;gap:.05rem;text-align:center;min-width:62px;background:var(--white);
   transition:border-color .16s,background-color .16s,transform .14s}
 .sizebtn:hover{border-color:var(--red);background:var(--paper)}
 .sizebtn:active{transform:scale(.95)}
@@ -326,9 +341,9 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   text-transform:uppercase;color:var(--ink-3)}
 .sizebtn b{font-size:.86rem;font-weight:800;font-variant-numeric:tabular-nums}
 
-/* the one offer allowed to sit on top of a category */
-.offer{border:2px solid var(--red);background:#fff}
-.offer .item-media{border-radius:11px}
+/* an offer is marked by its flag and its price, not by a red box round it */
+.offer{background:none}
+.offer .item-media{border-radius:14px}
 .flag{background:var(--red);color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.09em;
   text-transform:uppercase;padding:.2rem .45rem;border-radius:999px}
 .flag-save{background:var(--green-soft);color:var(--green)}
@@ -458,8 +473,8 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
    where it stands instead of throwing a dialog over the menu. Same mechanism
    for a deal opening into its pizzas. */
 .item-x{display:block;padding:0;overflow:visible}
-.item-hit{display:flex;align-items:center;gap:.85rem;width:100%;text-align:left;
-  padding:.65rem;cursor:pointer;border-radius:var(--r)}
+.item-hit{display:flex;align-items:center;gap:.9rem;width:100%;text-align:left;
+  padding:.7rem 0;cursor:pointer;border-radius:var(--r)}
 .item-x .item-body{display:flex;flex-direction:column;gap:.15rem;flex:1;min-width:0}
 .item-body .h4{font-size:1rem;font-weight:700;letter-spacing:-.01em;display:flex;
   align-items:center;gap:.4rem;flex-wrap:wrap}
@@ -476,7 +491,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .panel>.panel-in{overflow:hidden}
 [data-open]>.panel{grid-template-rows:1fr}
 [data-grown]>.panel>.panel-in{overflow:visible}
-.item-x[data-open]{border-color:transparent;box-shadow:var(--sh)}
+.item-x[data-open]{background:var(--paper);border-radius:var(--r)}
 .item-x>.panel>.panel-in>*{padding:.2rem .75rem 1rem}
 .item-x[data-open]>.panel>.panel-in{border-top:1px solid var(--line);margin-top:.1rem}
 
@@ -508,7 +523,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
    Once you are inside a category the way out and the way sideways have to be
    permanently visible, or every change of mind costs a scroll to the top. */
 .rail{position:sticky;top:var(--bar);z-index:20;display:flex;align-items:center;gap:.5rem;
-  padding:.55rem 0;background:var(--paper);min-width:0;max-width:100%;
+  padding:.55rem 0;background:var(--white);min-width:0;max-width:100%;
   box-shadow:0 1px 0 var(--line),0 10px 14px -14px rgba(17,17,19,.4)}
 .rail-back{flex:none;width:36px;height:36px;border-radius:999px;display:grid;place-items:center;
   border:2px solid var(--line);cursor:pointer;background:var(--white)}
@@ -593,11 +608,18 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   /* On a phone the pizza goes between the sentence and the buttons: you read
      what the place is, you see the food, and the buttons are the last thing
      under your thumb. */
-  .hero-in{grid-template-columns:1fr;grid-template-rows:auto auto auto;
+  .hero-in{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;
     gap:clamp(.4rem,1.4vh,.9rem);text-align:left}
   .hero-copy{grid-column:1;grid-row:1}
-  .herofig{grid-column:1;grid-row:2}
+  .herofig{grid-column:1;grid-row:2;align-self:center}
   .hero-cta{grid-column:1;grid-row:3}
+  /* On a phone the paragraph is the first thing to go. The slogan already
+     says what this is; the space is worth more to the pizza and the price. */
+  .hero .lede{display:none}
+  .hero{--pie:min(86vw,42svh)}
+  .deal h2{font-size:min(1.32rem,4.6svh)}
+  .deal .sub{font-size:.9rem}
+  .saveline{font-size:.92rem}
   /* the bar earns its 60px: mark, basket, dots. Phone and open-status live in
      the sheet, where they are not competing with the order button. */
   .bar nav,.bar .openpill,.bar .btn-sm{display:none}
@@ -636,6 +658,10 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .tops-grid{grid-template-columns:repeat(auto-fill,minmax(146px,1fr))}
   /* the rail runs to both edges on a phone so it reads as a bar, not a widget */
   .rail{margin:0 -1.1rem;padding:.5rem 1.1rem}
+  /* the rows run to the gutter on a phone; the old card padding
+     left a dead strip down the left of every dish */
+  .item{padding:.65rem 0}
+  .item-media{width:66px;height:66px}
   .cat{aspect-ratio:4/3}
   .cat b{font-size:.96rem}
   .cat small{display:none}
