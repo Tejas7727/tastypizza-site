@@ -40,7 +40,7 @@
   --sh:0 1px 2px rgba(17,17,19,.06),0 10px 28px rgba(17,17,19,.07);
   --sh-lift:0 2px 6px rgba(17,17,19,.08),0 20px 46px rgba(17,17,19,.13);
   --ease:cubic-bezier(.22,.7,.28,1);
-  --slide:cubic-bezier(.36,.02,.18,1);
+  --slide:cubic-bezier(.36,.02,.18,1); --rail:0px;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -270,7 +270,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
    text is clamped and the block holds one height for all five. */
 .deal .sub{font-size:min(.86rem,2.2svh);color:var(--ink-3);
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.dealin{min-height:var(--dealh,7.2rem)}
+.dealin{min-height:7.2rem}
 .saveline{display:flex;align-items:baseline;gap:.45rem;flex-wrap:wrap;font-size:.84rem}
 .saveline .was{color:var(--ink-3);text-decoration:line-through;font-weight:600;margin:0}
 .saveline .save{color:var(--green);font-weight:800}
@@ -433,7 +433,8 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .cfg{display:grid;gap:clamp(1rem,2.6vw,2.4rem);min-width:0;
   grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start}
 .cfg-ctrl{min-width:0}
-.cfg-stage{position:sticky;top:calc(var(--bar) + .4rem);z-index:5;display:grid;min-width:0;
+.cfg-stage{position:sticky;top:calc(var(--bar) + var(--rail,0px) + .5rem);z-index:5;
+  display:grid;min-width:0;
   justify-items:center;gap:.6rem;background:var(--white);padding-bottom:.5rem}
 .cfg .btn-wide{margin-top:.2rem}
 .peel{position:relative;width:min(100%,300px);aspect-ratio:1;display:grid;place-items:center}
@@ -667,7 +668,9 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .hero-cta{grid-column:1;grid-row:3}
   /* On a phone the paragraph is the first thing to go. The slogan already
      says what this is; the space is worth more to the pizza and the price. */
-  .hero .lede{display:none}
+  /* the address is in the footer, the map and the call button; above the
+     slogan on a phone it is just a line of small grey text in the way */
+  .hero .lede,.hero .eyebrow{display:none}
   .hero{--pie:min(86vw,42svh)}
   .display .wide{display:none}
   .display .narrow{display:inline}
@@ -1617,6 +1620,15 @@ window.TOPPING_LOOK = {
       if (anchor) anchor.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
     }
     centreRail();
+    measureRail();
+  }
+
+  /* The builder's pizza sticks below the top bar, but the category rail is
+     sticky too and sits in that same space — so the pizza slid under it and
+     lost its top fifth. Tell the CSS how tall the rail actually is. */
+  function measureRail() {
+    var r = $('[data-rail]', view);
+    if (r) document.documentElement.style.setProperty('--rail', Math.round(r.offsetHeight) + 'px');
   }
 
   /* slide the active pill into view, clear of the back button, without
@@ -1778,6 +1790,7 @@ window.TOPPING_LOOK = {
           cfgs[i] = mountBuilder(inner, { size: s.size, included: s.included,
             dealPrice: d.price }, function () {
             slot.removeAttribute('data-open');
+            slot.removeAttribute('data-grown');
             hit.setAttribute('aria-expanded', 'false');
             var sum = slot.querySelector('[data-slot-sum]');
             if (sum) {
@@ -1880,6 +1893,7 @@ window.TOPPING_LOOK = {
               add(cfg.name(), cfg.price(), cfg.label()
                 + (cfg.crust !== 'White' ? ' · ' + cfg.crust + ' crust' : ''));
               host.removeAttribute('data-open');
+              host.removeAttribute('data-grown');
               toggle.setAttribute('aria-expanded', 'false');
               openCart(true);
             });
@@ -2054,6 +2068,40 @@ window.TOPPING_LOOK = {
       paint();
     }
 
+    /* Reserve the tallest the offer block can ever be AT THIS WIDTH.
+       A fixed rem value cannot do it: at 600px "Medium Pizza + Medium Garlic
+       Fingers" wraps to two lines and at 900px it does not, so as the window
+       narrowed the block grew and shoved the headline up and the buttons down.
+       So measure all five for real, take the largest, and hold that. */
+    var inner = dealEl && $('.dealin', dealEl);
+    function sizeDeal() {
+      if (!inner) return;
+      var keep = {
+        name: $('[data-dealname]', dealEl).textContent,
+        desc: $('[data-dealdesc]', dealEl).textContent,
+        kick: $('[data-kicker]', dealEl).textContent
+      };
+      inner.style.minHeight = '0px';
+      var tall = 0;
+      S.forEach(function (s) {
+        $('[data-dealname]', dealEl).textContent = s.name;
+        $('[data-dealdesc]', dealEl).textContent = s.desc || '';
+        $('[data-kicker]', dealEl).textContent = s.kick;
+        tall = Math.max(tall, inner.scrollHeight);
+      });
+      $('[data-dealname]', dealEl).textContent = keep.name;
+      $('[data-dealdesc]', dealEl).textContent = keep.desc;
+      $('[data-kicker]', dealEl).textContent = keep.kick;
+      inner.style.minHeight = Math.ceil(tall) + 'px';
+    }
+
+    var rt;
+    addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(sizeDeal, 140);
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeDeal);
+
     function start() { stop(); if (!calm) { timer = setInterval(function () { go(cur + 1, 1); }, HOLD); paint(); } }
     function stop() { clearInterval(timer); timer = null; }
 
@@ -2110,7 +2158,7 @@ window.TOPPING_LOOK = {
       if (document.hidden) stop(); else start();
     });
 
-    start(); paint();
+    sizeDeal(); start(); paint();
   })();
 
   /* ------------------------------------------------------------ go */

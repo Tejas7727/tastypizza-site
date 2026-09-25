@@ -298,6 +298,15 @@
       if (anchor) anchor.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
     }
     centreRail();
+    measureRail();
+  }
+
+  /* The builder's pizza sticks below the top bar, but the category rail is
+     sticky too and sits in that same space — so the pizza slid under it and
+     lost its top fifth. Tell the CSS how tall the rail actually is. */
+  function measureRail() {
+    var r = $('[data-rail]', view);
+    if (r) document.documentElement.style.setProperty('--rail', Math.round(r.offsetHeight) + 'px');
   }
 
   /* slide the active pill into view, clear of the back button, without
@@ -459,6 +468,7 @@
           cfgs[i] = mountBuilder(inner, { size: s.size, included: s.included,
             dealPrice: d.price }, function () {
             slot.removeAttribute('data-open');
+            slot.removeAttribute('data-grown');
             hit.setAttribute('aria-expanded', 'false');
             var sum = slot.querySelector('[data-slot-sum]');
             if (sum) {
@@ -561,6 +571,7 @@
               add(cfg.name(), cfg.price(), cfg.label()
                 + (cfg.crust !== 'White' ? ' · ' + cfg.crust + ' crust' : ''));
               host.removeAttribute('data-open');
+              host.removeAttribute('data-grown');
               toggle.setAttribute('aria-expanded', 'false');
               openCart(true);
             });
@@ -735,6 +746,40 @@
       paint();
     }
 
+    /* Reserve the tallest the offer block can ever be AT THIS WIDTH.
+       A fixed rem value cannot do it: at 600px "Medium Pizza + Medium Garlic
+       Fingers" wraps to two lines and at 900px it does not, so as the window
+       narrowed the block grew and shoved the headline up and the buttons down.
+       So measure all five for real, take the largest, and hold that. */
+    var inner = dealEl && $('.dealin', dealEl);
+    function sizeDeal() {
+      if (!inner) return;
+      var keep = {
+        name: $('[data-dealname]', dealEl).textContent,
+        desc: $('[data-dealdesc]', dealEl).textContent,
+        kick: $('[data-kicker]', dealEl).textContent
+      };
+      inner.style.minHeight = '0px';
+      var tall = 0;
+      S.forEach(function (s) {
+        $('[data-dealname]', dealEl).textContent = s.name;
+        $('[data-dealdesc]', dealEl).textContent = s.desc || '';
+        $('[data-kicker]', dealEl).textContent = s.kick;
+        tall = Math.max(tall, inner.scrollHeight);
+      });
+      $('[data-dealname]', dealEl).textContent = keep.name;
+      $('[data-dealdesc]', dealEl).textContent = keep.desc;
+      $('[data-kicker]', dealEl).textContent = keep.kick;
+      inner.style.minHeight = Math.ceil(tall) + 'px';
+    }
+
+    var rt;
+    addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(sizeDeal, 140);
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeDeal);
+
     function start() { stop(); if (!calm) { timer = setInterval(function () { go(cur + 1, 1); }, HOLD); paint(); } }
     function stop() { clearInterval(timer); timer = null; }
 
@@ -791,7 +836,7 @@
       if (document.hidden) stop(); else start();
     });
 
-    start(); paint();
+    sizeDeal(); start(); paint();
   })();
 
   /* ------------------------------------------------------------ go */
