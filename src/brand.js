@@ -566,21 +566,20 @@
 
   document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') openCart(false); });
 
-  /* ------------------------------------------------------------ the hero wheel
+  /* ------------------------------------------------------------ the hero board
 
-     Five pizzas on the rim of one circle. Turning it counter-clockwise carries
-     the one on show off to the left and brings the next up from the right, so
-     it reads as a swipe but travels on an arc. Every pizza turns back by what
-     the wheel turns, on the same timing, so it lands level. */
+     A wooden board that stays put, and pizzas that slide across it right to
+     left. The pies are cut out with an alpha edge, so what moves is the pizza
+     itself and not a disc of white. */
   (function () {
     var S = window.SLIDES || [];
-    var stage = $('[data-wheelstage]'), wheel = $('[data-wheel]');
-    if (!stage || !wheel || S.length < 2) return;
+    var stage = $('[data-wheelstage]');
+    if (!stage || S.length < 2) return;
 
-    var discs = $$('.disc', wheel), ticks = $('[data-ticks]'), dealEl = $('[data-deal]');
+    var discs = $$('.disc', stage), ticks = $('[data-ticks]'), dealEl = $('[data-deal]');
     var badge = $('[data-badge]');
-    var STEP = 360 / S.length, HOLD = 2000;
-    var cur = 0, rot = 0, timer = null, busy = false;
+    var HOLD = 2000;
+    var cur = 0, timer = null, busy = false;
 
     S.forEach(function (s, i) {
       var t = document.createElement('button');
@@ -589,28 +588,24 @@
       t.setAttribute('aria-label', s.name);
       t.addEventListener('click', function () {
         if (i === cur) return;
-        var d = (i - cur + S.length) % S.length;
-        stop(); turn(d <= S.length / 2 ? d : d - S.length);
+        stop(); go(i, i > cur ? 1 : -1); start();
       });
       if (ticks) ticks.appendChild(t);
     });
 
-    function place() {
-      wheel.style.transform = 'rotate(' + rot + 'deg)';
-      discs.forEach(function (d, i) {
-        d.style.transform = 'rotate(' + (-(i * STEP) - rot) + 'deg)';
-      });
-    }
-
     function paint() {
       var s = S[cur];
-      discs.forEach(function (d, i) { d.classList.toggle('is-cur', i === cur); });
-
       var k = $('[data-kicker]', dealEl);
       if (k) { k.textContent = s.kick; k.className = 'kicker ' + (s.cls || ''); }
-      var set = function (sel, v) { var el = $(sel, dealEl); if (el) el.textContent = v; };
-      set('[data-dealname]', s.name);
-      set('[data-dealdesc]', s.desc || '');
+      var name = $('[data-dealname]', dealEl);
+      if (name) {
+        // the builder slide is a door, so it gets a link rather than a label
+        name.innerHTML = s.build
+          ? '<a href="#build" data-build-jump>' + esc(s.name) + '</a>'
+          : esc(s.name);
+      }
+      var desc = $('[data-dealdesc]', dealEl);
+      if (desc) desc.textContent = s.desc || '';
       var was = $('[data-dealwas]', dealEl), save = $('[data-dealsave]', dealEl);
       if (was && save) {
         was.hidden = !s.was;
@@ -620,12 +615,14 @@
           save.textContent = 'Save ' + money(s.was - s.price);
           save.className = 'save';
         } else {
-          save.textContent = s.unit ? s.unit + ' · ' + money(s.price) : money(s.price);
+          save.textContent = (s.unit ? s.unit + ' · ' : '')
+            + (s.build ? 'from ' : '') + money(s.price);
           save.className = 'unit';
         }
       }
       if (badge) {
-        badge.querySelector('[data-badge-kick]').textContent = s.was ? 'Deal' : 'From';
+        badge.querySelector('[data-badge-kick]').textContent =
+          s.was ? 'Deal' : (s.build ? 'Build' : 'From');
         badge.querySelector('[data-badge-price]').textContent = money(s.price);
         badge.querySelector('[data-badge-was]').textContent = s.was ? money(s.was) : '';
         badge.setAttribute('data-pop', '');
@@ -646,22 +643,44 @@
       }
     }
 
-    function turn(n) {
-      if (busy || !n) return;
+    function go(next, dir) {
+      next = (next + S.length) % S.length;
+      if (busy || next === cur) return;
       busy = true;
-      rot -= n * STEP;
-      cur = (cur + (n % S.length) + S.length) % S.length;
-      place();
+      var from = discs[cur], to = discs[next], d = dir > 0 ? 'next' : 'prev';
+
+      // park the incoming pie off the right of the board with no transition,
+      // then release it in the same frame the outgoing one leaves
+      to.classList.add('is-drag', 'in-' + d);
+      to.classList.remove('is-cur');
+      void to.offsetWidth;
+      to.classList.remove('is-drag');
+
+      requestAnimationFrame(function () {
+        from.classList.remove('is-cur');
+        from.classList.add('out-' + d);
+        to.classList.remove('in-' + d);
+        to.classList.add('is-cur');
+      });
+      setTimeout(function () {
+        from.classList.remove('out-next', 'out-prev');
+        from.style.transform = '';
+        busy = false;
+      }, 780);
+
+      cur = next;
       paint();
-      setTimeout(function () { busy = false; }, 820);
     }
-    function start() { stop(); if (!calm) { timer = setInterval(function () { turn(1); }, HOLD); paint(); } }
+
+    function start() { stop(); if (!calm) { timer = setInterval(function () { go(cur + 1, 1); }, HOLD); paint(); } }
     function stop() { clearInterval(timer); timer = null; }
 
-    var x0 = null, dx = 0, r0 = 0;
+    /* drag: the pizza follows your finger off the board */
+    var x0 = null, dx = 0, w = 1;
     stage.addEventListener('pointerdown', function (ev) {
-      if (busy) return;
-      x0 = ev.clientX; dx = 0; r0 = rot;
+      if (busy || ev.target.closest('a')) return;
+      x0 = ev.clientX; dx = 0;
+      w = stage.getBoundingClientRect().width || 1;
       stage.classList.add('is-drag');
       stage.setPointerCapture(ev.pointerId);
       stop();
@@ -669,29 +688,30 @@
     stage.addEventListener('pointermove', function (ev) {
       if (x0 === null) return;
       dx = ev.clientX - x0;
-      rot = r0 + (dx / (stage.getBoundingClientRect().width || 1)) * STEP * 1.15;
-      place();
+      var f = dx / w;
+      discs[cur].style.transform = 'translateX(' + (f * 100) + '%) rotate(' + (f * 11)
+        + 'deg) scale(' + (1 - Math.min(Math.abs(f), .4) * .28) + ')';
     });
     function release() {
       if (x0 === null) return;
       var moved = dx;
       x0 = null; dx = 0;
       stage.classList.remove('is-drag');
-      rot = r0; place();
-      if (Math.abs(moved) > 40) turn(moved < 0 ? 1 : -1);
+      discs[cur].style.transform = '';
+      if (Math.abs(moved) > 40) go(cur + (moved < 0 ? 1 : -1), moved < 0 ? 1 : -1);
       start();
     }
     stage.addEventListener('pointerup', release);
     stage.addEventListener('pointercancel', release);
     stage.addEventListener('keydown', function (ev) {
-      if (ev.key === 'ArrowRight') { stop(); turn(1); start(); }
-      if (ev.key === 'ArrowLeft') { stop(); turn(-1); start(); }
+      if (ev.key === 'ArrowRight') { stop(); go(cur + 1, 1); start(); }
+      if (ev.key === 'ArrowLeft') { stop(); go(cur - 1, -1); start(); }
     });
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) stop(); else start();
     });
 
-    place(); start(); paint();
+    start(); paint();
   })();
 
   /* ------------------------------------------------------------ go */

@@ -171,37 +171,45 @@ def main():
     # configurator renders itself wherever it is opened, and there is now more
     # than one place — the build section, a menu row, a slot inside a deal.
 
-    # What rides the wheel on the home page. Deals first, because that is what
-    # a hero is for, then two pizzas people actually order. All of it comes
-    # from deals.json and menu.json, so the shop edits one file and the home
-    # page follows.
+    # What slides across the board. Deals lead, because that is what a hero is
+    # for, then the two pizzas worth showing off, then the builder — the thing
+    # we most want people to touch. Prices come from deals.json and menu.json,
+    # so the shop edits one file and the home page follows.
+    #
+    # The pie art is commissioned, not stock, so which pie fronts which deal is
+    # a deliberate pairing rather than a photo of that exact order.
+    PIE = {"large-4-topping": "pepperoni", "pizza-and-fingers": "meat-lovers",
+           "two-mediums": "greek"}
+    by_id = {d["id"]: d for d in live}
     slides = []
-    for d in live:
-        if d.get("photo") in ROUND or (d.get("slots") and d.get("heroPhoto")):
-            slides.append({"photo": d.get("heroPhoto") or d["photo"],
-                           "kick": "Tonight’s deal", "name": d["name"],
+    for did, pie in PIE.items():
+        d = by_id.get(did)
+        if d:
+            slides.append({"pie": pie, "kick": "Tonight’s deal", "name": d["name"],
                            "desc": d.get("desc", ""), "price": d["price"],
                            "was": d.get("compareAt")})
+
     gourmet = {g["id"]: g for c in visible(MENU["categories"]) for g in c["groups"]}.get("gourmet")
-    if gourmet:
-        # no repeats: five of the same pie going round would make the wheel look
-        # like it is not turning at all
-        used = {s["photo"] for s in slides}
-        for it in gourmet["items"]:
-            if it.get("photo") in ROUND and it["photo"] not in used and len(slides) < 5:
-                used.add(it["photo"])
-                med = gourmet["tiers"][str(it["tier"])][1]
-                slides.append({"photo": it["photo"],
-                               "kick": "Made without meat" if "veg" in it.get("tags", [])
-                                       else "Most ordered",
-                               "cls": "is-green" if "veg" in it.get("tags", []) else "is-grey",
-                               "name": it["name"], "desc": it.get("desc", ""),
-                               "price": med, "unit": gourmet["sizes"][1]})
-    spokes = "".join(
-        f'<div class="spoke" style="--a:{i * 360 / len(slides):.4f}deg">'
+    # several pizzas carry the veg tag; this slide is fronted by the vegetarian
+    # pie art, so it has to be that pizza and not merely the first veg one
+    veg = next((it for it in gourmet["items"] if it["name"] == "Vegetarian"), None) if gourmet else None
+    if veg:
+        slides.append({"pie": "veggie", "kick": "Made without meat", "cls": "is-green",
+                       "name": veg["name"], "desc": veg.get("desc", ""),
+                       "price": gourmet["tiers"][str(veg["tier"])][1],
+                       "unit": gourmet["sizes"][1]})
+
+    # the builder, on the board. Tapping it drops you straight into the toy.
+    slides.append({"pie": "build-your-own", "kick": "Make it yours", "cls": "is-grey",
+                   "name": b["specialName"], "build": True,
+                   "desc": f'Pick your size, tap {b["maxToppings"]} toppings, watch it land.',
+                   "price": b["priceByToppingCount"][b["maxToppings"]][1],
+                   "unit": b["sizes"][1]})
+
+    pies = "".join(
         f'<div class="disc{" is-cur" if not i else ""}">'
-        f'<img src="{IMG}{s["photo"]}@sq.webp" width="620" height="620" alt="{e(s["name"])}"'
-        f'{" fetchpriority=\"high\"" if not i else " loading=\"lazy\""}></div></div>'
+        f'<img src="{IMG}pie-{s["pie"]}.webp" width="680" height="680" alt="{e(s["name"])}"'
+        f'{" fetchpriority=\"high\"" if not i else " loading=\"lazy\""}></div>'
         for i, s in enumerate(slides))
 
     hours = "".join(
@@ -283,8 +291,8 @@ def main():
 <section class="hero">
   <div class="wrap hero-in">
     <div class="hero-copy">
-      <p class="eyebrow" data-anim>760 Main Street &middot; Open 7 days</p>
-      <h1 class="display" data-anim>Tasty Pizza<br><em>Dartmouth.</em></h1>
+      <p class="eyebrow" data-anim>760 Main Street &middot; Dartmouth</p>
+      <h1 class="display" data-anim>Get<br><em>Tasty.</em></h1>
       <p class="lede" data-anim>Fresh dough every morning, hand-stretched, out of a deck oven.
         {SITE['owner']}.</p>
     </div>
@@ -302,16 +310,9 @@ def main():
     <div class="herofig" data-anim="grow">
       <div class="turntable" data-wheelstage tabindex="0" role="group"
            aria-roledescription="carousel" aria-label="Tonight&rsquo;s offers">
-        <span class="plate" aria-hidden="true"></span>
-        <div class="wheel" data-wheel>{spokes}</div>
-        <div class="orbit" aria-hidden="true">
-          <svg viewBox="0 0 120 120">
-            <defs><path id="ring"
-              d="M60,60 m-49,0 a49,49 0 1,1 98,0 a49,49 0 1,1 -98,0"/></defs>
-            <g><text><textPath href="#ring" startOffset="0">
-              Fresh dough daily &middot; Hand stretched &middot; Deck oven &middot; 760 Main St &middot;
-            </textPath></text></g>
-          </svg>
+        <div class="boardclip" aria-hidden="true">
+          <span class="board"></span>
+          <div class="pies">{pies}</div>
         </div>
         <span class="badge" data-badge aria-hidden="true">
           <i data-badge-kick>Deal</i><b data-badge-price>&nbsp;</b><s data-badge-was></s></span>

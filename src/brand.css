@@ -33,6 +33,7 @@
   --sh:0 1px 2px rgba(17,17,19,.06),0 10px 28px rgba(17,17,19,.07);
   --sh-lift:0 2px 6px rgba(17,17,19,.08),0 20px 46px rgba(17,17,19,.13);
   --ease:cubic-bezier(.22,.7,.28,1);
+  --slide:cubic-bezier(.36,.02,.18,1);
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -160,45 +161,50 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .hero-facts span{display:inline-flex;align-items:center;gap:.35rem}
 .hero-facts b{color:var(--ink)}
 
-/* The pizzas ride the rim of one big wheel. Turning the wheel counter-clockwise
-   carries the one on show off to the left and brings the next up from the
-   right, so the movement reads as a swipe but travels on an arc.
-
-   Two bits of geometry make it work:
-   * the wheel's radius equals the plate's width and its topmost point sits on
-     the plate's centre, so a pizza lands ON the plate instead of above it. The
-     wheel's own centre hangs a plate-width below, off screen.
-   * every pizza counter-turns by exactly what the wheel turns, on the same
-     duration and easing, so it arrives level instead of upside down. */
-.turntable{position:relative;aspect-ratio:1;display:grid;place-items:center;
-  width:min(100%,var(--pie,430px));margin-inline:auto;touch-action:pan-y;
-  cursor:grab;-webkit-user-select:none;user-select:none}
+/* A wooden board that never moves, and pizzas that slide across it right to
+   left. The pies are cut out of their background with a real alpha edge
+   (scripts/build_hero_pies.py), so the grain shows around the crust instead of
+   a white disc sitting on top of the wood. */
+.turntable{position:relative;width:var(--pie,430px);max-width:100%;aspect-ratio:1;
+  margin-inline:auto;touch-action:pan-y;cursor:grab;
+  -webkit-user-select:none;user-select:none}
 .turntable:active{cursor:grabbing}
-.turntable::before{content:'';position:absolute;inset:-4%;border-radius:50%;
-  border:1px dashed var(--line)}
-/* only a rim of board shows — the pizza is the hero, not the plate */
-.plate{position:absolute;inset:3%;border-radius:50%;
-  background:radial-gradient(circle at 38% 32%,#D6A96E,#B0814A 64%,#8E6336);
-  box-shadow:0 26px 52px -18px rgba(17,17,19,.42)}
-.wheel{position:absolute;left:50%;top:50%;width:200%;aspect-ratio:1;translate:-50% 0;
-  transition:transform .8s cubic-bezier(.38,.02,.2,1)}
-.spoke{position:absolute;inset:0;transform:rotate(var(--a))}
-.disc{position:absolute;left:50%;top:0;width:45%;aspect-ratio:1;translate:-50% -50%;
-  border-radius:50%;overflow:hidden;opacity:0;
-  box-shadow:0 20px 44px -14px rgba(17,17,19,.5);
-  transition:transform .8s cubic-bezier(.38,.02,.2,1),opacity .44s var(--ease)}
-.disc img{width:100%;height:100%;object-fit:cover}
-.disc.is-cur{opacity:1}
-.turntable.is-drag .wheel,.turntable.is-drag .disc{transition:none}
 
-/* the ring of words, kept. The viewBox is padded well past the circle so no
-   ascender can be clipped at any size — that was the cropping you spotted. */
-.orbit{position:absolute;inset:-4%;pointer-events:none;z-index:4}
-.orbit svg{width:100%;height:100%;overflow:visible}
-.orbit text{font-size:5px;font-weight:800;letter-spacing:.36em;fill:var(--ink-3);
-  text-transform:uppercase}
-.orbit g{transform-origin:60px 60px;animation:orbit 46s linear infinite}
-@keyframes orbit{to{transform:rotate(360deg)}}
+/* The clip box is wider than the board so a pizza can leave the frame before
+   it reaches the column edge, and taller at the bottom so the board's shadow
+   is not sliced off. The board and the pies are both sized from --pie rather
+   than from percentages of this box, which is what keeps the board a circle
+   instead of an oval. */
+.boardclip{position:absolute;inset:-6% -26%;overflow:hidden;
+  display:grid;place-items:center;pointer-events:none}
+.boardclip>*{grid-area:1/1;width:var(--pie,430px);max-width:none;aspect-ratio:1}
+
+.board{border-radius:50%;
+  background:
+    repeating-linear-gradient(93deg,rgba(60,30,6,.10) 0 2px,transparent 2px 11px),
+    repeating-linear-gradient(87deg,rgba(255,236,200,.07) 0 1px,transparent 1px 17px),
+    radial-gradient(circle at 36% 30%,#D2A468,#AC7C42 58%,#7E5730);
+  /* the shadow stays inside the clip box's 6% of vertical bleed, so the
+     board can cast one without it being sliced off at the bottom */
+  box-shadow:0 12px 22px -10px rgba(17,17,19,.45),
+    inset 0 0 0 4px rgba(255,241,214,.08),inset 0 -12px 26px rgba(80,44,10,.34)}
+.board::after{content:'';position:absolute;inset:5%;border-radius:50%;
+  box-shadow:inset 0 0 0 2px rgba(255,241,214,.09)}
+
+.pies{position:relative}
+.disc{position:absolute;inset:-4%;opacity:0;
+  transition:transform .72s var(--slide),opacity .4s var(--ease)}
+.disc img{width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 14px 16px rgba(60,30,6,.42))}
+.disc.is-cur{opacity:1;transform:none}
+/* right to left: the one on show leaves to the left, the next arrives from the
+   right. A little rotation and a dip in scale so it reads as a hand sliding it
+   across rather than a slideshow cutting. */
+.disc.out-next{transform:translateX(-138%) rotate(-13deg) scale(.8);opacity:0}
+.disc.in-next{transform:translateX(138%) rotate(13deg) scale(.8);opacity:0}
+.disc.out-prev{transform:translateX(138%) rotate(13deg) scale(.8);opacity:0}
+.disc.in-prev{transform:translateX(-138%) rotate(-13deg) scale(.8);opacity:0}
+.turntable.is-drag .disc{transition:none}
 
 /* the price, stuck on the rim. It belongs to the pizza, not to a card. */
 .badge{position:absolute;z-index:5;background:var(--red);color:#fff;border-radius:50%;
@@ -214,7 +220,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 @keyframes pop{0%{transform:scale(.62);opacity:0}60%{transform:scale(1.07)}100%{transform:none}}
 
 /* the timer bars: where you are, and that it is about to move on */
-.ticks{display:flex;gap:.3rem;justify-content:center;margin-top:.7rem}
+.ticks{display:flex;gap:.3rem;justify-content:center;margin-top:1.1rem}
 .ticks button{width:24px;height:4px;border-radius:99px;background:var(--line);cursor:pointer;
   position:relative;overflow:hidden;flex:none;padding:0;border:0}
 .ticks button::after{content:'';position:absolute;inset:0;background:var(--ink);
@@ -242,8 +248,8 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .saveline .unit{color:var(--ink-3);font-weight:600}
 
 @media (prefers-reduced-motion:reduce){
-  .wheel,.disc{transition:opacity .2s linear!important}
-  .orbit g{animation:none}
+  .disc{transition:opacity .2s linear!important}
+  .disc[class*="out-"],.disc[class*="in-"]{transform:none!important}
   .ticks button[data-run]::after{animation:none;transform:scaleX(1)}
 }
 
