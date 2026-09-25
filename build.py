@@ -18,6 +18,7 @@ from kit import (  # noqa: E402
     DATA, OUT, SRC, add_button, e, fmt_hour, from_price, icon, item_prices,
     load, money, page, photo_tag, slugify, visible,
 )
+import storefront  # noqa: E402  — the page generator, kept in its own file
 
 
 # ---------------------------------------------------------------- home page
@@ -462,21 +463,37 @@ def copy_assets():
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         f'<url><loc>https://tastypizza.ca/</loc><lastmod>{date.today()}</lastmod><priority>1.0</priority></url>\n'
-        f'<url><loc>https://tastypizza.ca/menu.html</loc><lastmod>{date.today()}</lastmod><priority>0.9</priority></url>\n'
         '</urlset>\n', encoding="utf-8")
+
+
+# The old two-page site (a video hero plus a long printed-style menu) has been
+# replaced by the ordering experience in site.py. Anything still pointing at
+# menu.html lands on the menu section of the new home page rather than a 404.
+MENU_REDIRECT = """<!doctype html>
+<html lang="en-CA"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tasty Pizza menu</title>
+<link rel="canonical" href="https://tejas7727.github.io/tastypizza-site/">
+<meta http-equiv="refresh" content="0; url=index.html#order">
+<meta name="robots" content="noindex">
+</head><body>
+<p>The menu now lives on the home page. <a href="index.html#order">Open the menu</a>.</p>
+<script>location.replace('index.html#order');</script>
+</body></html>
+"""
 
 
 def main():
     site, menu, deals = load("site"), load("menu"), load("deals")
     OUT.mkdir(parents=True, exist_ok=True)
     copy_assets()
-    (OUT / "index.html").write_text(build_home(site, menu, deals), encoding="utf-8")
-    (OUT / "menu.html").write_text(build_menu(site, menu, deals), encoding="utf-8")
+
+    storefront.main()
+    (OUT / "menu.html").write_text(MENU_REDIRECT, encoding="utf-8")
 
     n_items = sum(len(visible(g["items"]))
                   for c in visible(menu["categories"]) for g in c["groups"])
     n_deals = len([d for d in deals["deals"] if d.get("active")])
-    print(f"built docs/index.html and docs/menu.html")
     print(f"  {n_items} menu items across {len(visible(menu['categories']))} categories, {n_deals} live deals")
 
 

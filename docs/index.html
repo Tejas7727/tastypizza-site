@@ -1,415 +1,2199 @@
 <!doctype html>
-<html lang="en-CA">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tasty Pizza — Donairs, Pizza &amp; Garlic Fingers in Dartmouth, NS</title>
-<meta name="description" content="Dartmouth&#x27;s donair and pizza shop on Main Street. Fresh dough daily, garlic fingers, subs and seafood. Open 7 days, Friday till 1am. Call 902-435-5700.">
-<meta name="robots" content="noindex,nofollow">
-<link rel="canonical" href="https://tastypizza.ca/">
+<html lang="en-CA"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tasty Pizza &mdash; Pizza, Donairs &amp; Garlic Fingers in Dartmouth, NS</title>
+<meta name="description" content="Dartmouth's donair and pizza shop on Main Street. Fresh dough daily, garlic fingers, subs and seafood. Open 7 days, Friday till 1am. Call 902-435-5700.">
+<link rel="canonical" href="https://tejas7727.github.io/tastypizza-site/">
 <meta property="og:type" content="restaurant">
 <meta property="og:site_name" content="Tasty Pizza">
-<meta property="og:title" content="Tasty Pizza — Donairs, Pizza &amp; Garlic Fingers in Dartmouth, NS">
-<meta property="og:description" content="Dartmouth&#x27;s donair and pizza shop on Main Street. Fresh dough daily, garlic fingers, subs and seafood. Open 7 days, Friday till 1am. Call 902-435-5700.">
-<meta property="og:image" content="https://tastypizza.ca/assets/img/og.jpg">
-<meta property="og:url" content="https://tastypizza.ca">
+<meta property="og:title" content="Tasty Pizza &mdash; Dartmouth">
+<meta property="og:description" content="Dartmouth's donair and pizza shop on Main Street. Fresh dough daily, garlic fingers, subs and seafood. Open 7 days, Friday till 1am. Call 902-435-5700.">
+<meta property="og:url" content="https://tejas7727.github.io/tastypizza-site/">
+<meta property="og:image" content="https://tejas7727.github.io/tastypizza-site/assets/img/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Tasty Pizza — Donairs, Pizza &amp; Garlic Fingers in Dartmouth, NS">
-<meta name="twitter:description" content="Dartmouth&#x27;s donair and pizza shop on Main Street. Fresh dough daily, garlic fingers, subs and seafood. Open 7 days, Friday till 1am. Call 902-435-5700.">
-<meta name="twitter:image" content="https://tastypizza.ca/assets/img/og.jpg">
-<meta name="theme-color" content="#B70017">
+<meta name="twitter:title" content="Tasty Pizza &mdash; Dartmouth">
+<meta name="twitter:description" content="Dartmouth's donair and pizza shop on Main Street. Fresh dough daily, garlic fingers, subs and seafood. Open 7 days, Friday till 1am. Call 902-435-5700.">
+<meta name="twitter:image" content="https://tejas7727.github.io/tastypizza-site/assets/img/og.jpg">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="assets/img/icon-180.png">
-<link rel="preload" href="assets/fonts/alfaslabone-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/archivo-700.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="https://unpkg.com/lenis@1.3.26/dist/lenis.css">
+<style>/* Tasty Pizza — ordering experience.
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"Tasty Pizza","description":"Dartmouth's donair and pizza shop on Main Street. Fresh dough daily, garlic fingers, subs and seafood. Open 7 days, Friday till 1am. Call 902-435-5700.","url":"https://tastypizza.ca","telephone":"+1-902-435-5700","email":"tastypizzadm@gmail.com","image":"https://tastypizza.ca/assets/img/donair@wide.webp","servesCuisine":["Pizza","Donair","Seafood","Canadian"],"priceRange":"$$","menu":"https://tastypizza.ca/menu.html","acceptsReservations":false,"address":{"@type":"PostalAddress","streetAddress":"760 Main St.","addressLocality":"Dartmouth","addressRegion":"NS","postalCode":"B2W 3T8","addressCountry":"CA"},"geo":{"@type":"GeoCoordinates","latitude":44.6938,"longitude":-63.4993},"sameAs":["https://www.facebook.com/people/Tasty-Pizza/100091965769509/","https://www.instagram.com/tastypizzadartmouth/"],"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":"Sunday","opens":"14:00","closes":"22:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Monday","opens":"11:00","closes":"23:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Tuesday","opens":"11:00","closes":"23:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Wednesday","opens":"11:00","closes":"23:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Thursday","opens":"11:00","closes":"23:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Friday","opens":"11:00","closes":"01:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"11:00","closes":"01:00"}]}</script>
+   Built phone-first, because that is where nearly every order starts.
+
+   WHAT THE RESEARCH DECIDED
+   * ~10 choices is the overwhelm point, so ordering starts at 9 categories,
+     never at a 150-item list
+   * categories must be the top-level thing on mobile — a third of sites get
+     this wrong and bury them
+   * ONE thing highlighted per group. If everything is flagged, nothing is
+   * page speed is a conversion lever (1s load converts ~40%, 3s ~29%), so no
+     framework, no animation engine, CSS-driven motion only
+
+   COLOUR RULES
+     black  every piece of text and all structure
+     red    one job — the thing you click, and the price
+     green  one job — fresh, open, vegetarian, saving
+     red and green never touch; white or black always separates them */
+
+@font-face{font-family:'Archivo';src:url('assets/fonts/archivo-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Archivo';src:url('assets/fonts/archivo-500.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Archivo';src:url('assets/fonts/archivo-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Archivo';src:url('assets/fonts/archivo-800.woff2') format('woff2');font-weight:800;font-display:swap}
+
+:root{
+  --white:#FFFFFF; --paper:#FFFFFF; --wash:#F3F3F5;
+  --ink:#111113; --ink-2:#4A4A50; --ink-3:#6B6B73;
+  --red:#B70017; --red-hot:#DC0A22;
+  --green:#0B5C3F; --green-soft:#EAF3EE;
+  --line:rgba(17,17,19,.12);
+  --f:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --wrap:1280px; --bar:60px; --r:18px;
+  --sh:0 1px 2px rgba(17,17,19,.06),0 10px 28px rgba(17,17,19,.07);
+  --sh-lift:0 2px 6px rgba(17,17,19,.08),0 20px 46px rgba(17,17,19,.13);
+  --ease:cubic-bezier(.22,.7,.28,1);
+  --slide:cubic-bezier(.36,.02,.18,1); --rail:0px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--white);color:var(--ink);
+  font:400 clamp(15.5px,.4vw + 14.4px,17px)/1.6 var(--f);overflow-x:hidden}
+/* clip, not hidden: hidden makes body a scroll container and quietly breaks
+   every position:sticky on the page (the rail, the pizza). */
+@supports (overflow:clip){body{overflow-x:clip}}
+/* Barely-there grain. Pure white across a whole page looks like an unstyled
+   document; this gives the paper a surface without tinting it. */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .055 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* only main needs lifting above the grain; the bar, cart, sheet and scrim are
+   already positioned with their own z-index, and re-declaring position here
+   turned the cart from fixed into an in-flow 420px block */
+main{position:relative;z-index:1}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{margin:0;font-weight:800;letter-spacing:-.03em;line-height:.95}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:0}
+:focus-visible{outline:3px solid var(--red);outline-offset:3px;border-radius:6px}
+.wrap{width:min(100% - 2.2rem,var(--wrap));margin-inline:auto}
+.skip{position:absolute;left:-9999px;background:var(--red);color:#fff;padding:.7rem 1rem;z-index:99}
+.skip:focus{left:8px;top:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------------------------------------------------------------- type */
+.display{font-size:clamp(2.6rem,7.6vw,5.4rem);text-transform:uppercase;letter-spacing:-.042em;
+  line-height:.87}
+.display em{font-style:normal;color:var(--red)}
+.eyebrow{display:flex;align-items:center;gap:.6rem;font-size:.66rem;font-weight:800;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.eyebrow::before{content:'';width:26px;height:2px;background:var(--red);flex:none}
+.lede{font-size:clamp(.97rem,.4vw + .88rem,1.1rem);color:var(--ink-2);max-width:44ch}
+h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
+
+/* ---------------------------------------------------------------- controls */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.85rem 1.5rem;border:2px solid var(--ink);border-radius:999px;font-weight:700;
+  cursor:pointer;font-variant-numeric:tabular-nums;
+  transition:background-color .18s var(--ease),color .18s,transform .18s var(--ease),
+    box-shadow .18s var(--ease),border-color .18s}
+.btn:hover{transform:translateY(-2px)}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff;box-shadow:var(--sh)}
+.btn-red:hover{background:var(--red-hot);border-color:var(--red-hot);box-shadow:var(--sh-lift)}
+.btn-line:hover{background:var(--ink);color:#fff}
+.btn-sm{padding:.55rem 1rem;font-size:.88rem}
+.btn-wide{width:100%}
+.acts{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.4rem}
+
+.tag{display:inline-flex;align-items:center;align-self:flex-start;font-size:.62rem;
+  font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.24rem .5rem;
+  border-radius:999px;background:var(--wash);color:var(--ink-2)}
+.tag-veg{background:var(--green-soft);color:var(--green)}
+.tag-hot{background:var(--red);color:#fff}
+
+.openpill{display:inline-flex;align-items:center;gap:.45rem;font-size:.78rem;font-weight:700;
+  padding:.34rem .75rem;border-radius:999px;background:var(--green-soft);color:var(--green);
+  white-space:nowrap}
+.openpill::before{content:'';width:7px;height:7px;border-radius:99px;background:currentColor;
+  animation:ping 2.4s var(--ease) infinite}
+.openpill[data-shut]{background:#FBEAEC;color:#96101F}
+.openpill[data-shut]::before{animation:none}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(11,92,63,.5)}70%{box-shadow:0 0 0 7px rgba(11,92,63,0)}100%{box-shadow:0 0 0 0 rgba(11,92,63,0)}}
+
+/* ---------------------------------------------------------------- header */
+.bar{position:sticky;top:0;z-index:60;height:var(--bar);display:flex;align-items:center;
+  gap:1.2rem;padding:0 clamp(.9rem,3vw,2rem);background:rgba(255,255,255,.95);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .brand{flex:none;line-height:0}
+.bar .brand img{height:38px;width:auto}
+.bar nav{display:flex;gap:1.3rem;margin-left:auto;font-weight:600;font-size:.93rem}
+.bar nav a{padding:.3rem 0;border-bottom:2px solid transparent}
+.bar nav a:hover{border-color:var(--red)}
+.bar-right{margin-left:auto;display:flex;align-items:center;gap:.55rem}
+.bar nav + .bar-right{margin-left:0}
+/* nav is display:none on a phone but still a sibling, so the rule above was
+   cancelling the auto margin and parking the dots against the logo */
+@media (max-width:900px){.bar nav + .bar-right{margin-left:auto}}
+
+.dots{display:none;width:42px;height:42px;cursor:pointer;place-items:center;border-radius:999px}
+.dots:hover{background:var(--wash)}
+.dots i{display:block;width:5px;height:5px;border-radius:99px;background:var(--ink);
+  box-shadow:0 -8px 0 var(--ink),0 8px 0 var(--ink)}
+
+/* the cart: one circle, top right, only there once it has something in it */
+.cartbtn{position:relative;width:44px;height:44px;border-radius:999px;background:var(--ink);
+  color:#fff;display:grid;place-items:center;cursor:pointer;flex:none;
+  transition:background-color .18s,transform .2s var(--ease)}
+.cartbtn:hover{background:var(--red);transform:scale(1.05)}
+.cartbtn svg{width:21px;height:21px}
+.cartbtn b{position:absolute;top:-4px;right:-4px;min-width:21px;height:21px;padding:0 5px;
+  border-radius:999px;background:var(--red);color:#fff;font-size:.72rem;font-weight:800;
+  display:grid;place-items:center;border:2px solid var(--white);font-variant-numeric:tabular-nums}
+.cartbtn[data-bump]{animation:pop .42s var(--ease)}
+@keyframes pop{0%{transform:scale(1)}35%{transform:scale(1.22)}100%{transform:scale(1)}}
+
+.sheet{position:fixed;left:0;right:0;top:var(--bar);z-index:55;background:var(--white);
+  border-bottom:1px solid var(--line);box-shadow:var(--sh-lift);padding:.4rem 1.1rem 1.1rem;
+  display:grid;transform:translateY(-10px);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease),opacity .22s var(--ease)}
+.sheet[data-open]{transform:none;opacity:1;pointer-events:auto}
+.sheet a{display:flex;align-items:center;justify-content:space-between;padding:.85rem .2rem;
+  border-bottom:1px solid var(--line);font-weight:700;font-size:1.02rem}
+.sheet a::after{content:'\2192';color:var(--red);font-weight:400}
+.sheet .openpill{margin:.8rem .2rem 0;justify-self:start}
+
+/* ---------------------------------------------------------------- hero
+   One screen. Everything needed to start an order, nothing that needs scrolling
+   to make sense. What comes next is a new thing, not the rest of this one. */
+/* height, not min-height: one screen is the brief, so the hero is told exactly
+   how tall it is and everything inside is measured against that same height —
+   hence --pie and the display size both carrying an svh term. Nothing of the
+   next section is ever visible until you scroll. */
+.hero{height:calc(100vh - var(--bar));display:grid;align-content:center;overflow:hidden;
+  padding:clamp(.5rem,1.6vh,1.8rem) 0;--pie:min(72vw,33svh)}
+@supports (height:100svh){.hero{height:calc(100svh - var(--bar))}}
+/* Three blocks, not two, so the phone can slot the pizza between the sentence
+   and the buttons: read what we are, see the thing, act. On a wide screen the
+   copy and the buttons stack back up in the left column. */
+.hero-in{display:grid;gap:clamp(.5rem,1.6vh,1rem) clamp(1rem,3vw,3rem);align-items:center;
+  grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);
+  grid-template-rows:auto auto}
+.hero-copy{grid-column:1;grid-row:1;align-self:end}
+.hero-cta{grid-column:1;grid-row:2;align-self:start}
+.herofig{grid-column:2;grid-row:1 / span 2;min-width:0;display:grid;justify-items:center}
+@media (min-width:901px){.hero{--pie:min(40vw,56svh)}}
+.hero h1{margin:.5rem 0 .5rem}
+.hero .display{font-size:min(clamp(1.85rem,6.5vw,3.7rem),7.4svh)}
+/* Three beats fit a wide column. A phone gets the same three ideas folded
+   into two lines — "Fresh. Hot." carries what the first two lines said — so
+   the headline stops eating the screen the pizza needs. */
+.display .narrow{display:none}
+.hero .lede{font-size:min(clamp(.95rem,.4vw + .86rem,1.08rem),2.5svh)}
+.hero-facts{display:flex;flex-wrap:wrap;gap:.3rem .95rem;margin-top:.7rem;
+  font-size:.82rem;font-weight:600;color:var(--ink-2)}
+.hero-facts span{display:inline-flex;align-items:center;gap:.35rem}
+.hero-facts b{color:var(--ink)}
+
+/* No board, no plate. The pies are cut out on transparency, so they sit
+   straight on the page's own white — which is the cleanest this has looked.
+   What moves is the pizza; the ring of words and the price stay put. */
+.turntable{position:relative;width:var(--pie,430px);max-width:100%;aspect-ratio:1;
+  margin-inline:auto;touch-action:pan-y;cursor:grab;
+  -webkit-user-select:none;user-select:none}
+.turntable:active{cursor:grabbing}
+
+/* wide enough that a pizza leaves the frame before it reaches the text column */
+.pieclip{position:absolute;inset:0 -28%;overflow:hidden;
+  display:grid;place-items:center;pointer-events:none}
+.pieclip>*{grid-area:1/1;width:calc(var(--pie,430px) * .78);aspect-ratio:1}
+.pies{position:relative}
+.disc{position:absolute;inset:0;opacity:0;
+  transition:transform .72s var(--slide),opacity .4s var(--ease)}
+.disc img{width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 20px 24px rgba(17,17,19,.20))}
+.disc.is-cur{opacity:1;transform:none}
+/* right to left: the one on show leaves to the left, the next arrives from the
+   right, with a little rotation so it reads as a hand sliding it across */
+.disc.out-next{transform:translateX(-142%) rotate(-14deg) scale(.8);opacity:0}
+.disc.in-next{transform:translateX(142%) rotate(14deg) scale(.8);opacity:0}
+.disc.out-prev{transform:translateX(142%) rotate(14deg) scale(.8);opacity:0}
+.disc.in-prev{transform:translateX(-142%) rotate(-14deg) scale(.8);opacity:0}
+.turntable.is-drag .disc{transition:none}
+
+/* the ring of words, turning slowly around the pizza. The viewBox is padded
+   well past the circle so no ascender is ever clipped, and the ring sits
+   outside the pie so the two never collide. */
+.orbit{position:absolute;inset:-9%;pointer-events:none;z-index:2}
+.orbit svg{width:100%;height:100%;overflow:visible}
+.orbit text{font-size:4.6px;font-weight:800;letter-spacing:.34em;fill:var(--ink-3);
+  text-transform:uppercase}
+.orbit g{transform-origin:60px 60px;animation:orbit 54s linear infinite}
+@keyframes orbit{to{transform:rotate(360deg)}}
+
+/* the price, stuck on the rim. It belongs to the pizza, not to a card. */
+.badge{position:absolute;z-index:5;background:var(--red);color:#fff;border-radius:50%;
+  width:clamp(74px,calc(var(--pie,430px) * .3),116px);aspect-ratio:1;
+  display:grid;place-content:center;gap:.05rem;text-align:center;
+  right:-4%;top:1%;rotate:-7deg;box-shadow:0 12px 26px -6px rgba(183,0,23,.45)}
+.badge i{font-style:normal;font-size:.56rem;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;opacity:.9}
+.badge b{font-size:clamp(1rem,calc(var(--pie,430px) * .092),1.5rem);font-weight:800;
+  letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums}
+.badge s{font-size:.66rem;opacity:.74;font-weight:600}
+.badge[data-pop]{animation:pop .5s var(--ease)}
+@keyframes pop{0%{transform:scale(.62);opacity:0}60%{transform:scale(1.07)}100%{transform:none}}
+
+/* the timer bars: where you are, and that it is about to move on */
+.ticks{display:flex;gap:.3rem;justify-content:center;margin-top:1.1rem}
+.ticks button{width:24px;height:4px;border-radius:99px;background:var(--line);cursor:pointer;
+  position:relative;overflow:hidden;flex:none;padding:0;border:0}
+.ticks button::after{content:'';position:absolute;inset:0;background:var(--ink);
+  transform-origin:left;transform:scaleX(0)}
+.ticks button[data-on]::after{transform:scaleX(1);transition:transform .22s var(--ease)}
+.ticks button[data-run]::after{animation:fill 2000ms linear forwards}
+@keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* the offer, set on the page itself rather than boxed off from it */
+.deal{display:grid;gap:.2rem;min-width:0;margin-top:.9rem;color:inherit;
+  text-decoration:none;cursor:pointer;border-radius:14px;
+  transition:background-color .18s var(--ease)}
+.deal:hover{background:var(--wash)}
+.dealgo{display:inline-flex;align-items:center;gap:.3rem;font-size:.76rem;font-weight:800;
+  letter-spacing:.02em;color:var(--red);margin-top:.15rem}
+.dealgo::after{content:'';width:6px;height:6px;border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;transform:rotate(-45deg);
+  transition:transform .18s var(--ease)}
+.deal:hover .dealgo::after{transform:rotate(-45deg) translate(2px,2px)}
+.turntable{cursor:pointer}
+.deal[data-flash] .dealin{animation:dealin .46s var(--ease)}
+@keyframes dealin{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.dealin{display:grid;gap:.22rem;min-width:0;align-content:start}
+.kicker{display:flex;align-items:center;gap:.45rem;font-size:.6rem;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--red)}
+.kicker.is-green{color:var(--green)}
+.kicker.is-grey{color:var(--ink-3)}
+.kicker::after{content:'';height:1px;flex:1;background:var(--line);min-width:12px}
+.deal h2{font-size:min(clamp(1.1rem,4.2vw,1.7rem),4.4svh);letter-spacing:-.028em;
+  text-transform:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden}
+/* Every offer has a different amount to say. Left to itself the tallest one
+   pushed the headline up and the buttons down as the carousel turned, so the
+   text is clamped and the block holds one height for all five. */
+.deal .sub{font-size:min(.86rem,2.2svh);color:var(--ink-3);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dealin{min-height:7.2rem}
+.saveline{display:flex;align-items:baseline;gap:.45rem;flex-wrap:wrap;font-size:.84rem}
+.saveline .was{color:var(--ink-3);text-decoration:line-through;font-weight:600;margin:0}
+.saveline .save{color:var(--green);font-weight:800}
+.saveline .unit{color:var(--ink-3);font-weight:600}
+
+@media (prefers-reduced-motion:reduce){
+  .disc{transition:opacity .2s linear!important}
+  .orbit g{animation:none}
+  .disc[class*="out-"],.disc[class*="in-"]{transform:none!important}
+  .ticks button[data-run]::after{animation:none;transform:scaleX(1)}
+}
+
+/* ---------------------------------------------------------------- ordering */
+.order-wrap{min-height:100vh}
+@supports (min-height:100svh){.order-wrap{min-height:100svh}}
+.band{padding:clamp(2.4rem,5vw,4.5rem) 0}
+.band-paper{background:var(--paper)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
+  gap:.9rem;margin-bottom:clamp(1.1rem,2.4vw,1.8rem)}
+.sec-head p{color:var(--ink-3);font-size:.93rem;margin-top:.35rem}
+
+/* nine doors. Never a 150-item list. */
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.6rem,1.4vw,1rem)}
+.cat{position:relative;border-radius:var(--r);overflow:hidden;background:var(--ink);
+  color:#fff;cursor:pointer;text-align:left;display:block;aspect-ratio:5/3;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.cat:hover{transform:translateY(-3px);box-shadow:var(--sh-lift)}
+.cat img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.62;
+  transition:transform .6s var(--ease),opacity .3s}
+.cat:hover img{transform:scale(1.07);opacity:.72}
+.cat-in{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;
+  justify-content:flex-end;padding:.8rem .9rem;
+  background:linear-gradient(180deg,rgba(17,17,19,.08) 30%,rgba(17,17,19,.85))}
+.cat b{font-size:1.06rem;font-weight:800;letter-spacing:-.015em;line-height:1.1}
+.cat small{font-size:.76rem;color:rgba(255,255,255,.76);font-weight:500}
+.cat.is-deals{background:var(--red)}
+.cat.is-deals .cat-in{background:linear-gradient(180deg,rgba(183,0,23,.25),rgba(140,0,18,.9))}
+
+/* the category view swaps in where the grid was */
+/* A flex item defaults to min-width:auto, which means it refuses to shrink
+   below its own content. The rail's nine pills measure about 1000px, so on a
+   phone they forced this grid wide, which forced the page wide, and the phone
+   zoomed the whole site out to fit. Every link in that chain needs a floor of
+   zero before the strip will scroll inside itself instead of stretching. */
+.catview{display:grid;gap:1rem;grid-template-columns:minmax(0,1fr)}
+.catview-head{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.back{display:inline-flex;align-items:center;gap:.45rem;font-weight:700;cursor:pointer;
+  padding:.5rem .95rem;border:2px solid var(--line);border-radius:999px;font-size:.9rem}
+.back:hover{border-color:var(--ink)}
+.catview h2{font-size:clamp(1.5rem,3vw,2.2rem);text-transform:uppercase}
+.catview-blurb{color:var(--ink-3);font-size:.93rem;max-width:56ch}
+.grouphead{font-size:.7rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);margin:1.4rem 0 .6rem;padding-bottom:.4rem;border-bottom:2px solid var(--ink)}
+.grouphead:first-of-type{margin-top:.4rem}
+.groupnote{font-size:.86rem;color:var(--ink-3);margin:-.2rem 0 .7rem}
+
+/* An item row. No card, no border, no fill — a hairline between neighbours is
+   enough to separate them, and the food photo does the rest. Boxes around
+   every dish make a menu look like a spreadsheet. */
+.items{display:grid;list-style:none;margin:0;padding:0}
+.item{display:flex;align-items:center;gap:.9rem;padding:.7rem 0;
+  border-bottom:1px solid var(--line);background:none;
+  transition:background-color .16s var(--ease)}
+.item:last-child{border-bottom:0}
+.item:hover{background:var(--wash)}
+.item-media{width:72px;height:72px;border-radius:14px;overflow:hidden;flex:none;
+  background:var(--wash)}
+.item-media img{width:100%;height:100%;object-fit:cover}
+.item-media.is-empty{background:none}
+.item-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:.15rem}
+.item-body h4{font-size:1rem;font-weight:700;letter-spacing:-.01em;display:flex;
+  align-items:center;gap:.4rem;flex-wrap:wrap}
+.item-body p{font-size:.84rem;color:var(--ink-3);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.item-side{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;flex:none}
+.price{font-weight:800;font-variant-numeric:tabular-nums;font-size:1.02rem;white-space:nowrap}
+.price small{font-weight:600;color:var(--ink-3);font-size:.66rem;text-transform:uppercase;
+  letter-spacing:.09em;margin-right:.25rem}
+.was{color:var(--ink-3);text-decoration:line-through;font-weight:600;font-size:.82rem;
+  margin-right:.35rem}
+.add{background:var(--ink);color:#fff;border-radius:999px;font-weight:700;font-size:.84rem;
+  padding:.44rem 1rem;cursor:pointer;transition:background-color .18s,transform .15s}
+.add:hover{background:var(--red)}
+.add:active{transform:scale(.95)}
+.add[data-done]{background:var(--green)}
+
+/* sizes as a row of buttons, so picking a size IS adding to the cart */
+.sizes{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:flex-end}
+.sizebtn{border:1.5px solid var(--line);border-radius:11px;padding:.32rem .55rem;cursor:pointer;
+  display:grid;gap:.05rem;text-align:center;min-width:62px;background:var(--white);
+  transition:border-color .16s,background-color .16s,transform .14s}
+.sizebtn:hover{border-color:var(--red);background:var(--wash)}
+.sizebtn:active{transform:scale(.95)}
+.sizebtn[data-done]{border-color:var(--green);background:var(--green-soft)}
+.sizebtn i{font-style:normal;font-size:.6rem;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-3)}
+.sizebtn b{font-size:.86rem;font-weight:800;font-variant-numeric:tabular-nums}
+/* the tile you picked lifts out of the row so it is obvious which one the
+   Add button underneath is talking about */
+.sizebtn[data-picked]{border-color:var(--ink);background:var(--ink);color:#fff;
+  transform:translateY(-2px) scale(1.04);box-shadow:var(--sh)}
+.sizebtn[data-picked] i{color:rgba(255,255,255,.72)}
+.pickbar{display:flex;justify-content:flex-end;width:100%;margin-top:.5rem;
+  animation:pickin .26s var(--ease)}
+.pickbar .add{background:var(--red);padding:.5rem 1.2rem}
+.pickbar .add:hover{background:var(--red-hot)}
+@keyframes pickin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+/* an offer is marked by its flag and its price, not by a red box round it */
+.offer{background:none}
+.offer .item-media{border-radius:14px}
+.flag{background:var(--red);color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.09em;
+  text-transform:uppercase;padding:.2rem .45rem;border-radius:999px}
+.flag-save{background:var(--green-soft);color:var(--green)}
+
+/* ---------------------------------------------------------------- cart */
+.scrim{position:fixed;inset:0;z-index:70;background:rgba(17,17,19,.45);
+  opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+.scrim[data-open]{opacity:1;pointer-events:auto}
+.cart{position:fixed;z-index:72;right:0;top:0;bottom:0;width:min(100%,420px);background:var(--white);
+  display:flex;flex-direction:column;transform:translateX(102%);
+  transition:transform .32s var(--ease);box-shadow:-10px 0 40px rgba(17,17,19,.18)}
+.cart[data-open]{transform:none}
+.cart-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:1rem 1.1rem;border-bottom:1px solid var(--line);flex:none}
+.cart-head h2{font-size:1.25rem;text-transform:uppercase}
+.x{width:38px;height:38px;border-radius:999px;display:grid;place-items:center;cursor:pointer}
+.x:hover{background:var(--wash)}
+.cart-list{flex:1;overflow:auto;padding:.8rem 1.1rem;display:grid;gap:.5rem;align-content:start}
+.cart-row{display:flex;align-items:center;gap:.7rem;padding:.55rem .65rem;border-radius:13px;
+  background:var(--paper)}
+.cart-row .n{flex:1;min-width:0;font-weight:600;font-size:.92rem;line-height:1.25}
+.cart-row .n small{display:block;font-weight:500;color:var(--ink-3);font-size:.78rem}
+.cart-row .p{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.qty{display:flex;align-items:center;gap:.1rem;background:var(--white);border-radius:999px;
+  padding:.12rem;border:1px solid var(--line)}
+.qty button{width:28px;height:28px;border-radius:999px;cursor:pointer;display:grid;
+  place-items:center;font-weight:800;font-size:1rem;line-height:1}
+.qty button:hover{background:var(--wash)}
+.qty span{min-width:22px;text-align:center;font-weight:800;font-size:.88rem;
+  font-variant-numeric:tabular-nums}
+.cart-empty{text-align:center;color:var(--ink-3);padding:2.5rem 1rem;display:grid;gap:.8rem;
+  justify-items:center}
+.cart-foot{flex:none;padding:1rem 1.1rem calc(1rem + env(safe-area-inset-bottom,0px));
+  border-top:1px solid var(--line);display:grid;gap:.5rem;background:var(--white)}
+.tot{display:flex;justify-content:space-between;font-size:.92rem;color:var(--ink-2)}
+.tot.grand{font-size:1.15rem;font-weight:800;color:var(--ink);padding-top:.5rem;
+  border-top:2px solid var(--ink);margin-top:.2rem}
+.tot b{font-variant-numeric:tabular-nums}
+.cart-note{font-size:.78rem;color:var(--ink-3);text-align:center}
+
+/* checkout is a step inside the same panel, not a new page */
+.pay{display:grid;gap:.6rem}
+.paybox{border:2px dashed var(--line);border-radius:var(--r);padding:1rem;display:grid;gap:.45rem;
+  background:var(--paper)}
+.paybox h3{font-size:.95rem;text-transform:uppercase}
+.paybox p{font-size:.84rem;color:var(--ink-3)}
+
+/* ---------------------------------------------------------------- builder */
+.cfg{display:grid;gap:clamp(1rem,2.6vw,2.4rem);min-width:0;
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start}
+.cfg-ctrl{min-width:0}
+.cfg-stage{position:sticky;top:calc(var(--bar) + var(--rail,0px) + .5rem);z-index:5;
+  display:grid;min-width:0;
+  justify-items:center;gap:.6rem;background:var(--white);padding-bottom:.5rem}
+.cfg .btn-wide{margin-top:.2rem}
+.peel{position:relative;width:min(100%,300px);aspect-ratio:1;display:grid;place-items:center}
+.peel-board{position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#D6A96E,#B0814A 62%,#94683A);
+  box-shadow:0 18px 40px rgba(17,17,19,.24),inset 0 0 0 3px rgba(255,255,255,.1)}
+.dough{position:relative;width:86%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 42% 38%,#F3DCAE,#E7C58A 70%,#D9AE6B);
+  box-shadow:inset 0 -6px 16px rgba(140,90,40,.3),0 4px 14px rgba(0,0,0,.2);
+  transition:width .45s var(--ease)}
+.sauce{position:absolute;inset:8%;border-radius:50%;
+  background:radial-gradient(circle at 44% 40%,#D33A22,#A8240F);opacity:0;transition:opacity .35s}
+.cheese{position:absolute;inset:10%;border-radius:50%;opacity:0;transition:opacity .4s;
+  background:
+    radial-gradient(circle at 28% 30%,rgba(255,255,255,.5) 0 5%,transparent 6%),
+    radial-gradient(circle at 66% 24%,rgba(255,255,255,.4) 0 4%,transparent 5%),
+    radial-gradient(circle at 74% 62%,rgba(255,255,255,.42) 0 5%,transparent 6%),
+    radial-gradient(circle at 34% 72%,rgba(255,255,255,.38) 0 4%,transparent 5%),
+    radial-gradient(circle at 44% 40%,#F7D882,#EDBF55 62%,#DCA637);
+  box-shadow:inset 0 -4px 12px rgba(160,95,20,.35)}
+.dough[data-topped] .sauce,.dough[data-topped] .cheese{opacity:1}
+.tops{position:absolute;inset:6%;border-radius:50%;overflow:hidden}
+.bit{position:absolute;width:var(--w,20px);height:var(--w,20px);line-height:0;
+  transform:translate(-50%,-50%) rotate(var(--rot,0deg));
+  filter:drop-shadow(0 1.5px 1.5px rgba(96,48,10,.42));
+  animation:drop .46s cubic-bezier(.3,1.5,.5,1) both}
+.bit svg{width:100%;height:100%}
+@keyframes drop{
+  0%{opacity:0;transform:translate(-50%,-340%) rotate(calc(var(--rot,0deg) - 50deg)) scale(1.45)}
+  58%{opacity:1;transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(.82)}
+  78%{transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(1.06)}
+  100%{opacity:1;transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(1)}}
+.readout{display:flex;align-items:center;justify-content:center;gap:.5rem .8rem;
+  flex-wrap:wrap;padding:.5rem .9rem;border-radius:18px;max-width:100%;
+  background:var(--ink);color:#fff;font-weight:700}
+.readout b{font-size:1.25rem;font-variant-numeric:tabular-nums}
+.readout span{font-size:.76rem;color:rgba(255,255,255,.72);font-weight:500}
+.readout b[data-bump]{animation:bump .3s var(--ease)}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.1)}100%{transform:scale(1)}}
+.ctrl{margin-bottom:1.1rem}
+.ctrl h3{font-size:.71rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);
+  margin-bottom:.5rem;display:flex;gap:.55rem;align-items:baseline}
+.ctrl h3 em{font-style:normal;color:var(--red)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{border:2px solid var(--line);border-radius:999px;padding:.46rem .9rem;font-weight:700;
+  font-size:.88rem;cursor:pointer;transition:border-color .16s,background-color .16s,color .16s}
+.chip:hover{border-color:var(--ink)}
+.chip[data-on]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip em{font-style:normal;opacity:.65;font-size:.74rem;margin-left:.25rem}
+.ctrl-hint{font-size:.78rem;color:var(--ink-3);margin:-.3rem 0 .55rem}
+
+/* A topping is a row you can tap once, or step up and down. Nothing is ever
+   disabled: past the allowance the price simply appears on every topping, so
+   the choice stays the customer's and the cost stops being a surprise. */
+.tops-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(152px,1fr));gap:.4rem}
+.topbtn{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.5rem;
+  text-align:left;cursor:pointer;border:2px solid var(--line);border-radius:12px;
+  padding:.36rem .4rem .36rem .6rem;font-size:.85rem;font-weight:500;
+  transition:border-color .16s,background-color .16s,color .16s}
+.topbtn:hover{border-color:var(--ink)}
+.topbtn.is-on{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:700}
+.topname{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topcost{grid-column:2;grid-row:2;font-size:.68rem;font-weight:800;color:var(--red);
+  letter-spacing:.02em;margin-top:-.2rem}
+.topbtn.is-on .topcost{color:#FF9AA6}
+.topq{grid-column:3;grid-row:1 / span 2;display:flex;align-items:center;gap:.1rem}
+.topq button{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  cursor:pointer;font-weight:800;font-size:.95rem;line-height:1;
+  border:1.5px solid var(--line);transition:background-color .14s,border-color .14s}
+.topbtn.is-on .topq button{border-color:rgba(255,255,255,.34)}
+.topq button:hover{background:var(--red);border-color:var(--red);color:#fff}
+.topq b{min-width:1.1ch;text-align:center;font-variant-numeric:tabular-nums;font-size:.86rem}
+.tdot{width:13px;height:13px;border-radius:99px;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+
+/* ---------------------------------------------------------------- expanding rows
+   A pizza is not a thing you pick, it is a thing you build, so the row opens
+   where it stands instead of throwing a dialog over the menu. Same mechanism
+   for a deal opening into its pizzas. */
+.item-x{display:block;padding:0;overflow:visible}
+.item-hit{display:flex;align-items:center;gap:.9rem;width:100%;text-align:left;
+  padding:.7rem 0;cursor:pointer;border-radius:var(--r)}
+.item-x .item-body{display:flex;flex-direction:column;gap:.15rem;flex:1;min-width:0}
+.item-body .h4{font-size:1rem;font-weight:700;letter-spacing:-.01em;display:flex;
+  align-items:center;gap:.4rem;flex-wrap:wrap}
+.item-body .p{font-size:.84rem;color:var(--ink-3);font-weight:400;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.item-x .item-side{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;flex:none}
+.add-ghost{background:var(--ink);color:#fff;border-radius:999px;font-weight:700;font-size:.84rem;
+  padding:.44rem 1rem;white-space:nowrap;transition:background-color .18s}
+.item-x:hover .add-ghost{background:var(--red)}
+.item-x[data-open] .add-ghost{background:var(--red)}
+.flag-build{background:var(--green-soft);color:var(--green)}
+
+.panel{display:grid;grid-template-rows:0fr;min-width:0;
+  transition:grid-template-rows .42s var(--ease)}
+.panel>.panel-in{overflow:hidden;min-width:0}
+[data-open]>.panel{grid-template-rows:1fr}
+[data-grown]>.panel>.panel-in{overflow:visible}
+.item-x[data-open]{background:var(--wash);border-radius:var(--r)}
+.item-x>.panel>.panel-in>*{padding:.2rem .75rem 1rem}
+.item-x[data-open]>.panel>.panel-in{border-top:1px solid var(--line);margin-top:.1rem}
+
+/* a deal's slots: Pizza 1, Pizza 2, each opening the same builder */
+.slots{display:grid;gap:.45rem;padding-top:.8rem!important}
+.slot{border:2px solid var(--line);border-radius:14px;overflow:visible;background:var(--white)}
+.slot[data-set]{border-color:var(--green)}
+.slot-hit{display:grid;grid-template-columns:1fr auto;align-items:center;gap:.2rem .7rem;
+  width:100%;text-align:left;padding:.62rem .8rem;cursor:pointer}
+.slot-hit b{font-size:.95rem;font-weight:800;letter-spacing:-.01em}
+.slot-hit span{grid-column:1;font-size:.78rem;color:var(--ink-3);font-weight:500}
+.slot[data-set] .slot-hit span{color:var(--green);font-weight:700}
+.chev,.chev-l{width:9px;height:9px;border-right:2.4px solid currentColor;
+  border-bottom:2.4px solid currentColor;transform:rotate(45deg);
+  transition:transform .28s var(--ease);opacity:.5}
+.slot-hit .chev{grid-column:2;grid-row:1 / span 2}
+.slot[data-open] .chev{transform:rotate(-135deg);opacity:1}
+.chev-l{transform:rotate(135deg);opacity:.75}
+.slot-fixed{display:flex;align-items:center;justify-content:space-between;gap:.7rem;
+  border:2px dashed var(--line);border-radius:14px;padding:.62rem .8rem}
+.slot-fixed b{font-size:.95rem;font-weight:800;letter-spacing:-.01em}
+.slot-fixed span{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--green)}
+.slot>.panel>.panel-in>*{padding:.1rem .7rem .9rem}
+.slots-foot{display:grid;gap:.45rem;padding:.9rem 0 0!important}
+.slots-note{font-size:.8rem;color:var(--red);font-weight:700}
+
+/* ---------------------------------------------------------------- category rail
+   Once you are inside a category the way out and the way sideways have to be
+   permanently visible, or every change of mind costs a scroll to the top. */
+.rail{position:sticky;top:var(--bar);z-index:20;display:flex;align-items:center;gap:.5rem;
+  padding:.55rem 0;background:var(--white);min-width:0;max-width:100%;
+  box-shadow:0 1px 0 var(--line),0 10px 14px -14px rgba(17,17,19,.4)}
+.rail-back{flex:none;width:36px;height:36px;border-radius:999px;display:grid;place-items:center;
+  border:2px solid var(--line);cursor:pointer;background:var(--white)}
+.rail-back:hover{border-color:var(--ink)}
+.rail-scroll{flex:1 1 0%;min-width:0;display:flex;gap:.35rem;overflow-x:auto;
+  overscroll-behavior-x:contain;scroll-behavior:smooth;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:.15rem 0;
+  /* fade both ends: a pill scrolled half under the back button and cut off
+     square looks like a mistake, where a fade reads as "there is more" */
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,
+    #000 calc(100% - 26px),transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 18px,
+    #000 calc(100% - 26px),transparent)}
+.rail-scroll::-webkit-scrollbar{display:none}
+.railbtn{flex:none;border:2px solid var(--line);border-radius:999px;padding:.34rem .8rem;
+  font-size:.83rem;font-weight:700;cursor:pointer;white-space:nowrap;background:var(--white);
+  transition:border-color .16s,background-color .16s,color .16s}
+.railbtn:hover{border-color:var(--ink)}
+.railbtn[data-on]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* ---------------------------------------------------------------- order note */
+.note-field{display:grid;gap:.35rem;margin-bottom:.2rem}
+.note-field>span{font-size:.7rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3)}
+.note-field textarea{font:inherit;font-size:.88rem;width:100%;resize:vertical;
+  border:2px solid var(--line);border-radius:12px;padding:.55rem .7rem;background:var(--white);
+  color:inherit;transition:border-color .16s}
+.note-field textarea:focus{border-color:var(--ink);outline:none}
+.paynote{display:grid;gap:.15rem;border-left:3px solid var(--green);padding:.2rem .7rem;
+  margin-bottom:.7rem}
+.paynote b{font-size:.68rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--green)}
+.paynote span{font-size:.86rem;color:var(--ink-2)}
+
+/* ---------------------------------------------------------------- steps + find */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.9rem,2.2vw,1.8rem);counter-reset:s}
+.step{counter-increment:s;position:relative;padding-top:1rem;border-top:3px solid var(--ink)}
+.step::before{content:counter(s);position:absolute;top:-1.1rem;right:0;font-size:2.3rem;
+  font-weight:800;color:var(--line);line-height:1}
+.step h3{font-size:1.04rem;text-transform:uppercase;margin-bottom:.25rem}
+.step p{font-size:.9rem;color:var(--ink-2)}
+.find{display:grid;gap:clamp(1rem,2.6vw,2.4rem);grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  align-items:start}
+.hours{display:grid;margin:1rem 0;border-top:1px solid var(--line)}
+.hours div{display:flex;justify-content:space-between;gap:1rem;padding:.55rem 0;
+  border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;font-size:.93rem}
+.hours div[data-today]{color:var(--red);font-weight:700}
+.hours dt,.hours dd{margin:0}
+.mapcard{position:relative;display:block;border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;
+  background:var(--paper);box-shadow:var(--sh)}
+.mapcard iframe{position:absolute;left:-9%;top:-7%;width:119%;height:119%;border:0;
+  pointer-events:none;filter:saturate(.75) contrast(1.04)}
+.mapcard .pin{position:absolute;left:50%;bottom:1rem;transform:translateX(-50%);
+  background:var(--red);color:#fff;font-weight:700;padding:.68rem 1.2rem;border-radius:999px;
+  box-shadow:var(--sh-lift);white-space:nowrap;font-size:.92rem}
+.mapattr{position:absolute;right:.5rem;bottom:.35rem;font-size:.58rem;color:var(--ink-3);
+  background:rgba(255,255,255,.85);padding:.1rem .3rem;border-radius:4px}
+.findmail{font-size:.86rem;color:var(--ink-3);margin-top:.8rem}
+.findmail a{font-weight:700;color:var(--ink);border-bottom:2px solid var(--line)}
+.findmail a:hover{border-color:var(--red);color:var(--red)}
+.areas{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.8rem}
+.areas span{font-size:.8rem;font-weight:600;padding:.3rem .65rem;border-radius:999px;
+  background:var(--paper);color:var(--ink-2)}
+
+/* ---------------------------------------------------------------- reveals */
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    [data-anim]{animation:rise .01s both;animation-timeline:view();animation-range:entry 3% cover 22%}
+    [data-anim="grow"]{animation-name:grow}
+    [data-stagger]>*{animation:rise .01s both;animation-timeline:view();animation-range:entry 2% cover 20%}
+    [data-stagger]>*:nth-child(2){animation-range:entry 3% cover 21%}
+    [data-stagger]>*:nth-child(3){animation-range:entry 4% cover 22%}
+    [data-stagger]>*:nth-child(4){animation-range:entry 5% cover 23%}
+    [data-stagger]>*:nth-child(5){animation-range:entry 6% cover 24%}
+    [data-stagger]>*:nth-child(6){animation-range:entry 7% cover 25%}
+  }
+  @supports not (animation-timeline:view()){
+    [data-anim],[data-stagger]>*{opacity:0;transform:translateY(22px);
+      transition:opacity .6s var(--ease),transform .7s var(--ease)}
+    [data-anim].in,[data-stagger].in>*{opacity:1;transform:none}
+  }
+  /* The hero is above the fold, so a view() timeline leaves whatever sits low
+     in the first screen stranded part-way through its fade — which is why the
+     order button rendered as washed-out pink on a phone and solid red on a
+     laptop. Nothing in the hero animates on scroll; it is finished at rest. */
+  .hero [data-anim],.hero [data-stagger]>*{
+    animation:none!important;opacity:1!important;transform:none!important}
+}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes grow{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+
+/* ---------------------------------------------------------------- responsive */
+@media (min-width:1500px){ .cats{grid-template-columns:repeat(3,1fr)} }
+@media (max-width:1040px){ .cfg,.find{grid-template-columns:1fr} }
+@media (max-width:900px){
+  /* On a phone the pizza goes between the sentence and the buttons: you read
+     what the place is, you see the food, and the buttons are the last thing
+     under your thumb. */
+  .hero-in{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;
+    gap:clamp(.4rem,1.4vh,.9rem);text-align:left}
+  .hero-copy{grid-column:1;grid-row:1}
+  .herofig{grid-column:1;grid-row:2;align-self:center}
+  .hero-cta{grid-column:1;grid-row:3}
+  /* On a phone the paragraph is the first thing to go. The slogan already
+     says what this is; the space is worth more to the pizza and the price. */
+  /* the address is in the footer, the map and the call button; above the
+     slogan on a phone it is just a line of small grey text in the way */
+  .hero .lede,.hero .eyebrow{display:none}
+  .hero{--pie:min(86vw,42svh)}
+  .display .wide{display:none}
+  .display .narrow{display:inline}
+  .display{font-size:min(clamp(2rem,9vw,2.9rem),8.6svh)}
+  .deal h2{font-size:min(1.32rem,4.6svh)}
+  .deal .sub{font-size:.9rem}
+  .saveline{font-size:.92rem}
+  /* the bar earns its 60px: mark, basket, dots. Phone and open-status live in
+     the sheet, where they are not competing with the order button. */
+  .bar nav,.bar .openpill,.bar .btn-sm{display:none}
+  .dots{display:grid}
+  .bar{gap:.5rem}
+  .steps{grid-template-columns:1fr;gap:1rem}
+  .cfg-stage{box-shadow:0 14px 20px -14px rgba(17,17,19,.25)}
+  .peel{width:min(52vw,210px)}
+  .cats{grid-template-columns:repeat(2,1fr)}
+  .hero .acts{margin-top:.8rem;gap:.5rem}
+  /* flex:1 made both buttons the same width, and "Start your order" is longer
+     than "Call", so it wrapped to two lines and doubled the button's height.
+     Let each take the width its label needs, then share what is left. */
+  .hero .acts .btn{flex:1 1 auto;min-width:0;white-space:nowrap;padding-inline:1rem}
+}
+@media (max-width:620px){
+  .display{font-size:min(clamp(1.8rem,8vw,2.4rem),7.2svh)}
+  /* On a laptop the price column sits beside the description. On a phone that
+     column steals the width the food name needs and leaves a ragged gutter
+     down the left. So the prices drop to their own full-width line and spread
+     out — the row uses all of the screen instead of a third of it. */
+  .item-media{width:64px;height:64px}
+  .item,.item-hit{display:grid;grid-template-columns:auto minmax(0,1fr);
+    grid-template-areas:"media body" "side side";column-gap:.7rem;row-gap:.5rem;
+    align-items:center;padding:.6rem}
+  .item,.item-hit{padding:.65rem 0}
+  .item-x{display:block;padding:0}
+  .item-media{grid-area:media}
+  .item-body{grid-area:body}
+  .item-side{grid-area:side}
+  .item-body h4,.item-body .h4{font-size:.95rem}
+  .item-body p,.item-body .p{font-size:.79rem;-webkit-line-clamp:2}
+  .item-side,.item-x .item-side{flex-direction:row;align-items:center;
+    justify-content:space-between;gap:.5rem;width:100%}
+  .sizes{flex:1;flex-wrap:nowrap;justify-content:stretch;gap:.3rem}
+  .sizebtn{flex:1;min-width:0;padding:.34rem .3rem}
+  .item-side>.price{order:-1}
+  /* every pill on a row is the same pill: the Build it button was stretching
+     to fill while Add stayed small, and the two read as different controls */
+  .add,.add-ghost{flex:none;padding:.46rem 1.15rem;font-size:.84rem}
+  .item-side{flex-wrap:wrap}
+  .pickbar{justify-content:stretch}
+  .pickbar .add{flex:1;text-align:center;padding:.6rem 1rem}
+  .tops-grid{grid-template-columns:repeat(auto-fill,minmax(146px,1fr))}
+  /* the rail runs to both edges on a phone so it reads as a bar, not a widget */
+  .rail{margin:0 -1.1rem;padding:.5rem 1.1rem}
+  /* the rows run to the gutter on a phone; the old card padding
+     left a dead strip down the left of every dish */
+  .item{padding:.65rem 0}
+  .item-media{width:66px;height:66px}
+  .cat{aspect-ratio:4/3}
+  .cat b{font-size:.96rem}
+  .cat small{display:none}
+}
+
+/* Short screens give up the address line and the pickup facts before they give
+   up anything you would actually order with. The pizza shrinks rather than
+   pushing the buttons past the fold. */
+@media (max-height:680px){
+  .hero{--pie:min(58vw,29svh)}
+  .hero .eyebrow,.hero-facts{display:none}
+  .hero .lede{display:none}
+  .deal .sub{display:none}
+}
+@media (max-height:560px){
+  .hero{--pie:min(46vw,26svh)}
+  .ticks{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"Tasty Pizza","description":"Dartmouth's donair and pizza shop on Main Street. Fresh dough daily, garlic fingers, subs and seafood. Open 7 days, Friday till 1am. Call 902-435-5700.","url":"https://tastypizza.ca","telephone":"+1-902-435-5700","email":"tastypizzadm@gmail.com","servesCuisine":["Pizza","Donair","Seafood","Canadian"],"priceRange":"$$","address":{"@type":"PostalAddress","streetAddress":"760 Main St.","addressLocality":"Dartmouth","addressRegion":"NS","postalCode":"B2W 3T8","addressCountry":"CA"},"geo":{"@type":"GeoCoordinates","latitude":44.6938,"longitude":-63.4993},"areaServed":[{"@type":"Place","name":"Cole Harbour"},{"@type":"Place","name":"Forest Hill"},{"@type":"Place","name":"Lake Echo"},{"@type":"Place","name":"Main Street"},{"@type":"Place","name":"Westphal"},{"@type":"Place","name":"Montague"}],"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":"Sunday","opens":"14:00","closes":"22:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Monday","opens":"11:00","closes":"23:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Tuesday","opens":"11:00","closes":"23:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Wednesday","opens":"11:00","closes":"23:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Thursday","opens":"11:00","closes":"23:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Friday","opens":"11:00","closes":"01:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"11:00","closes":"01:00"}],"hasMenu":{"@type":"Menu","name":"Tasty Pizza menu","hasMenuSection":[{"@type":"MenuSection","name":"Pizza","description":"Dough and sauce made fresh every morning. Build your own or take one we already figured out.","hasMenuItem":[{"@type":"MenuItem","name":"Build Your Own Pizza","offers":{"@type":"Offer","price":"9.50","priceCurrency":"CAD"},"description":"Pick your size, then tap toppings. Five toppings makes it a Tasty Pizza Special."},{"@type":"MenuItem","name":"All Dressed","offers":{"@type":"Offer","price":"13.25","priceCurrency":"CAD"},"description":"Pepperoni, salami, mushrooms, green peppers, onions, bacon, hamburger."},{"@type":"MenuItem","name":"Donair Pizza","offers":{"@type":"Offer","price":"14.95","priceCurrency":"CAD"},"description":"Donair meat, onions, tomatoes, donair sauce."},{"@type":"MenuItem","name":"Bubba","offers":{"@type":"Offer","price":"14.95","priceCurrency":"CAD"},"description":"Garlic spread, donair meat, onions, tomatoes, donair sauce."},{"@type":"MenuItem","name":"Meat Lovers","offers":{"@type":"Offer","price":"13.25","priceCurrency":"CAD"},"description":"Pepperoni, salami, bacon, hamburger, ham, donair meat, Italian sausage."},{"@type":"MenuItem","name":"Hawaiian","offers":{"@type":"Offer","price":"13.25","priceCurrency":"CAD"},"description":"Ham, pineapple, mozzarella."},{"@type":"MenuItem","name":"Greek","offers":{"@type":"Offer","price":"13.25","priceCurrency":"CAD"},"description":"Tomatoes, red onions, black olives, feta and mozzarella, oregano and olive oil.","suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"Cheese Lovers","offers":{"@type":"Offer","price":"13.25","priceCurrency":"CAD"},"description":"Feta, cheddar, mozzarella and parmesan.","suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"BBQ Chicken","offers":{"@type":"Offer","price":"13.25","priceCurrency":"CAD"},"description":"Chicken, zesty sauce, tomatoes, green peppers, red onions, mushrooms, mozzarella and cheddar."},{"@type":"MenuItem","name":"Vegetarian","offers":{"@type":"Offer","price":"13.25","priceCurrency":"CAD"},"description":"Mushrooms, green peppers, onions, tomatoes, hot peppers, olives, pineapple.","suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"Canadian Classic","offers":{"@type":"Offer","price":"13.25","priceCurrency":"CAD"},"description":"Pepperoni, mushrooms, bacon, mozzarella and cheddar on a garlic crust."},{"@type":"MenuItem","name":"Cheeseburger","offers":{"@type":"Offer","price":"13.25","priceCurrency":"CAD"},"description":"Hamburger, cheddar and mozzarella, your choice of four vegetables."},{"@type":"MenuItem","name":"Philly Cheese Steak","offers":{"@type":"Offer","price":"14.95","priceCurrency":"CAD"},"description":"Zesty sauce, sliced steak, red onions, tomatoes, green peppers, mushrooms, mozzarella and cheddar."},{"@type":"MenuItem","name":"Special Topping","offers":{"@type":"Offer","price":"1.95","priceCurrency":"CAD"},"description":"Zesty chicken, sliced steak, parmesan, cheddar or feta."},{"@type":"MenuItem","name":"Gluten Free Crust","offers":{"@type":"Offer","price":"4.99","priceCurrency":"CAD"},"description":"Any size."}]},{"@type":"MenuSection","name":"Garlic Fingers","description":"Served with donair sauce. The Yum Yums are in here too.","hasMenuItem":[{"@type":"MenuItem","name":"Garlic Fingers","offers":{"@type":"Offer","price":"10.25","priceCurrency":"CAD"},"description":"Garlic butter, mozzarella, pulled apart by hand.","suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"With Bacon","offers":{"@type":"Offer","price":"11.25","priceCurrency":"CAD"},"description":"Same, with bacon through it."},{"@type":"MenuItem","name":"With Donair","offers":{"@type":"Offer","price":"14.95","priceCurrency":"CAD"},"description":"Same, loaded with donair meat."},{"@type":"MenuItem","name":"Small Yum Yums","offers":{"@type":"Offer","price":"12.95","priceCurrency":"CAD"},"suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"Large Yum Yums","offers":{"@type":"Offer","price":"16.45","priceCurrency":"CAD"},"suitableForDiet":"https://schema.org/VegetarianDiet"}]},{"@type":"MenuSection","name":"Donairs","description":"On the pita, on a plate, in an egg roll, or on a stick.","hasMenuItem":[{"@type":"MenuItem","name":"Donair","offers":{"@type":"Offer","price":"9.25","priceCurrency":"CAD"},"description":"Spiced beef off the spit, sweet sauce, warm pita. The one we're known for."},{"@type":"MenuItem","name":"Add Cheese","offers":{"@type":"Offer","price":"2.00","priceCurrency":"CAD"},"description":"Melted through the meat."},{"@type":"MenuItem","name":"Add Extra Meat","offers":{"@type":"Offer","price":"3.35","priceCurrency":"CAD"},"description":"For when a large isn't a large."},{"@type":"MenuItem","name":"Small Donair Plate","offers":{"@type":"Offer","price":"11.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Large Donair Plate","offers":{"@type":"Offer","price":"15.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Donair Egg Roll","offers":{"@type":"Offer","price":"2.50","priceCurrency":"CAD"},"description":"Donair, rolled and fried. Order more than one."},{"@type":"MenuItem","name":"Donair Egg Rolls \u2014 Dozen","offers":{"@type":"Offer","price":"28.00","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Donair Pogo","offers":{"@type":"Offer","price":"3.45","priceCurrency":"CAD"},"description":"Donair on a stick in batter. Yes, really."},{"@type":"MenuItem","name":"Donair Pogos \u2014 Dozen","offers":{"@type":"Offer","price":"38.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Small Donair Sauce","offers":{"@type":"Offer","price":"2.25","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Large Donair Sauce","offers":{"@type":"Offer","price":"3.25","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Extra Large Donair Sauce","offers":{"@type":"Offer","price":"4.95","priceCurrency":"CAD"}}]},{"@type":"MenuSection","name":"Subs & Pockets","description":"Small or large. Oven baked or deep fried.","hasMenuItem":[{"@type":"MenuItem","name":"Cold Cut","offers":{"@type":"Offer","price":"9.25","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Salami & Ham","offers":{"@type":"Offer","price":"9.25","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Pizza Sub","offers":{"@type":"Offer","price":"9.25","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Vegetarian","offers":{"@type":"Offer","price":"9.25","priceCurrency":"CAD"},"suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"Real Turkey","offers":{"@type":"Offer","price":"9.45","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Bubba","offers":{"@type":"Offer","price":"9.95","priceCurrency":"CAD"},"description":"The one people ask for by name."},{"@type":"MenuItem","name":"Club","offers":{"@type":"Offer","price":"10.25","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Steak","offers":{"@type":"Offer","price":"10.25","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Donair Sub","offers":{"@type":"Offer","price":"10.25","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Super Sub","offers":{"@type":"Offer","price":"10.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Garlic Bread","offers":{"@type":"Offer","price":"4.95","priceCurrency":"CAD"},"suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"Extra Cheese","offers":{"@type":"Offer","price":"2.45","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Extra Meat","offers":{"@type":"Offer","price":"3.45","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Pita Wrap","offers":{"@type":"Offer","price":"10.45","priceCurrency":"CAD"},"description":"Pizza, donair, cold cut, club, vegetarian, chicken, turkey or chicken Caesar."},{"@type":"MenuItem","name":"Pocket \u2014 Pizza, Chicken, Meats or Vegetarian","offers":{"@type":"Offer","price":"15.95","priceCurrency":"CAD"},"description":"Oven baked or deep fried."},{"@type":"MenuItem","name":"Pocket \u2014 Donair or Steak","offers":{"@type":"Offer","price":"16.45","priceCurrency":"CAD"},"description":"Oven baked or deep fried."}]},{"@type":"MenuSection","name":"Chicken & Wings","description":"Wings in seven sauces, fingers, nuggets and the family pack.","hasMenuItem":[{"@type":"MenuItem","name":"10 Wings","offers":{"@type":"Offer","price":"12.99","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"15 Wings","offers":{"@type":"Offer","price":"18.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"20 Wings","offers":{"@type":"Offer","price":"24.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"30 Wings","offers":{"@type":"Offer","price":"36.95","priceCurrency":"CAD"},"description":"For the room."},{"@type":"MenuItem","name":"Chicken & Chips \u2014 1 pc","offers":{"@type":"Offer","price":"8.45","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Chicken & Chips \u2014 2 pc","offers":{"@type":"Offer","price":"12.45","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Chicken & Chips \u2014 3 pc","offers":{"@type":"Offer","price":"14.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Extra Piece of Chicken","offers":{"@type":"Offer","price":"3.75","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"2 Chicken Legs & Chips","offers":{"@type":"Offer","price":"9.95","priceCurrency":"CAD"},"description":"Everyday special."},{"@type":"MenuItem","name":"Chicken Family Pack","offers":{"@type":"Offer","price":"39.95","priceCurrency":"CAD"},"description":"10 pieces, 2 large fries, gravy and coleslaw."},{"@type":"MenuItem","name":"6 Chicken Nuggets & Fries","offers":{"@type":"Offer","price":"7.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"12 Chicken Nuggets & Fries","offers":{"@type":"Offer","price":"13.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"5 Chicken Fingers & Fries","offers":{"@type":"Offer","price":"14.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"10 Chicken Fingers & Fries","offers":{"@type":"Offer","price":"26.45","priceCurrency":"CAD"}}]},{"@type":"MenuSection","name":"Seafood","description":"Fresh haddock, scallops, clams and shrimp.","hasMenuItem":[{"@type":"MenuItem","name":"Fish & Chips \u2014 1 pc","offers":{"@type":"Offer","price":"8.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Fish & Chips \u2014 2 pc","offers":{"@type":"Offer","price":"12.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Fish & Chips \u2014 3 pc","offers":{"@type":"Offer","price":"14.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Extra Piece of Fish","offers":{"@type":"Offer","price":"3.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Fish Family Pack","offers":{"@type":"Offer","price":"39.95","priceCurrency":"CAD"},"description":"10 pieces of fish, 2 large fries, large gravy, coleslaw and tartar sauce."},{"@type":"MenuItem","name":"Scallops & Chips","offers":{"@type":"Offer","price":"13.45","priceCurrency":"CAD"},"description":"10 scallops."},{"@type":"MenuItem","name":"Clams & Chips","offers":{"@type":"Offer","price":"13.45","priceCurrency":"CAD"},"description":"Two cups of clams."},{"@type":"MenuItem","name":"Shrimp & Chips","offers":{"@type":"Offer","price":"13.45","priceCurrency":"CAD"},"description":"12 shrimp."},{"@type":"MenuItem","name":"Seafood Platter","offers":{"@type":"Offer","price":"17.45","priceCurrency":"CAD"},"description":"A piece of fish, fries, 5 scallops, 5 shrimp and clams."},{"@type":"MenuItem","name":"Extra Coleslaw \u2014 Small","offers":{"@type":"Offer","price":"1.75","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Extra Coleslaw \u2014 Large","offers":{"@type":"Offer","price":"2.95","priceCurrency":"CAD"}}]},{"@type":"MenuSection","name":"Burgers & Poutine","description":"Burger or platter. Every poutine is real curds and homemade gravy.","hasMenuItem":[{"@type":"MenuItem","name":"Hamburger","offers":{"@type":"Offer","price":"6.45","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Cheeseburger","offers":{"@type":"Offer","price":"6.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Chicken Burger","offers":{"@type":"Offer","price":"6.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Donair Burger","offers":{"@type":"Offer","price":"7.25","priceCurrency":"CAD"},"description":"Donair meat and sauce on a burger. A Dartmouth idea."},{"@type":"MenuItem","name":"Pizza Burger","offers":{"@type":"Offer","price":"6.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Add Bacon","offers":{"@type":"Offer","price":"1.00","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Classic Poutine","offers":{"@type":"Offer","price":"8.55","priceCurrency":"CAD"},"description":"Curds, gravy, fries. Done right."},{"@type":"MenuItem","name":"Donair Poutine","offers":{"@type":"Offer","price":"14.25","priceCurrency":"CAD"},"description":"With donair meat and a line of donair sauce."},{"@type":"MenuItem","name":"Chicken Poutine","offers":{"@type":"Offer","price":"13.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Hamburger Poutine","offers":{"@type":"Offer","price":"13.95","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Greek Poutine","offers":{"@type":"Offer","price":"13.95","priceCurrency":"CAD"},"description":"Feta, tomato, red onion, olives."},{"@type":"MenuItem","name":"Extra Cheese","offers":{"@type":"Offer","price":"2.25","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Extra Gravy","offers":{"@type":"Offer","price":"1.75","priceCurrency":"CAD"}}]},{"@type":"MenuSection","name":"Sides & Nachos","description":"Fries, rings, mozza sticks, gravy and the loaded nachos.","hasMenuItem":[{"@type":"MenuItem","name":"Club House Sandwich with Fries","offers":{"@type":"Offer","price":"14.45","priceCurrency":"CAD"},"description":"Real turkey."},{"@type":"MenuItem","name":"Hot Hamburger with Gravy & Fries","offers":{"@type":"Offer","price":"12.30","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Hot Turkey with Gravy & Fries","offers":{"@type":"Offer","price":"12.30","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Large Fries","offers":{"@type":"Offer","price":"5.45","priceCurrency":"CAD"},"suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"Large Onion Rings","offers":{"@type":"Offer","price":"5.45","priceCurrency":"CAD"},"suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"12 Chicken Fries","offers":{"@type":"Offer","price":"9.45","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"9 Mozza Sticks","offers":{"@type":"Offer","price":"10.95","priceCurrency":"CAD"},"suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"Cup of Gravy \u2014 Small","offers":{"@type":"Offer","price":"1.65","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Cup of Gravy \u2014 Large","offers":{"@type":"Offer","price":"2.85","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Nachos","offers":{"@type":"Offer","price":"15.45","priceCurrency":"CAD"},"description":"Green onion, tomato, black olives, jalape\u00f1o, mozzarella and cheddar. Salsa and sour cream on the side.","suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"Add Chicken, Hamburger or Bacon","offers":{"@type":"Offer","price":"3.65","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Extra Cheese","offers":{"@type":"Offer","price":"3.95","priceCurrency":"CAD"}}]},{"@type":"MenuSection","name":"Salads & Pasta","description":"Something green, or lasagna with garlic bread.","hasMenuItem":[{"@type":"MenuItem","name":"Caesar or Garden Salad","offers":{"@type":"Offer","price":"8.95","priceCurrency":"CAD"},"suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"Greek Salad","offers":{"@type":"Offer","price":"9.45","priceCurrency":"CAD"},"suitableForDiet":"https://schema.org/VegetarianDiet"},{"@type":"MenuItem","name":"Add Chicken \u2014 Crispy or Grilled","offers":{"@type":"Offer","price":"2.30","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Lasagna with Garlic Bread","offers":{"@type":"Offer","price":"10.45","priceCurrency":"CAD"}},{"@type":"MenuItem","name":"Ravioli with Garlic Bread","offers":{"@type":"Offer","price":"10.45","priceCurrency":"CAD"}}]}]}}</script>
 </head>
-<body data-page="home">
-<a class="skip" href="#main">Skip to content</a>
+<body>
+<a class="skip" href="#order">Skip to ordering</a>
 
-<header class="top">
-  <a class="brand" href="index.html" aria-label="Tasty Pizza, home">
-    <img src="assets/img/logo.webp" width="421" height="179" alt="Tasty Pizza">
-  </a>
-  <nav class="nav"><a href="index.html" class="on">Home</a><a href="menu.html">Menu</a><a href="index.html#deals">Deals</a><a href="index.html#find">Find us</a></nav>
-  <div class="top-act">
-    <span class="openpill" data-clock hidden></span>
-    <a class="btn btn-ghost tel" href="tel:+19024355700"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2.2 2A16 16 0 0 1 2 6.2 2 2 0 0 1 4 4Z"/></svg><span>902-435-5700</span></a>
-    <a class="btn btn-red" href="#order"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>Order</span></a>
+<header class="bar">
+  <a class="brand" href="#top"><img src="assets/img/logo-clean.webp"
+     srcset="assets/img/logo-clean.webp 414w, assets/img/logo-clean@2x.webp 828w"
+     width="414" height="172" alt="Tasty Pizza, Dartmouth"></a>
+  <nav><a href="#order">Menu</a><a href="#build">Build a pizza</a><a href="#find">Find us</a></nav>
+  <div class="bar-right">
+    <span class="openpill" data-clock>Open</span>
+    <a class="btn btn-red btn-sm" href="tel:+19024355700">902-435-5700</a>
+    <button class="cartbtn" type="button" data-cart-open hidden aria-label="Your order">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 8h14l-1.2 11.2A2 2 0 0 1 15.8 21H8.2a2 2 0 0 1-2-1.8Z"/>
+        <path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><b>0</b></button>
+    <button class="dots" type="button" data-sheet-toggle aria-label="Menu" aria-expanded="false"><i></i></button>
   </div>
-  <button class="burger" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
-<div class="drawer" hidden>
-  <nav><a href="index.html" class="on">Home</a><a href="menu.html">Menu</a><a href="index.html#deals">Deals</a><a href="index.html#find">Find us</a></nav>
-  <a class="btn btn-red big" href="tel:+19024355700"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2.2 2A16 16 0 0 1 2 6.2 2 2 0 0 1 4 4Z"/></svg>Call 902-435-5700</a>
+
+<div class="sheet" data-sheet>
+  <a href="#order">See the menu</a>
+  <a href="#build">Build your own pizza</a>
+  <a href="#find">Hours &amp; directions</a>
+  <a href="tel:+19024355700">Call 902-435-5700</a>
+  <span class="openpill" data-clock>Open</span>
 </div>
-<main id="main">
 
+<main id="top">
 <section class="hero">
-  <div class="hero-media">
-    <video data-hero-video poster="assets/video/hero-poster.webp" autoplay muted loop playsinline
-           preload="auto" aria-label="A pizza bubbling in the oven" width="1440" height="810">
-      <source src="assets/video/hero.mp4" type="video/mp4">
-      <img src="assets/video/hero-poster.webp" width="1440" height="810"
-           alt="A pizza bubbling in the oven">
-    </video>
-    <div class="hero-scrim"></div>
-  </div>
-  <div class="steam" aria-hidden="true">
-    <i style="--x:38%;--w:170px;--d:12s;--delay:0s"></i>
-    <i style="--x:54%;--w:130px;--d:9.5s;--delay:2.4s"></i>
-    <i style="--x:68%;--w:190px;--d:14s;--delay:5.1s"></i>
-  </div>
-  <div class="hero-in">
-    <p class="kicker">Halifax&#x27;s official food, made on Main Street.</p>
-    <h1>Donairs, pizza and<br>garlic fingers on<br><em>Main Street.</em></h1>
-    <p class="lede">Dartmouth&#x27;s pizza shop for over 20 years. Dough and sauce made fresh every day.</p>
-    <div class="hero-act">
-      <a class="btn btn-red big" href="menu.html"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>See the menu</span></a>
-      <a class="btn btn-bone big" href="tel:+19024355700"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2.2 2A16 16 0 0 1 2 6.2 2 2 0 0 1 4 4Z"/></svg><span>902-435-5700</span></a>
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <p class="eyebrow" data-anim>760 Main Street &middot; Dartmouth</p>
+      <h1 class="display" data-anim><span class="wide">Fresh daily.<br>Hot nightly.<br></span><span class="narrow">Fresh. Hot.<br></span><em>Always tasty.</em></h1>
+      <p class="lede" data-anim>Fresh dough every morning, hand-stretched, out of a deck oven.
+        Owned and operated by the Patel family.</p>
     </div>
-    <p class="hero-open"><span class="openpill big" data-clock hidden></span></p>
-  </div>
-  <span class="scrollcue" aria-hidden="true">Scroll</span>
-</section>
-<section class="band band-bone" id="hits">
-  <div class="wrap">
-    <header class="sec-head">
-      <h2>What people actually order</h2>
-      <a class="ul" href="menu.html">See the whole menu <span aria-hidden="true">&rarr;</span></a>
-    </header>
-    <div class="hits">
-      <article class="hit">
-        <a class="hit-media" href="menu.html#donairs" tabindex="-1" aria-hidden="true"><img class="" src="assets/img/donair.webp" srcset="assets/img/donair@sm.webp 400w, assets/img/donair.webp 800w" sizes="(max-width:700px) 46vw, 300px" width="800" height="600" alt="Spiced beef off the spit, sweet sauce, warm pita. The one we&#x27;re known for." loading="lazy" decoding="async"></a>
-        <div class="hit-body">
-          <h3><a href="menu.html#donairs">Donair</a></h3>
-          <p>Spiced beef off the spit, sweet sauce, warm pita. The one we&#x27;re known for.</p>
-          <div class="hit-foot">
-            <span class="price">from $9.25</span>
-            <button class="add" type="button" data-add="Donair" data-price="9.25"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
+    <div class="hero-cta">
+      <div class="acts" data-anim>
+        <a class="btn btn-red" href="#order">Start your order</a>
+        <a class="btn btn-line" href="tel:+19024355700">Call</a>
+      </div>
+      <p class="hero-facts" data-anim>
+        <span><b>20&ndash;30 min</b> pickup</span>
+        <span><b>$2.00</b> delivery</span>
+        <span><b>Free</b> parking</span>
+      </p>
+    </div>
+    <div class="herofig" data-anim="grow">
+      <div class="turntable" data-wheelstage tabindex="0" role="group"
+           aria-roledescription="carousel" aria-label="Tonight&rsquo;s offers">
+        <div class="pieclip" aria-hidden="true"><div class="pies"><div class="disc is-cur"><img src="assets/img/pie-pepperoni.webp" width="680" height="680" alt="Large 16&quot; Pizza, 4 Toppings" fetchpriority="high"></div><div class="disc"><img src="assets/img/pie-meat-lovers.webp" width="680" height="680" alt="Medium Pizza + Medium Garlic Fingers" loading="lazy"></div><div class="disc"><img src="assets/img/pie-greek.webp" width="680" height="680" alt="Two Medium Pizzas" loading="lazy"></div><div class="disc"><img src="assets/img/pie-veggie.webp" width="680" height="680" alt="Vegetarian" loading="lazy"></div><div class="disc"><img src="assets/img/pie-build-your-own.webp" width="680" height="680" alt="Tasty Pizza Special" loading="lazy"></div></div></div>
+        <div class="orbit" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <defs><path id="ring"
+              d="M60,60 m-49,0 a49,49 0 1,1 98,0 a49,49 0 1,1 -98,0"/></defs>
+            <g><text><textPath href="#ring" startOffset="0">
+              Fresh dough daily &middot; Hand stretched &middot; Deck oven &middot; 760 Main St &middot;
+            </textPath></text></g>
+          </svg>
         </div>
-      </article>
-      <article class="hit">
-        <a class="hit-media" href="menu.html#pizza" tabindex="-1" aria-hidden="true"><img class="" src="assets/img/garlic-fingers.webp" srcset="assets/img/garlic-fingers@sm.webp 400w, assets/img/garlic-fingers.webp 800w" sizes="(max-width:700px) 46vw, 300px" width="800" height="600" alt="Garlic butter, mozzarella, pulled apart by hand." loading="lazy" decoding="async"></a>
-        <div class="hit-body">
-          <h3><a href="menu.html#pizza">Garlic Fingers</a></h3>
-          <p>Garlic butter, mozzarella, pulled apart by hand.</p>
-          <div class="hit-foot">
-            <span class="price">from $10.25</span>
-            <button class="add" type="button" data-add="Garlic Fingers" data-price="10.25"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
+        <span class="badge" data-badge aria-hidden="true">
+          <i data-badge-kick>Deal</i><b data-badge-price>&nbsp;</b><s data-badge-was></s></span>
+      </div>
+      <div class="ticks" data-ticks role="tablist" aria-label="Choose an offer"></div>
+      <a class="deal" data-deal data-dealgo href="#order" aria-live="polite">
+        <div class="dealin">
+          <p class="kicker" data-kicker>Tonight&rsquo;s deal</p>
+          <h2 data-dealname>&nbsp;</h2>
+          <p class="sub" data-dealdesc>&nbsp;</p>
+          <p class="saveline"><span class="was" data-dealwas hidden></span>
+            <span class="save" data-dealsave hidden></span></p>
+          <span class="dealgo" data-dealcta>See it on the menu</span>
         </div>
-      </article>
-      <article class="hit">
-        <a class="hit-media" href="menu.html#pizza" tabindex="-1" aria-hidden="true"><img class="" src="assets/img/all-dressed-pizza.webp" srcset="assets/img/all-dressed-pizza@sm.webp 400w, assets/img/all-dressed-pizza.webp 800w" sizes="(max-width:700px) 46vw, 300px" width="800" height="600" alt="Pepperoni, salami, mushrooms, green peppers, onions, bacon, hamburger." loading="lazy" decoding="async"></a>
-        <div class="hit-body">
-          <h3><a href="menu.html#pizza">All Dressed</a></h3>
-          <p>Pepperoni, salami, mushrooms, green peppers, onions, bacon, hamburger.</p>
-          <div class="hit-foot">
-            <span class="price">from $13.25</span>
-            <button class="add" type="button" data-add="All Dressed" data-price="13.25"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
-        </div>
-      </article>
-      <article class="hit">
-        <a class="hit-media" href="menu.html#pizza" tabindex="-1" aria-hidden="true"><img class="" src="assets/img/donair-pizza.webp" srcset="assets/img/donair-pizza@sm.webp 400w, assets/img/donair-pizza.webp 800w" sizes="(max-width:700px) 46vw, 300px" width="800" height="600" alt="Donair meat, onions, tomatoes, donair sauce." loading="lazy" decoding="async"></a>
-        <div class="hit-body">
-          <h3><a href="menu.html#pizza">Donair Pizza</a></h3>
-          <p>Donair meat, onions, tomatoes, donair sauce.</p>
-          <div class="hit-foot">
-            <span class="price">from $14.95</span>
-            <button class="add" type="button" data-add="Donair Pizza" data-price="14.95"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
-        </div>
-      </article>
-      <article class="hit">
-        <a class="hit-media" href="menu.html#favourites" tabindex="-1" aria-hidden="true"><img class="" src="assets/img/poutine.webp" srcset="assets/img/poutine@sm.webp 400w, assets/img/poutine.webp 800w" sizes="(max-width:700px) 46vw, 300px" width="800" height="600" alt="Curds, gravy, fries. Done right." loading="lazy" decoding="async"></a>
-        <div class="hit-body">
-          <h3><a href="menu.html#favourites">Classic Poutine</a></h3>
-          <p>Curds, gravy, fries. Done right.</p>
-          <div class="hit-foot">
-            <span class="price">from $8.55</span>
-            <button class="add" type="button" data-add="Classic Poutine" data-price="8.55"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
-        </div>
-      </article>
-      <article class="hit">
-        <a class="hit-media" href="menu.html#seafood-subs" tabindex="-1" aria-hidden="true"><img class="" src="assets/img/fish-and-chips.webp" srcset="assets/img/fish-and-chips@sm.webp 400w, assets/img/fish-and-chips.webp 800w" sizes="(max-width:700px) 46vw, 300px" width="800" height="600" alt="Fish &amp; Chips — 1 pc" loading="lazy" decoding="async"></a>
-        <div class="hit-body">
-          <h3><a href="menu.html#seafood-subs">Fish &amp; Chips — 1 pc</a></h3>
-          <p></p>
-          <div class="hit-foot">
-            <span class="price">$8.95</span>
-            <button class="add" type="button" data-add="Fish &amp; Chips — 1 pc" data-price="8.95"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
-        </div>
-      </article></div>
+      </a>
+    </div>
   </div>
 </section>
-<section class="band band-ink" id="build">
-  <div class="wrap build">
-    <div class="build-copy">
-      <p class="kicker">The fun part</p>
-      <h2>Build it on the peel</h2>
-      <p class="lede">Pick a size, start tapping. The price moves as you go, so there are no
-        surprises when you get to the counter.</p>
-      <div class="build-price">
-        <span class="bp-label">Your pizza</span>
-        <strong class="till" data-build-price>$12.90</strong>
-        <span class="bp-note" data-build-note>12&quot; Medium &middot; just cheese</span>
-      </div>
-      <div class="build-act">
-        <button class="add" type="button" data-add="Custom pizza" data-price=""><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add to my order</span></button>
-        <button class="linkbtn" type="button" data-build-reset>Start over</button>
-      </div>
-    </div>
 
-    <div class="build-stage">
-      <div class="peel" data-peel>
-        <span class="peel-handle" aria-hidden="true"></span>
-        <span class="peel-board" aria-hidden="true"></span>
-        <div class="dough" data-dough>
-          <span class="crustring" aria-hidden="true"></span>
-          <span class="sauce" aria-hidden="true"></span>
-          <span class="cheese" aria-hidden="true"></span>
-          <div class="tops" data-tops></div>
-        </div>
-      </div>
-      <img class="chef chef-build" src="assets/img/chef.png" width="231" height="100" alt="" data-chef aria-hidden="true">
-    </div>
-
-    <div class="build-ctrl">
-      <div class="ctrl">
-        <h3>Size</h3>
-        <div class="chips" role="radiogroup" aria-label="Pizza size" data-sizes><button class="chip" type="button" data-size="0" role="radio" aria-checked="false">9&quot; Small</button><button class="chip" type="button" data-size="1" role="radio" aria-checked="true" data-on>12&quot; Medium</button><button class="chip" type="button" data-size="2" role="radio" aria-checked="false">16&quot; Large</button><button class="chip" type="button" data-size="3" role="radio" aria-checked="false">18&quot; X-Large</button></div>
-      </div>
-      <div class="ctrl">
-        <h3>Crust</h3>
-        <div class="chips" role="radiogroup" aria-label="Crust" data-crusts><button class="chip" type="button" data-crust="White" data-sur="0" role="radio" aria-checked="true" data-on>White</button><button class="chip" type="button" data-crust="Whole Wheat" data-sur="0" role="radio" aria-checked="false">Whole Wheat</button><button class="chip" type="button" data-crust="Gluten Free" data-sur="4.99" role="radio" aria-checked="false">Gluten Free<em>+$4.99</em></button></div>
-      </div>
-      <div class="ctrl ctrl-wide">
-        <h3>Toppings <span class="ctrl-note" data-top-count>0 of 5</span></h3>
-        <div class="tops-grid" data-topgrid><button class="topbtn" type="button" data-top="Pepperoni" aria-pressed="false"><i class="tdot t-pepperoni" aria-hidden="true"></i>Pepperoni</button><button class="topbtn" type="button" data-top="Salami" aria-pressed="false"><i class="tdot t-salami" aria-hidden="true"></i>Salami</button><button class="topbtn" type="button" data-top="Mushrooms" aria-pressed="false"><i class="tdot t-mushrooms" aria-hidden="true"></i>Mushrooms</button><button class="topbtn" type="button" data-top="Green Peppers" aria-pressed="false"><i class="tdot t-green-peppers" aria-hidden="true"></i>Green Peppers</button><button class="topbtn" type="button" data-top="Red Peppers" aria-pressed="false"><i class="tdot t-red-peppers" aria-hidden="true"></i>Red Peppers</button><button class="topbtn" type="button" data-top="Onions" aria-pressed="false"><i class="tdot t-onions" aria-hidden="true"></i>Onions</button><button class="topbtn" type="button" data-top="Red Onions" aria-pressed="false"><i class="tdot t-red-onions" aria-hidden="true"></i>Red Onions</button><button class="topbtn" type="button" data-top="Bacon" aria-pressed="false"><i class="tdot t-bacon" aria-hidden="true"></i>Bacon</button><button class="topbtn" type="button" data-top="Hamburger" aria-pressed="false"><i class="tdot t-hamburger" aria-hidden="true"></i>Hamburger</button><button class="topbtn" type="button" data-top="Tomatoes" aria-pressed="false"><i class="tdot t-tomatoes" aria-hidden="true"></i>Tomatoes</button><button class="topbtn" type="button" data-top="Pineapple" aria-pressed="false"><i class="tdot t-pineapple" aria-hidden="true"></i>Pineapple</button><button class="topbtn" type="button" data-top="Italian Sausage" aria-pressed="false"><i class="tdot t-italian-sausage" aria-hidden="true"></i>Italian Sausage</button><button class="topbtn" type="button" data-top="Hot Peppers" aria-pressed="false"><i class="tdot t-hot-peppers" aria-hidden="true"></i>Hot Peppers</button><button class="topbtn" type="button" data-top="Black Olives" aria-pressed="false"><i class="tdot t-black-olives" aria-hidden="true"></i>Black Olives</button><button class="topbtn" type="button" data-top="Green Olives" aria-pressed="false"><i class="tdot t-green-olives" aria-hidden="true"></i>Green Olives</button><button class="topbtn" type="button" data-top="Donair Meat" aria-pressed="false"><i class="tdot t-donair-meat" aria-hidden="true"></i>Donair Meat</button><button class="topbtn" type="button" data-top="Ham" aria-pressed="false"><i class="tdot t-ham" aria-hidden="true"></i>Ham</button></div>
-        <p class="ctrl-hint">Five toppings makes it a Tasty Pizza Special &mdash; we price it that way
-          automatically.</p>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="band band-checker" id="deals">
+<section class="band band-paper order-wrap" id="order">
   <div class="wrap">
-    <header class="sec-head">
-      <h2>Deals on right now</h2>
-      <p class="sec-sub">7 running. All prices before tax.</p>
+    <header class="sec-head" data-order-head>
+      <div><h2 class="sec">What are you after?</h2>
+        <p>Pick a section &mdash; deals inside it come first.</p></div>
+      <span class="openpill" data-clock>Open</span>
     </header>
-    <div class="deals">
-      <article class="deal">
-        <span class="badge">Most ordered</span>
-        <div class="deal-media"><img class="" src="assets/img/all-dressed-pizza.webp" srcset="assets/img/all-dressed-pizza@sm.webp 400w, assets/img/all-dressed-pizza.webp 800w" sizes="(max-width:700px) 92vw, 300px" width="800" height="600" alt="Large 16&quot; Pizza, 4 Toppings" loading="lazy" decoding="async"></div>
-        <div class="deal-body">
-          <h3>Large 16&quot; Pizza, 4 Toppings</h3>
-          <p>Any four toppings you like.</p>
-          <label class="addon"><input type="checkbox" data-addon="12.45"><span>Add medium garlic fingers with dipping sauce <b>+$12.45</b></span></label>
-          <div class="deal-foot">
-            <span class="price big" data-deal-price="20.95">$20.95</span><span class="save">Save $2.00</span>
-            <button class="add" type="button" data-add="Large 16&quot; Pizza, 4 Toppings" data-price="20.95"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
-        </div>
-      </article>
-      <article class="deal">
-        
-        <div class="deal-media"><img class="" src="assets/img/garlic-fingers.webp" srcset="assets/img/garlic-fingers@sm.webp 400w, assets/img/garlic-fingers.webp 800w" sizes="(max-width:700px) 92vw, 300px" width="800" height="600" alt="Medium Pizza + Medium Garlic Fingers" loading="lazy" decoding="async"></div>
-        <div class="deal-body">
-          <h3>Medium Pizza + Medium Garlic Fingers</h3>
-          <p>12&quot; pizza with four toppings, plus 12&quot; garlic fingers with donair sauce.</p>
-          
-          <div class="deal-foot">
-            <span class="price big" data-deal-price="28.95">$28.95</span><span class="save">Save $2.45</span>
-            <button class="add" type="button" data-add="Medium Pizza + Medium Garlic Fingers" data-price="28.95"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
-        </div>
-      </article>
-      <article class="deal">
-        <span class="badge">Feeds 4</span>
-        <div class="deal-media"><img class="" src="assets/img/meat-lovers-pizza.webp" srcset="assets/img/meat-lovers-pizza@sm.webp 400w, assets/img/meat-lovers-pizza.webp 800w" sizes="(max-width:700px) 92vw, 300px" width="800" height="600" alt="Two Medium Pizzas" loading="lazy" decoding="async"></div>
-        <div class="deal-body">
-          <h3>Two Medium Pizzas</h3>
-          <p>Four toppings on each.</p>
-          
-          <div class="deal-foot">
-            <span class="price big" data-deal-price="32.95">$32.95</span><span class="save">Save $1.95</span>
-            <button class="add" type="button" data-add="Two Medium Pizzas" data-price="32.95"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
-        </div>
-      </article>
-      <article class="deal">
-        <span class="badge">For the room</span>
-        <div class="deal-media"><img class="" src="assets/img/mozza-sticks.webp" srcset="assets/img/mozza-sticks@sm.webp 400w, assets/img/mozza-sticks.webp 800w" sizes="(max-width:700px) 92vw, 300px" width="800" height="600" alt="Tasty Party Box" loading="lazy" decoding="async"></div>
-        <div class="deal-body">
-          <h3>Tasty Party Box</h3>
-          <p>Onion rings, deep fried pepperoni, 9 mozza sticks, 12 chicken fries and 6 donair egg rolls. Honey mustard, sour cream and donair sauce. 2L pop included.</p>
-          
-          <div class="deal-foot">
-            <span class="price big" data-deal-price="47.99">$47.99</span>
-            <button class="add" type="button" data-add="Tasty Party Box" data-price="47.99"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
-        </div>
-      </article>
-      <article class="deal">
-        
-        <div class="deal-media"><img class="" src="assets/img/donair-egg-roll.webp" srcset="assets/img/donair-egg-roll@sm.webp 400w, assets/img/donair-egg-roll.webp 800w" sizes="(max-width:700px) 92vw, 300px" width="800" height="600" alt="6 Donair Egg Rolls" loading="lazy" decoding="async"></div>
-        <div class="deal-body">
-          <h3>6 Donair Egg Rolls</h3>
-          <p>With donair sauce.</p>
-          
-          <div class="deal-foot">
-            <span class="price big" data-deal-price="13.95">$13.95</span><span class="save">Save $1.05</span>
-            <button class="add" type="button" data-add="6 Donair Egg Rolls" data-price="13.95"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
-        </div>
-      </article>
-      <article class="deal">
-        
-        <div class="deal-media"><img class="" src="assets/img/donair-pogo.webp" srcset="assets/img/donair-pogo@sm.webp 400w, assets/img/donair-pogo.webp 800w" sizes="(max-width:700px) 92vw, 300px" width="800" height="600" alt="6 Donair Pogos" loading="lazy" decoding="async"></div>
-        <div class="deal-body">
-          <h3>6 Donair Pogos</h3>
-          <p>With donair sauce.</p>
-          
-          <div class="deal-foot">
-            <span class="price big" data-deal-price="19.5">$19.50</span><span class="save">Save $1.20</span>
-            <button class="add" type="button" data-add="6 Donair Pogos" data-price="19.5"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
-        </div>
-      </article>
-      <article class="deal">
-        
-        <div class="deal-media"><img class="" src="assets/img/cold-cut-sub.webp" srcset="assets/img/cold-cut-sub@sm.webp 400w, assets/img/cold-cut-sub.webp 800w" sizes="(max-width:700px) 92vw, 300px" width="800" height="600" alt="Two Large Subs" loading="lazy" decoding="async"></div>
-        <div class="deal-body">
-          <h3>Two Large Subs</h3>
-          <p>Cold cut, pizza or real turkey.</p>
-          
-          <div class="deal-foot">
-            <span class="price big" data-deal-price="22.45">$22.45</span>
-            <button class="add" type="button" data-add="Two Large Subs" data-price="22.45"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>
-          </div>
-        </div>
-      </article></div>
+    <div class="cats" data-cats data-stagger><button class="cat" type="button" data-cat="pizza"><img src="assets/img/meat-lovers-pizza.webp" width="800" height="600" loading="lazy" alt=""><span class="cat-in"><b>Pizza</b><small>15 to choose from</small></span></button><button class="cat" type="button" data-cat="garlic-fingers"><img src="assets/img/garlic-fingers.webp" width="800" height="600" loading="lazy" alt=""><span class="cat-in"><b>Garlic Fingers</b><small>6 to choose from</small></span></button><button class="cat" type="button" data-cat="donairs"><img src="assets/img/donair.webp" width="800" height="600" loading="lazy" alt=""><span class="cat-in"><b>Donairs</b><small>12 to choose from</small></span></button><button class="cat" type="button" data-cat="subs"><img src="assets/img/cold-cut-sub.webp" width="800" height="600" loading="lazy" alt=""><span class="cat-in"><b>Subs & Pockets</b><small>16 to choose from</small></span></button><button class="cat" type="button" data-cat="chicken"><img src="assets/img/chicken-wings.webp" width="800" height="600" loading="lazy" alt=""><span class="cat-in"><b>Chicken & Wings</b><small>14 to choose from</small></span></button><button class="cat" type="button" data-cat="seafood"><img src="assets/img/fish-and-chips.webp" width="800" height="600" loading="lazy" alt=""><span class="cat-in"><b>Seafood</b><small>11 to choose from</small></span></button><button class="cat" type="button" data-cat="burgers"><img src="assets/img/hamburger.webp" width="800" height="600" loading="lazy" alt=""><span class="cat-in"><b>Burgers & Poutine</b><small>13 to choose from</small></span></button><button class="cat" type="button" data-cat="sides"><img src="assets/img/onion-rings.webp" width="800" height="600" loading="lazy" alt=""><span class="cat-in"><b>Sides & Nachos</b><small>12 to choose from</small></span></button><button class="cat" type="button" data-cat="salads"><img src="assets/img/salad.webp" width="800" height="600" loading="lazy" alt=""><span class="cat-in"><b>Salads & Pasta</b><small>5 to choose from</small></span></button></div>
+    <div class="catview" data-catview hidden></div>
   </div>
 </section>
-<section class="band band-bone" id="order">
+
+<section class="band" id="build">
   <div class="wrap">
-    <header class="sec-head"><h2>Three ways to get it</h2></header>
-    <div class="order-grid">
-      <div class="ord ord-main">
-        <h3>Call us &mdash; it's the fastest</h3>
-        <p>Straight through to the kitchen. Tell us what you want and we'll tell you when it's ready.</p>
-        <a class="btn btn-red big" href="tel:+19024355700"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2.2 2A16 16 0 0 1 2 6.2 2 2 0 0 1 4 4Z"/></svg><span>902-435-5700</span></a>
-        <p class="ord-note">Eat in, pick up or delivery. Debit at your door on request.</p>
-      </div>
-      <div class="ord">
-        <h3>Order online</h3>
-        <p>Through our delivery partners.</p>
-        <div class="plats"><a class="plat" href="https://www.doordash.com/en-CA/store/tasty-pizza-dartmouth-32990155/" target="_blank" rel="noopener"><span class="plat-n">DoorDash</span><span class="plat-s">Delivery &amp; pickup, tracked</span><span class="plat-go" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span></a><a class="plat" href="https://www.ubereats.com/ca/store/tasty-pizza/IST5GL8wVniy8hh0oilx9w" target="_blank" rel="noopener"><span class="plat-n">Uber Eats</span><span class="plat-s">Delivery &amp; pickup, tracked</span><span class="plat-go" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span></a></div>
-      </div>
-      <div class="ord">
-        <h3>Delivery</h3>
-        <p class="big-fact">$10.00<span>minimum order</span></p>
-        <p class="big-fact">$2.00<span>delivery charge</span></p>
-        <p class="ord-note">Delivery on orders over $10 after 2pm in our local area.</p>
-        <p class="muted">Cole Harbour, Forest Hill, Lake Echo, Main Street, Westphal, Montague</p>
-      </div>
+    <header class="sec-head" data-anim>
+      <div><h2 class="sec">Build your own</h2>
+        <p>Pick a size, tap toppings. The price moves as you go.</p></div>
+    </header>
+    <div data-build-mount></div>
+  </div>
+</section>
+
+<section class="band band-paper">
+  <div class="wrap">
+    <header class="sec-head" data-anim><h2 class="sec">Ordering is three steps</h2></header>
+    <div class="steps" data-stagger>
+      <div class="step"><h3>Pick your food</h3>
+        <p>Tap a section, then tap a price. It goes in the basket at the top of the screen.</p></div>
+      <div class="step"><h3>Check the basket</h3>
+        <p>You see the total with HST before anything else happens. Change your mind freely.</p></div>
+      <div class="step"><h3>Pay or call</h3>
+        <p>Pay online, or read the order to us on the phone. Twenty to thirty minutes for pickup.</p></div>
     </div>
   </div>
 </section>
-<section class="band band-cream" id="find">
+
+<section class="band" id="find">
   <div class="wrap find">
-    <div class="find-copy">
-      <p class="kicker">Come and get it</p>
-      <h2>760 Main Street</h2>
-      <p class="lede">Just off the #7, free parking out front.</p>
-      <a class="btn btn-red" href="https://www.google.com/maps/dir/?api=1&destination=760+Main+St+Dartmouth+NS+B2W+3T8" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Get directions</span></a>
-      <ul class="facts"><li><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M10 16V9h3a2.5 2.5 0 0 1 0 5h-3"/></svg><span>Free parking</span></li><li><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><span>Debit at your door, on request</span></li><li><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.3 2"/></svg><span>Open 7 days</span></li><li><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M9 10h.01M15 11h.01M12 15h.01"/></svg><span>Dough &amp; sauce made fresh daily</span></li></ul>
-      <h3 class="find-h3">Open 7 days</h3>
-      <dl class="hours big"><div class="hrow" data-day="Sunday"><dt>Sunday</dt><dd>2pm &ndash; 10pm</dd></div><div class="hrow" data-day="Monday"><dt>Monday</dt><dd>11am &ndash; 11pm</dd></div><div class="hrow" data-day="Tuesday"><dt>Tuesday</dt><dd>11am &ndash; 11pm</dd></div><div class="hrow" data-day="Wednesday"><dt>Wednesday</dt><dd>11am &ndash; 11pm</dd></div><div class="hrow" data-day="Thursday"><dt>Thursday</dt><dd>11am &ndash; 11pm</dd></div><div class="hrow" data-day="Friday"><dt>Friday</dt><dd>11am &ndash; 1am</dd></div><div class="hrow" data-day="Saturday"><dt>Saturday</dt><dd>11am &ndash; 1am</dd></div></dl>
-      <p class="find-late">Kitchen's on until <strong>2am Friday</strong> and <strong>1am Saturday</strong>.</p>
+    <div>
+      <h2 class="sec" data-anim>Find us</h2>
+      <p class="lede" data-anim style="margin-top:.6rem">760 Main St., Just off the #7 Hwy.<br>
+        Dartmouth, NS B2W 3T8</p>
+      <dl class="hours" data-anim><div data-day="Sunday"><dt>Sunday</dt><dd>2pm &ndash; 10pm</dd></div><div data-day="Monday"><dt>Monday</dt><dd>11am &ndash; 11pm</dd></div><div data-day="Tuesday"><dt>Tuesday</dt><dd>11am &ndash; 11pm</dd></div><div data-day="Wednesday"><dt>Wednesday</dt><dd>11am &ndash; 11pm</dd></div><div data-day="Thursday"><dt>Thursday</dt><dd>11am &ndash; 11pm</dd></div><div data-day="Friday"><dt>Friday</dt><dd>11am &ndash; 1am</dd></div><div data-day="Saturday"><dt>Saturday</dt><dd>11am &ndash; 1am</dd></div></dl>
+      <p style="font-size:.9rem;color:var(--ink-2)" data-anim>We deliver to:</p>
+      <div class="areas" data-anim><span>Cole Harbour</span><span>Forest Hill</span><span>Lake Echo</span><span>Main Street</span><span>Westphal</span><span>Montague</span></div>
+      <div class="acts" data-anim>
+        <a class="btn btn-red" href="tel:+19024355700">Call 902-435-5700</a>
+        <a class="btn btn-line" href="https://www.google.com/maps/dir/?api=1&destination=760+Main+St+Dartmouth+NS+B2W+3T8" target="_blank" rel="noopener">Directions</a>
+      </div>
+      <p class="findmail"><a href="mailto:tastypizzadm@gmail.com">tastypizzadm@gmail.com</a>
+        &middot; <a href="https://www.doordash.com/en-CA/store/tasty-pizza-dartmouth-32990155/" target="_blank" rel="noopener">DoorDash</a>
+        &middot; <a href="https://www.ubereats.com/ca/store/tasty-pizza/IST5GL8wVniy8hh0oilx9w" target="_blank" rel="noopener">Uber&nbsp;Eats</a>
+      </div>
     </div>
     <a class="mapcard" href="https://www.google.com/maps/search/?api=1&query=Tasty+Pizza+760+Main+St+Dartmouth+NS+B2W+3T8" target="_blank" rel="noopener"
-       aria-label="Open Tasty Pizza, 760 Main Street, in Google Maps">
+       aria-label="Open Tasty Pizza in Google Maps" data-anim>
       <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-63.509299999999996,44.6888,-63.4893,44.698800000000006&amp;layer=mapnik&amp;marker=44.6938,-63.4993"
-              title="Map showing 760 Main Street, Dartmouth" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
-      <span class="mapcard-cta"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Open in Google Maps</span></span>
-      <span class="mapcard-attr">&copy; OpenStreetMap contributors</span>
+              title="Map of 760 Main Street, Dartmouth" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+      <span class="pin">Open in Google Maps</span>
+      <span class="mapattr">&copy; OpenStreetMap contributors</span>
     </a>
   </div>
 </section>
 </main>
 
-<footer class="foot">
-  <div class="foot-grid">
-    <div>
-      <img class="foot-logo" src="assets/img/logo.webp" width="421" height="179" alt="Tasty Pizza">
-      <p class="foot-blurb">Family-run on Main Street in Dartmouth. Dough and pizza sauce made fresh every day, the best donair in town, and a kitchen that&#x27;s still on at 1am Friday and Saturday.</p>
-      <div class="foot-social">
-        <a href="https://www.facebook.com/people/Tasty-Pizza/100091965769509/" rel="noopener">Facebook</a>
-        <a href="https://www.instagram.com/tastypizzadartmouth/" rel="noopener">Instagram</a>
+<div class="scrim" data-scrim data-cart-close></div>
+<aside class="cart" data-cart aria-label="Your order">
+  <div class="cart-head">
+    <h2>Your order</h2>
+    <button class="x" type="button" data-cart-close aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2.2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="cart-list" data-cart-list></div>
+  <div class="cart-foot" data-cart-foot hidden>
+    <div class="tot"><span>Subtotal</span><b data-sub>$0.00</b></div>
+    <div class="tot"><span data-taxlabel>HST 14%</span><b data-tax>$0.00</b></div>
+    <div class="tot grand"><span>Total</span><b data-total>$0.00</b></div>
+    <label class="note-field" data-notefield>
+      <span>Anything we should know?</span>
+      <textarea data-order-note rows="2" maxlength="280"
+        placeholder="Well done, no onions, buzzer is broken &mdash; that sort of thing"></textarea>
+    </label>
+    <button class="btn btn-red btn-wide" type="button" data-checkout>Checkout</button>
+    <div class="pay" data-pay hidden>
+      <div class="paynote" data-paynote hidden><b>Your note</b><span data-paynote-text></span></div>
+      <div class="paybox">
+        <h3>Card payment goes here</h3>
+        <p>This is where the payment provider drops in &mdash; Square, Stripe or Moneris. It is
+          left as a placeholder on purpose: no card details are collected by this page.</p>
       </div>
+      <a class="btn btn-red btn-wide" href="tel:+19024355700">Call and read your order</a>
+      <a class="btn btn-line btn-wide" href="https://www.doordash.com/en-CA/store/tasty-pizza-dartmouth-32990155/" target="_blank" rel="noopener">Order on DoorDash</a>
+      <button class="btn btn-line btn-wide" type="button" data-paydone>Back to the order</button>
     </div>
-    <div>
-      <h3>Find us</h3>
-      <p><a class="ul" href="https://www.google.com/maps/search/?api=1&query=Tasty+Pizza+760+Main+St+Dartmouth+NS+B2W+3T8" target="_blank" rel="noopener">760 Main St.<br>Just off the #7 Hwy<br>Dartmouth, NS B2W 3T8</a></p>
-      <p><a class="ul" href="tel:+19024355700">902-435-5700</a><br>
-         <a class="ul" href="mailto:tastypizzadm@gmail.com">tastypizzadm@gmail.com</a></p>
-    </div>
-    <div>
-      <h3>Hours</h3>
-      <dl class="hours"><div class="hrow" data-day="Sunday"><dt>Sunday</dt><dd>2pm – 10pm</dd></div><div class="hrow" data-day="Monday"><dt>Monday</dt><dd>11am – 11pm</dd></div><div class="hrow" data-day="Tuesday"><dt>Tuesday</dt><dd>11am – 11pm</dd></div><div class="hrow" data-day="Wednesday"><dt>Wednesday</dt><dd>11am – 11pm</dd></div><div class="hrow" data-day="Thursday"><dt>Thursday</dt><dd>11am – 11pm</dd></div><div class="hrow" data-day="Friday"><dt>Friday</dt><dd>11am – 1am</dd></div><div class="hrow" data-day="Saturday"><dt>Saturday</dt><dd>11am – 1am</dd></div></dl>
-    </div>
-    <div>
-      <h3>Delivery</h3>
-      <p>Delivery on orders over $10 after 2pm in our local area. Minimum $10.00, $2.00 delivery charge.</p>
-      <p class="muted">Cole Harbour, Forest Hill, Lake Echo, Main Street, Westphal, Montague</p>
-    </div>
+    <p class="cart-note">Delivery $2.00 on orders over
+      $10.00 after 2pm.</p>
   </div>
-  <ul class="fine"><li>HST not included in listed prices.</li><li>Prices and store hours are subject to change without notice.</li></ul>
-  <p class="credit">Food photography and the hero clip are freely-licensed stock, used as
-     placeholders until Tasty Pizza's own photos replace them. Hero clip by Ruth Hartnup
-     (<a class="ul" href="https://commons.wikimedia.org/wiki/File:Bubbling_baking_pizza.webm"
-     rel="noopener" target="_blank">CC BY 2.0</a>). Map &copy; OpenStreetMap contributors.</p>
-  <p class="copy">© 2026 Tasty Pizza. Site rebuilt September 2026.</p>
-</footer>
+</aside>
 
-<div class="tray" data-tray hidden>
-  <button class="tray-bar" type="button" data-tray-toggle>
-    <span class="tray-count" data-tray-count>0</span>
-    <span class="tray-label">Your order</span>
-    <span class="tray-total" data-tray-total>$0.00</span>
-  </button>
-  <div class="tray-scrim" data-tray-scrim hidden></div>
-  <div class="tray-sheet" data-tray-sheet hidden>
-    <div class="tray-head">
-      <h2>Your order</h2>
-      <button class="iconbtn" type="button" data-tray-close aria-label="Close">
-        <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg>
-      </button>
-    </div>
-    <ul class="tray-list" data-tray-list></ul>
-    <div class="tray-sum">
-      <span>Total before tax</span><strong data-tray-total>$0.00</strong>
-    </div>
-    <p class="tray-note">This is a list to read out or send — it doesn't place the order. Pick how you'd like to order:</p>
-    <div class="tray-acts" data-tray-acts></div>
-    <button class="linkbtn" type="button" data-tray-clear>Clear the list</button>
-  </div>
-</div>
-<div class="callbar">
-  <a class="cb cb-red" href="tel:+19024355700"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2.2 2A16 16 0 0 1 2 6.2 2 2 0 0 1 4 4Z"/></svg>Call to order</a>
-  <a class="cb" href="menu.html"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Menu</a>
-</div>
-<script>window.HOURS=[{"day": "Sunday", "open": 14, "close": 22, "closed": false}, {"day": "Monday", "open": 11, "close": 23, "closed": false}, {"day": "Tuesday", "open": 11, "close": 23, "closed": false}, {"day": "Wednesday", "open": 11, "close": 23, "closed": false}, {"day": "Thursday", "open": 11, "close": 23, "closed": false}, {"day": "Friday", "open": 11, "close": 25, "closed": false}, {"day": "Saturday", "open": 11, "close": 25, "closed": false}];window.SITE={"phone":"902-435-5700","phoneLink":"+19024355700","email":"tastypizzadm@gmail.com","doordash":"https://www.doordash.com/en-CA/store/tasty-pizza-dartmouth-32990155/","ubereats":"https://www.ubereats.com/ca/store/tasty-pizza/IST5GL8wVniy8hh0oilx9w","name":"Tasty Pizza"};</script>
-<script src="assets/app.js" defer></script>
-<script>window.BUILD={"sizes":["9\" Small","12\" Medium","16\" Large","18\" X-Large"],"priceByToppingCount":[[9.5,12.9,16.9,20.95],[10.7,13.8,17.9,22.25],[11.2,15.75,19.75,23.95],[11.95,16.45,20.45,25.35],[12.8,17.45,22.95,27.45],[13.5,18.75,24.45,28.45]],"maxToppings":5,"specialName":"Tasty Pizza Special"};</script>
-</body>
-</html>
+<script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js"></script>
+<script>
+window.SHOP={"img":"assets/img/","taxRate":0.14,"categories":[{"id":"pizza","name":"Pizza","blurb":"Dough and sauce made fresh every morning. Build your own or take one we already figured out.","groups":[{"name":"Build Your Own","note":"Pick your size, pick your toppings. Whole wheat, white or gluten free crust.","items":[{"name":"Build Your Own Pizza","sizes":[{"label":"","price":null}],"desc":"Pick your size, then tap toppings. Five toppings makes it a Tasty Pizza Special.","photo":"cheese-pizza","alt":"A whole cheese pizza","tags":["popular"],"builder":true}]},{"name":"Gourmet Specialty Pizza","note":"Built for you, already figured out. Whole wheat, white or gluten free crust.","items":[{"name":"All Dressed","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Pepperoni, salami, mushrooms, green peppers, onions, bacon, hamburger.","photo":"all-dressed-pizza","alt":"An all dressed pizza loaded with toppings","tags":["popular"]},{"name":"Donair Pizza","sizes":[{"label":"9\" S","price":14.95},{"label":"12\" M","price":21.5},{"label":"16\" L","price":27.45},{"label":"18\" XL","price":32.95}],"desc":"Donair meat, onions, tomatoes, donair sauce.","photo":"donair-pizza","alt":"A loaded donair pizza","tags":["donair","popular"]},{"name":"Bubba","sizes":[{"label":"9\" S","price":14.95},{"label":"12\" M","price":21.5},{"label":"16\" L","price":27.45},{"label":"18\" XL","price":32.95}],"desc":"Garlic spread, donair meat, onions, tomatoes, donair sauce.","tags":["donair"]},{"name":"Meat Lovers","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Pepperoni, salami, bacon, hamburger, ham, donair meat, Italian sausage.","photo":"meat-lovers-pizza","alt":"A meat lovers pizza covered in pepperoni","tags":["popular"]},{"name":"Hawaiian","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Ham, pineapple, mozzarella.","photo":"hawaiian-pizza","alt":"A Hawaiian pizza with ham and pineapple"},{"name":"Greek","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Tomatoes, red onions, black olives, feta and mozzarella, oregano and olive oil.","photo":"greek-pizza","alt":"A Greek pizza with feta and olives","tags":["veg"]},{"name":"Cheese Lovers","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Feta, cheddar, mozzarella and parmesan.","tags":["veg"]},{"name":"BBQ Chicken","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Chicken, zesty sauce, tomatoes, green peppers, red onions, mushrooms, mozzarella and cheddar.","photo":"bbq-chicken-pizza","alt":"A BBQ chicken pizza with red onion","tags":["chicken"]},{"name":"Vegetarian","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Mushrooms, green peppers, onions, tomatoes, hot peppers, olives, pineapple.","photo":"veggie-pizza","alt":"A vegetarian pizza with fresh greens","tags":["veg"]},{"name":"Canadian Classic","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Pepperoni, mushrooms, bacon, mozzarella and cheddar on a garlic crust."},{"name":"Cheeseburger","sizes":[{"label":"9\" S","price":13.25},{"label":"12\" M","price":19.75},{"label":"16\" L","price":25.45},{"label":"18\" XL","price":30.95}],"desc":"Hamburger, cheddar and mozzarella, your choice of four vegetables."},{"name":"Philly Cheese Steak","sizes":[{"label":"9\" S","price":14.95},{"label":"12\" M","price":21.5},{"label":"16\" L","price":27.45},{"label":"18\" XL","price":32.95}],"desc":"Zesty sauce, sliced steak, red onions, tomatoes, green peppers, mushrooms, mozzarella and cheddar."}]},{"name":"Pizza Extras","note":"","items":[{"name":"Special Topping","sizes":[{"label":"9\" S","price":1.95},{"label":"12\" M","price":2.85},{"label":"16\" L","price":3.95},{"label":"18\" XL","price":4.95}],"desc":"Zesty chicken, sliced steak, parmesan, cheddar or feta."},{"name":"Gluten Free Crust","sizes":[{"label":"","price":4.99}],"desc":"Any size.","tags":["glutenfree"]}]}]},{"id":"garlic-fingers","name":"Garlic Fingers","blurb":"Served with donair sauce. The Yum Yums are in here too.","groups":[{"name":"Garlic Fingers","note":"Served with donair sauce, the way it's meant to be.","items":[{"name":"Garlic Fingers","sizes":[{"label":"9\" S","price":10.25},{"label":"12\" M","price":13.95},{"label":"16\" L","price":17.95},{"label":"18\" XL","price":22.45}],"desc":"Garlic butter, mozzarella, pulled apart by hand.","photo":"garlic-fingers","alt":"Garlic fingers with a pot of donair dipping sauce","tags":["veg","popular"]},{"name":"With Bacon","sizes":[{"label":"9\" S","price":11.25},{"label":"12\" M","price":14.95},{"label":"16\" L","price":19.95},{"label":"18\" XL","price":24.45}],"desc":"Same, with bacon through it."},{"name":"With Donair","sizes":[{"label":"9\" S","price":14.95},{"label":"12\" M","price":17.95},{"label":"16\" L","price":21.95},{"label":"18\" XL","price":26.95}],"desc":"Same, loaded with donair meat.","tags":["donair"]},{"name":"Honey Garlic Fingers","sizes":[{"label":"","price":null}]}]},{"name":"Bread Sticks (\"Yum Yums\")","note":"Tossed in parmesan, served with donair dipping sauce.","items":[{"name":"Small Yum Yums","sizes":[{"label":"","price":12.95}],"photo":"bread-sticks","alt":"Bread sticks with a pot of dipping sauce","tags":["veg"]},{"name":"Large Yum Yums","sizes":[{"label":"","price":16.45}],"tags":["veg"]}]}]},{"id":"donairs","name":"Donairs","blurb":"On the pita, on a plate, in an egg roll, or on a stick.","groups":[{"name":"Donair","note":"On pita bread with tomatoes, onions and donair sauce.","items":[{"name":"Donair","sizes":[{"label":"Small","price":9.25},{"label":"Medium","price":11.35},{"label":"Large","price":13.45},{"label":"Super","price":15.55}],"desc":"Spiced beef off the spit, sweet sauce, warm pita. The one we're known for.","photo":"donair","alt":"A donair in pita bread with tomato, onion and donair sauce","tags":["donair","popular"]},{"name":"Add Cheese","sizes":[{"label":"Small","price":2.0},{"label":"Medium","price":2.3},{"label":"Large","price":2.85},{"label":"Super","price":3.35}],"desc":"Melted through the meat."},{"name":"Add Extra Meat","sizes":[{"label":"Small","price":3.35},{"label":"Medium","price":4.35},{"label":"Large","price":5.35},{"label":"Super","price":6.35}],"desc":"For when a large isn't a large."}]},{"name":"Donair Plates","note":"Donair meat over fries with mozzarella, tomatoes, onions and donair sauce.","items":[{"name":"Small Donair Plate","sizes":[{"label":"","price":11.95}],"photo":"donair-plate","alt":"A donair plate with fries and donair sauce","tags":["donair"]},{"name":"Large Donair Plate","sizes":[{"label":"","price":15.95}],"tags":["donair"]}]},{"name":"Donair, Deep Fried","note":"Served with donair sauce. Nowhere else does these properly.","items":[{"name":"Donair Egg Roll","sizes":[{"label":"","price":2.5}],"desc":"Donair, rolled and fried. Order more than one.","photo":"donair-egg-roll","alt":"Crispy donair egg rolls on a plate","tags":["donair","popular"]},{"name":"Donair Egg Rolls \u2014 Dozen","sizes":[{"label":"","price":28.0}],"tags":["donair"]},{"name":"Donair Pogo","sizes":[{"label":"","price":3.45}],"desc":"Donair on a stick in batter. Yes, really.","photo":"donair-pogo","alt":"Donair pogos on sticks","tags":["donair","popular"]},{"name":"Donair Pogos \u2014 Dozen","sizes":[{"label":"","price":38.95}],"tags":["donair"]}]},{"name":"Donair Sauce","note":"Take some home. People do.","items":[{"name":"Small Donair Sauce","sizes":[{"label":"","price":2.25}],"tags":["donair"]},{"name":"Large Donair Sauce","sizes":[{"label":"","price":3.25}],"tags":["donair"]},{"name":"Extra Large Donair Sauce","sizes":[{"label":"","price":4.95}],"tags":["donair"]}]}]},{"id":"subs","name":"Subs & Pockets","blurb":"Small or large. Oven baked or deep fried.","groups":[{"name":"Subs","note":"","items":[{"name":"Cold Cut","sizes":[{"label":"Small","price":9.25},{"label":"Large","price":11.45}],"photo":"cold-cut-sub","alt":"A loaded cold cut submarine sandwich"},{"name":"Salami & Ham","sizes":[{"label":"Small","price":9.25},{"label":"Large","price":11.45}]},{"name":"Pizza Sub","sizes":[{"label":"Small","price":9.25},{"label":"Large","price":11.45}]},{"name":"Vegetarian","sizes":[{"label":"Small","price":9.25},{"label":"Large","price":11.45}],"tags":["veg"]},{"name":"Real Turkey","sizes":[{"label":"Small","price":9.45},{"label":"Large","price":11.45}]},{"name":"Bubba","sizes":[{"label":"Small","price":9.95},{"label":"Large","price":12.75}],"desc":"The one people ask for by name.","tags":["popular"]},{"name":"Club","sizes":[{"label":"Small","price":10.25},{"label":"Large","price":12.75}]},{"name":"Steak","sizes":[{"label":"Small","price":10.25},{"label":"Large","price":13.25}],"photo":"steak-sub","alt":"A steak sub with cheese and peppers"},{"name":"Donair Sub","sizes":[{"label":"Small","price":10.25},{"label":"Large","price":13.25}],"tags":["donair"]},{"name":"Super Sub","sizes":[{"label":"Small","price":10.95},{"label":"Large","price":14.75}]},{"name":"Garlic Bread","sizes":[{"label":"Small","price":4.95},{"label":"Large","price":5.95}],"tags":["veg"]},{"name":"Extra Cheese","sizes":[{"label":"Small","price":2.45},{"label":"Large","price":3.45}]},{"name":"Extra Meat","sizes":[{"label":"Small","price":3.45},{"label":"Large","price":4.45}]}]},{"name":"Wraps & Pockets","note":"","items":[{"name":"Pita Wrap","sizes":[{"label":"","price":10.45}],"desc":"Pizza, donair, cold cut, club, vegetarian, chicken, turkey or chicken Caesar.","photo":"pita-wrap","alt":"A pita wrap on a plate"},{"name":"Pocket \u2014 Pizza, Chicken, Meats or Vegetarian","sizes":[{"label":"","price":15.95}],"desc":"Oven baked or deep fried."},{"name":"Pocket \u2014 Donair or Steak","sizes":[{"label":"","price":16.45}],"desc":"Oven baked or deep fried.","tags":["donair"]}]}]},{"id":"chicken","name":"Chicken & Wings","blurb":"Wings in seven sauces, fingers, nuggets and the family pack.","groups":[{"name":"Chicken Wings","note":"Sauces: hot, mild, honey garlic, honey mustard, ranch, sweet & sour, BBQ.","items":[{"name":"10 Wings","sizes":[{"label":"","price":12.99}],"photo":"chicken-wings","alt":"Chicken wings with celery and dipping sauce","tags":["chicken","popular"]},{"name":"15 Wings","sizes":[{"label":"","price":18.95}],"tags":["chicken"]},{"name":"20 Wings","sizes":[{"label":"","price":24.95}],"tags":["chicken"]},{"name":"30 Wings","sizes":[{"label":"","price":36.95}],"desc":"For the room.","tags":["chicken"]}]},{"name":"Chicken","note":"","items":[{"name":"Chicken & Chips \u2014 1 pc","sizes":[{"label":"","price":8.45}],"photo":"fried-chicken","alt":"Pieces of golden fried chicken","tags":["chicken"]},{"name":"Chicken & Chips \u2014 2 pc","sizes":[{"label":"","price":12.45}],"tags":["chicken"]},{"name":"Chicken & Chips \u2014 3 pc","sizes":[{"label":"","price":14.95}],"tags":["chicken"]},{"name":"Extra Piece of Chicken","sizes":[{"label":"","price":3.75}],"tags":["chicken"]},{"name":"2 Chicken Legs & Chips","sizes":[{"label":"","price":9.95}],"desc":"Everyday special.","tags":["chicken"]},{"name":"Chicken Family Pack","sizes":[{"label":"","price":39.95}],"desc":"10 pieces, 2 large fries, gravy and coleslaw.","tags":["chicken","popular"]},{"name":"6 Chicken Nuggets & Fries","sizes":[{"label":"","price":7.95}],"tags":["chicken"]},{"name":"12 Chicken Nuggets & Fries","sizes":[{"label":"","price":13.95}],"tags":["chicken"]},{"name":"5 Chicken Fingers & Fries","sizes":[{"label":"","price":14.95}],"photo":"chicken-fingers","alt":"Chicken fingers and fries in a basket","tags":["chicken"]},{"name":"10 Chicken Fingers & Fries","sizes":[{"label":"","price":26.45}],"tags":["chicken"]}]}]},{"id":"seafood","name":"Seafood","blurb":"Fresh haddock, scallops, clams and shrimp.","groups":[{"name":"Fish & Chips","note":"Fresh haddock. The reason people drive out here.","items":[{"name":"Fish & Chips \u2014 1 pc","sizes":[{"label":"","price":8.95}],"photo":"fish-and-chips","alt":"Battered haddock with chips and tartar sauce","tags":["seafood","popular"]},{"name":"Fish & Chips \u2014 2 pc","sizes":[{"label":"","price":12.95}],"tags":["seafood"]},{"name":"Fish & Chips \u2014 3 pc","sizes":[{"label":"","price":14.95}],"tags":["seafood"]},{"name":"Extra Piece of Fish","sizes":[{"label":"","price":3.95}],"tags":["seafood"]},{"name":"Fish Family Pack","sizes":[{"label":"","price":39.95}],"desc":"10 pieces of fish, 2 large fries, large gravy, coleslaw and tartar sauce.","tags":["seafood","popular"]}]},{"name":"More Seafood","note":"","items":[{"name":"Scallops & Chips","sizes":[{"label":"","price":13.45}],"desc":"10 scallops.","photo":"scallops","alt":"Fried scallops and chips in a basket","tags":["seafood"]},{"name":"Clams & Chips","sizes":[{"label":"","price":13.45}],"desc":"Two cups of clams.","tags":["seafood"]},{"name":"Shrimp & Chips","sizes":[{"label":"","price":13.45}],"desc":"12 shrimp.","photo":"shrimp","alt":"A plate of golden fried shrimp","tags":["seafood"]},{"name":"Seafood Platter","sizes":[{"label":"","price":17.45}],"desc":"A piece of fish, fries, 5 scallops, 5 shrimp and clams.","tags":["seafood","popular"]},{"name":"Extra Coleslaw \u2014 Small","sizes":[{"label":"","price":1.75}]},{"name":"Extra Coleslaw \u2014 Large","sizes":[{"label":"","price":2.95}]}]}]},{"id":"burgers","name":"Burgers & Poutine","blurb":"Burger or platter. Every poutine is real curds and homemade gravy.","groups":[{"name":"Burgers","note":"Platter comes with fries.","items":[{"name":"Hamburger","sizes":[{"label":"Burger","price":6.45},{"label":"Platter","price":9.95}],"photo":"hamburger","alt":"A hamburger with a side of fries"},{"name":"Cheeseburger","sizes":[{"label":"Burger","price":6.95},{"label":"Platter","price":9.95}]},{"name":"Chicken Burger","sizes":[{"label":"Burger","price":6.95},{"label":"Platter","price":9.95}],"tags":["chicken"]},{"name":"Donair Burger","sizes":[{"label":"Burger","price":7.25},{"label":"Platter","price":10.45}],"desc":"Donair meat and sauce on a burger. A Dartmouth idea.","tags":["donair"]},{"name":"Pizza Burger","sizes":[{"label":"Burger","price":6.95},{"label":"Platter","price":10.45}]},{"name":"Add Bacon","sizes":[{"label":"Burger","price":1.0},{"label":"Platter","price":1.0}]}]},{"name":"Poutine","note":"Real cheese curds and homemade gravy. Always.","items":[{"name":"Classic Poutine","sizes":[{"label":"Small","price":8.55},{"label":"Large","price":12.25}],"desc":"Curds, gravy, fries. Done right.","photo":"poutine","alt":"Poutine with cheese curds and gravy","tags":["popular"]},{"name":"Donair Poutine","sizes":[{"label":"Small","price":null},{"label":"Large","price":14.25}],"desc":"With donair meat and a line of donair sauce.","tags":["donair","popular"]},{"name":"Chicken Poutine","sizes":[{"label":"Small","price":null},{"label":"Large","price":13.95}],"tags":["chicken"]},{"name":"Hamburger Poutine","sizes":[{"label":"Small","price":null},{"label":"Large","price":13.95}]},{"name":"Greek Poutine","sizes":[{"label":"Small","price":null},{"label":"Large","price":13.95}],"desc":"Feta, tomato, red onion, olives."},{"name":"Extra Cheese","sizes":[{"label":"Small","price":2.25},{"label":"Large","price":2.95}]},{"name":"Extra Gravy","sizes":[{"label":"Small","price":1.75},{"label":"Large","price":2.75}]}]}]},{"id":"sides","name":"Sides & Nachos","blurb":"Fries, rings, mozza sticks, gravy and the loaded nachos.","groups":[{"name":"Sides & Plates","note":"","items":[{"name":"Club House Sandwich with Fries","sizes":[{"label":"","price":14.45}],"desc":"Real turkey.","photo":"club-sandwich","alt":"A club sandwich with a side of fries"},{"name":"Hot Hamburger with Gravy & Fries","sizes":[{"label":"","price":12.3}],"tags":["popular"]},{"name":"Hot Turkey with Gravy & Fries","sizes":[{"label":"","price":12.3}]},{"name":"Large Fries","sizes":[{"label":"","price":5.45}],"photo":"fries","alt":"A pile of golden french fries","tags":["veg"]},{"name":"Large Onion Rings","sizes":[{"label":"","price":5.45}],"photo":"onion-rings","alt":"Golden onion rings with dipping sauce","tags":["veg"]},{"name":"12 Chicken Fries","sizes":[{"label":"","price":9.45}],"tags":["chicken"]},{"name":"9 Mozza Sticks","sizes":[{"label":"","price":10.95}],"photo":"mozza-sticks","alt":"Mozzarella sticks with marinara sauce","tags":["veg"]},{"name":"Cup of Gravy \u2014 Small","sizes":[{"label":"","price":1.65}]},{"name":"Cup of Gravy \u2014 Large","sizes":[{"label":"","price":2.85}]}]},{"name":"Nachos","note":"","items":[{"name":"Nachos","sizes":[{"label":"","price":15.45}],"desc":"Green onion, tomato, black olives, jalape\u00f1o, mozzarella and cheddar. Salsa and sour cream on the side.","photo":"nachos","alt":"Loaded nachos with cheese, tomato and olives","tags":["veg","spicy"]},{"name":"Add Chicken, Hamburger or Bacon","sizes":[{"label":"","price":3.65}]},{"name":"Extra Cheese","sizes":[{"label":"","price":3.95}]}]}]},{"id":"salads","name":"Salads & Pasta","blurb":"Something green, or lasagna with garlic bread.","groups":[{"name":"Salads & Pasta","note":"","items":[{"name":"Caesar or Garden Salad","sizes":[{"label":"","price":8.95}],"photo":"salad","alt":"A fresh Caesar salad in a bowl","tags":["veg"]},{"name":"Greek Salad","sizes":[{"label":"","price":9.45}],"tags":["veg"]},{"name":"Add Chicken \u2014 Crispy or Grilled","sizes":[{"label":"","price":2.3}],"tags":["chicken"]},{"name":"Lasagna with Garlic Bread","sizes":[{"label":"","price":10.45}],"photo":"lasagna","alt":"A slice of lasagna showing its layers"},{"name":"Ravioli with Garlic Bread","sizes":[{"label":"","price":10.45}]}]}]}],"hours":[{"day":"Sunday","open":14,"close":22,"closed":false},{"day":"Monday","open":11,"close":23,"closed":false},{"day":"Tuesday","open":11,"close":23,"closed":false},{"day":"Wednesday","open":11,"close":23,"closed":false},{"day":"Thursday","open":11,"close":23,"closed":false},{"day":"Friday","open":11,"close":25,"closed":false},{"day":"Saturday","open":11,"close":25,"closed":false}],"deals":[{"id":"large-4-topping","name":"Large 16\" Pizza, 4 Toppings","desc":"Any four toppings you like.","price":20.95,"compareAt":22.95,"photo":"all-dressed-pizza","slots":[{"type":"pizza","label":"Your 16\" pizza","size":2,"included":4}],"cats":["pizza"]},{"id":"pizza-and-fingers","name":"Medium Pizza + Medium Garlic Fingers","desc":"12\" pizza with four toppings, plus 12\" garlic fingers with donair sauce.","price":28.95,"compareAt":31.4,"photo":"garlic-fingers","slots":[{"type":"pizza","label":"Your 12\" pizza","size":1,"included":4},{"type":"fixed","label":"12\" garlic fingers with donair sauce"}],"cats":["pizza","garlic-fingers"]},{"id":"two-mediums","name":"Two Medium Pizzas","desc":"Four toppings on each.","price":32.95,"compareAt":34.9,"photo":"meat-lovers-pizza","slots":[{"type":"pizza","label":"Pizza 1 \u2014 12\" medium","size":1,"included":4},{"type":"pizza","label":"Pizza 2 \u2014 12\" medium","size":1,"included":4}],"cats":["pizza"]},{"id":"party-box","name":"Tasty Party Box","desc":"Onion rings, deep fried pepperoni, 9 mozza sticks, 12 chicken fries and 6 donair egg rolls. Honey mustard, sour cream and donair sauce. 2L pop included.","price":47.99,"compareAt":null,"photo":"mozza-sticks","slots":[],"cats":["sides","chicken"]},{"id":"egg-rolls-6","name":"6 Donair Egg Rolls","desc":"With donair sauce.","price":13.95,"compareAt":15.0,"photo":"donair-egg-roll","slots":[],"cats":["donairs"]},{"id":"pogos-6","name":"6 Donair Pogos","desc":"With donair sauce.","price":19.5,"compareAt":20.7,"photo":"donair-pogo","slots":[],"cats":["donairs"]},{"id":"two-large-subs","name":"Two Large Subs","desc":"Cold cut, pizza or real turkey.","price":22.45,"compareAt":null,"photo":"cold-cut-sub","slots":[],"cats":["subs"]}]};
+window.BUILD={"sizes":["9\" Small","12\" Medium","16\" Large","18\" X-Large"],"prices":[[9.5,12.9,16.9,20.95],[10.7,13.8,17.9,22.25],[11.2,15.75,19.75,23.95],[11.95,16.45,20.45,25.35],[12.8,17.45,22.95,27.45],[13.5,18.75,24.45,28.45]],"max":5,"special":"Tasty Pizza Special","extra":[0.8,1.2,1.5,1.5]};
+window.SLIDES=[{"pie":"pepperoni","kick":"Tonight\u2019s deal","name":"Large 16\" Pizza, 4 Toppings","desc":"Any four toppings you like.","price":20.95,"was":22.95,"href":"#c-pizza"},{"pie":"meat-lovers","kick":"Tonight\u2019s deal","name":"Medium Pizza + Medium Garlic Fingers","desc":"12\" pizza with four toppings, plus 12\" garlic fingers with donair sauce.","price":28.95,"was":31.4,"href":"#c-pizza"},{"pie":"greek","kick":"Tonight\u2019s deal","name":"Two Medium Pizzas","desc":"Four toppings on each.","price":32.95,"was":34.9,"href":"#c-pizza"},{"pie":"veggie","kick":"Made without meat","cls":"is-green","name":"Vegetarian","desc":"Mushrooms, green peppers, onions, tomatoes, hot peppers, olives, pineapple.","price":19.75,"unit":"12\" M","href":"#c-pizza"},{"pie":"build-your-own","kick":"Make it yours","cls":"is-grey","name":"Tasty Pizza Special","build":true,"href":"#build","desc":"Pick your size, tap 5 toppings, watch it land.","price":18.75,"unit":"12\" Medium"}];
+window.TOPPINGS=["Pepperoni","Salami","Mushrooms","Green Peppers","Red Peppers","Onions","Red Onions","Bacon","Hamburger","Tomatoes","Pineapple","Italian Sausage","Hot Peppers","Black Olives","Green Olives","Donair Meat","Ham"];
+window.CRUSTS=[{"name":"White","surcharge":0},{"name":"Whole Wheat","surcharge":0},{"name":"Gluten Free","surcharge":4.99,"tags":["glutenfree"]}];
+window.TOPPING_LOOK = {
+    'Pepperoni': { c: '#C23B2B', size: 30, svg:
+      '<circle cx="16" cy="16" r="14" fill="#A8291C"/><circle cx="16" cy="16" r="12.4" fill="#CC4630"/>' +
+      '<circle cx="16" cy="16" r="10.4" fill="#D9573C"/>' +
+      '<ellipse cx="12" cy="12" rx="2.1" ry="1.7" fill="#8E2318" opacity=".62"/>' +
+      '<ellipse cx="20" cy="14.5" rx="1.7" ry="1.4" fill="#8E2318" opacity=".55"/>' +
+      '<ellipse cx="15" cy="21" rx="1.9" ry="1.5" fill="#8E2318" opacity=".5"/>' +
+      '<ellipse cx="12" cy="11" rx="4.5" ry="3" fill="#F08A6A" opacity=".3"/>' },
+    'Salami': { c: '#96332F', size: 28, svg:
+      '<circle cx="16" cy="16" r="14" fill="#7E2926"/><circle cx="16" cy="16" r="12.2" fill="#9C3934"/>' +
+      '<circle cx="11.5" cy="13" r="1.9" fill="#F2DCCF" opacity=".78"/>' +
+      '<circle cx="20" cy="12.5" r="1.5" fill="#F2DCCF" opacity=".7"/>' +
+      '<circle cx="18" cy="20.5" r="1.7" fill="#F2DCCF" opacity=".72"/>' +
+      '<circle cx="12" cy="20" r="1.2" fill="#F2DCCF" opacity=".6"/>' },
+    'Mushrooms': { c: '#C2AD8E', size: 27, svg:
+      '<path d="M4 18c0-7 5.4-12 12-12s12 5 12 12c0 2-2 3-5 3H9c-3 0-5-1-5-3Z" fill="#D9C7A8"/>' +
+      '<path d="M11 21h10c0 4-2 6-5 6s-5-2-5-6Z" fill="#EFE3CC"/>' +
+      '<path d="M8 19h16M12 19.4l-.6 2M20 19.4l.6 2" stroke="#B49C77" stroke-width="1.1" stroke-linecap="round"/>' +
+      '<path d="M9 12c3-3 8-4 12-2" stroke="#EDDFC4" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>' },
+    'Green Peppers': { c: '#3E8E41', size: 26, svg:
+      '<path d="M16 3a13 13 0 1 1 0 26 13 13 0 0 1 0-26Zm0 5a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" fill="#3D8B3F"/>' +
+      '<path d="M16 4.6a11.4 11.4 0 0 1 9 4.4" stroke="#6FBF6B" stroke-width="2" stroke-linecap="round" fill="none" opacity=".75"/>' },
+    'Red Peppers': { c: '#CE4A22', size: 26, svg:
+      '<path d="M16 3a13 13 0 1 1 0 26 13 13 0 0 1 0-26Zm0 5a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" fill="#C8461F"/>' +
+      '<path d="M16 4.6a11.4 11.4 0 0 1 9 4.4" stroke="#EE7A4C" stroke-width="2" stroke-linecap="round" fill="none" opacity=".75"/>' },
+    'Onions': { c: '#EFE2D2', size: 30, svg:
+      '<path d="M3 20a13 13 0 0 1 26 0" stroke="#F4EADC" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".92"/>' +
+      '<path d="M7 20a9 9 0 0 1 18 0" stroke="#E2D2BE" stroke-width="2" fill="none" stroke-linecap="round" opacity=".8"/>' },
+    'Red Onions': { c: '#9A6C9E', size: 30, svg:
+      '<path d="M3 20a13 13 0 0 1 26 0" stroke="#A375A6" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".92"/>' +
+      '<path d="M7 20a9 9 0 0 1 18 0" stroke="#C9A8CB" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/>' },
+    'Bacon': { c: '#A8503A', size: 28, svg:
+      '<path d="M2 12c5-5 9 3 14-1s9 2 14-2v9c-5 4-9-2-14 2s-9-4-14 1Z" fill="#A8503A"/>' +
+      '<path d="M2 14.5c5-5 9 3 14-1s9 2 14-2" stroke="#EBC7B2" stroke-width="1.8" fill="none" opacity=".72"/>' +
+      '<path d="M2 19c5-5 9 3 14-1s9 2 14-2" stroke="#7E3527" stroke-width="1.3" fill="none" opacity=".55"/>' },
+    'Hamburger': { c: '#7B4B2A', size: 26, svg:
+      '<path d="M6 14c0-2.6 2.3-4.3 4.6-3.6 1.3-2.2 4.6-2.4 6-.4 2.6-1 5.4.8 5.4 3.4 2.2.5 3 3.2 1.4 4.8-.6 2.6-3.6 3.6-5.6 2.2-1.7 1.6-4.7 1.3-6-.6-2.6.5-5-1.6-4.8-4.2Z" fill="#7A4826"/>' +
+      '<path d="M10 13.5c1.6-1.2 3.6-.6 4.4 1M18 12.6c1.8-.3 3 .8 3.2 2.3" stroke="#A9754C" stroke-width="1.5" stroke-linecap="round" fill="none"/>' +
+      '<circle cx="12" cy="17.6" r="1.7" fill="#5E3117" opacity=".55"/>' +
+      '<circle cx="18.6" cy="18.4" r="1.4" fill="#5E3117" opacity=".45"/>' +
+      '<circle cx="15.4" cy="14.6" r="1.2" fill="#9C6841" opacity=".8"/>' },
+    'Tomatoes': { c: '#D64031', size: 26, svg:
+      '<circle cx="16" cy="16" r="13" fill="#CE3A2C"/><circle cx="16" cy="16" r="10.6" fill="#E45744"/>' +
+      '<path d="M16 6.5v19M6.5 16h19M9 9l14 14M23 9 9 23" stroke="#F4A092" stroke-width="1.5" opacity=".45"/>' +
+      '<circle cx="16" cy="16" r="3.4" fill="#F2AFA2" opacity=".7"/>' },
+    // a wedge cut from a pineapple ring: the notched inner edge and the fibre fan
+    // keep it distinct from the olives and peppers, which are full rings
+    'Pineapple': { c: '#F0C233', size: 26, svg:
+      '<path d="M16 19.8a4.2 4.2 0 0 1 3.9-4.2l9.3-.7a1.6 1.6 0 0 1 1.7 1.9 15.6 15.6 0 0 1-11.6 12 1.6 1.6 0 0 1-2-1.6Z" ' +
+      'transform="rotate(-140 16 16)" fill="#D79A12"/>' +
+      '<path d="M16 19.8a3.4 3.4 0 0 1 3.2-3.4l8.8-.6a1.2 1.2 0 0 1 1.3 1.4 14.2 14.2 0 0 1-10.6 10.9 1.2 1.2 0 0 1-1.5-1.2Z" ' +
+      'transform="rotate(-140 16 16)" fill="#F7CE42"/>' +
+      '<g transform="rotate(-140 16 16)" stroke="#CE9410" stroke-width=".85" stroke-linecap="round" opacity=".62">' +
+      '<path d="M18.6 19.6 27.4 19"/><path d="M19.6 22.8 26.8 21.4"/><path d="M21.3 25.4 25.6 23.4"/></g>' +
+      '<path d="M16 19.8a3.4 3.4 0 0 1 3.2-3.4" transform="rotate(-140 16 16)" stroke="#FCEBAE" stroke-width="1.3" fill="none" stroke-linecap="round"/>' },
+    'Italian Sausage': { c: '#8C4A2F', size: 25, svg:
+      '<path d="M8.4 12.6c.6-3 4-4.6 6.6-3.4 2.4-1.7 6-.4 6.8 2.4 2.7 1 3.2 4.8 1 6.6.2 3-3 5.2-5.7 4-2.3 1.9-5.9.9-7-1.8-2.9-.6-4-4.4-1.7-6.4Z" fill="#8A472D"/>' +
+      '<circle cx="12.6" cy="14" r="1.5" fill="#C08A63" opacity=".85"/>' +
+      '<circle cx="19.4" cy="14.8" r="1.2" fill="#C08A63" opacity=".75"/>' +
+      '<circle cx="15.8" cy="19.4" r="1.6" fill="#5C2D18" opacity=".6"/>' +
+      '<circle cx="19.8" cy="19.2" r="1" fill="#C08A63" opacity=".6"/>' +
+      '<circle cx="13.4" cy="18.4" r=".9" fill="#5C2D18" opacity=".5"/>' },
+    'Hot Peppers': { c: '#2E7D32', size: 22, svg:
+      '<path d="M16 5a11 11 0 1 1 0 22 11 11 0 0 1 0-22Zm0 4.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z" fill="#2F7D33"/>' +
+      '<circle cx="12.5" cy="13" r="1" fill="#FCF3CE"/><circle cx="19" cy="18" r="1" fill="#FCF3CE"/>' },
+    'Black Olives': { c: '#2B2430', size: 22, svg:
+      '<path d="M16 4a12 12 0 1 1 0 24 12 12 0 0 1 0-24Zm0 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z" fill="#2A232E"/>' +
+      '<path d="M9 10a9.6 9.6 0 0 1 5-4" stroke="#6B5E72" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".75"/>' },
+    'Green Olives': { c: '#7D8F3A', size: 22, svg:
+      '<path d="M16 4a12 12 0 1 1 0 24 12 12 0 0 1 0-24Zm0 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z" fill="#7E9139"/>' +
+      '<circle cx="16" cy="16" r="4.2" fill="#C3453A"/>' +
+      '<path d="M9 10a9.6 9.6 0 0 1 5-4" stroke="#BDCB86" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".8"/>' },
+    'Donair Meat': { c: '#8A5A34', size: 28, svg:
+      '<path d="M3 13c5-2 8 2 13 0s10-1 13 1l-1 6c-5 2-8-2-13 0s-10 1-13-1Z" fill="#8A5A34"/>' +
+      '<path d="M3 15c5-2 8 2 13 0s10-1 13 1" stroke="#B5845A" stroke-width="1.5" fill="none" opacity=".65"/>' +
+      '<path d="M5 18.5c4-1.5 7 1.5 11 0" stroke="#5E3A1E" stroke-width="1.2" fill="none" opacity=".5"/>' },
+    'Ham': { c: '#E29A9A', size: 26, svg:
+      '<path d="M5.6 12.4c2.6-2.6 6-3.6 9.4-3.2 3.2.4 6.6-.6 9.2 1.2 2.4 1.7 3 5.4 1.2 7.8-1.8 2.4-5.2 2.4-8 3-3 .6-6.4 1.2-8.8-.8-2.4-2-4.2-5.6-3-8Z" fill="#DE9494"/>' +
+      '<path d="M8 14.2c3.4.8 6.8-.8 10.2 0 2 .5 3.4.2 4.6-.8" stroke="#F5C6C6" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".85"/>' +
+      '<path d="M7.6 19c3.4-1 6.8.6 10.2-.2 1.8-.4 3.2-.2 4.4.6" stroke="#F5C6C6" stroke-width="1.3" fill="none" stroke-linecap="round" opacity=".7"/>' +
+      '<path d="M11 11.4c2.4.4 5 .2 7.4-.2" stroke="#C97B7B" stroke-width="1" fill="none" stroke-linecap="round" opacity=".6"/>' }
+  };
+</script>
+<script>/* The pizza configurator.
+
+   A pizza is not a product you pick off a list, it is something you build, and
+   the price follows what you built. The old list showed "Cheese / 1 Topping /
+   2 Toppings / 3 Toppings..." as if those were dishes — that was the shop's
+   price table wearing a costume. Nobody orders "3 Toppings".
+
+   So: one "Build Your Own Pizza" row that expands in place into the builder.
+   Deals that contain pizzas expand into slots — Pizza 1, Pizza 2 — and each
+   slot expands again into the same builder with its size locked.
+
+   Three rules the brief set:
+   * never block a topping. Past the included count, show what the next one
+     costs so the decision is informed rather than refused.
+   * the same topping can be added twice. Double pepperoni is a real order.
+   * size is chosen once. Inside a deal it is already decided, so it is shown
+     but not changeable.
+*/
+(function (root) {
+  'use strict';
+
+  var money = function (n) { return '$' + (Math.round(n * 100) / 100).toFixed(2); };
+  var esc = function (s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  };
+
+  function Config(opts) {
+    var B = root.BUILD;
+    this.sizeLocked = opts.size != null;
+    this.size = opts.size != null ? opts.size : 1;
+    this.included = opts.included != null ? opts.included : B.max;
+    this.dealPrice = opts.dealPrice || null;   // set when this lives inside a deal
+    this.crust = 'White';
+    this.sur = 0;
+    this.tops = [];                            // [{name, qty}]
+  }
+
+  Config.prototype.count = function () {
+    return this.tops.reduce(function (s, t) { return s + t.qty; }, 0);
+  };
+
+  Config.prototype.qtyOf = function (name) {
+    for (var i = 0; i < this.tops.length; i++) if (this.tops[i].name === name) return this.tops[i].qty;
+    return 0;
+  };
+
+  Config.prototype.bump = function (name, d) {
+    var i = -1;
+    for (var k = 0; k < this.tops.length; k++) if (this.tops[k].name === name) i = k;
+    if (i < 0) { if (d > 0) this.tops.push({ name: name, qty: 1 }); return; }
+    this.tops[i].qty += d;
+    if (this.tops[i].qty <= 0) this.tops.splice(i, 1);
+  };
+
+  /* what one more topping costs right now — 0 while still inside the allowance */
+  Config.prototype.nextCost = function () {
+    var B = root.BUILD;
+    if (this.count() < this.included) return 0;
+    return B.extra[this.size];
+  };
+
+  Config.prototype.extras = function () {
+    return Math.max(0, this.count() - this.included);
+  };
+
+  Config.prototype.price = function () {
+    var B = root.BUILD;
+    var extra = this.extras() * B.extra[this.size] + this.sur;
+    if (this.dealPrice != null) return extra;            // on top of the deal price
+    var n = Math.min(this.count(), B.prices.length - 1);
+    return B.prices[n][this.size] + extra;
+  };
+
+  Config.prototype.label = function () {
+    if (!this.count()) return 'just cheese';
+    var parts = this.tops.map(function (t) {
+      return t.qty > 1 ? t.qty + '× ' + t.name : t.name;
+    });
+    return parts.join(', ');
+  };
+
+  Config.prototype.name = function () {
+    var B = root.BUILD;
+    if (this.dealPrice != null) return null;
+    var n = this.count();
+    return B.sizes[this.size] + (n >= B.max ? ' ' + B.special : ' pizza');
+  };
+
+  /* ------------------------------------------------------------ markup */
+
+  Config.prototype.render = function () {
+    var B = root.BUILD, self = this;
+
+    var sizes = B.sizes.map(function (s, i) {
+      var on = i === self.size;
+      var dis = self.sizeLocked && !on;
+      return '<button class="chip" type="button" data-size="' + i + '"'
+        + (on ? ' data-on' : '') + (dis ? ' disabled aria-disabled="true"' : '')
+        + '>' + esc(s) + '</button>';
+    }).join('');
+
+    var crusts = (root.CRUSTS || []).map(function (c, i) {
+      return '<button class="chip" type="button" data-crust="' + esc(c.name) + '"'
+        + ' data-sur="' + c.surcharge + '"' + (i === 0 ? ' data-on' : '') + '>'
+        + esc(c.name) + (c.surcharge ? '<em>+' + money(c.surcharge) + '</em>' : '') + '</button>';
+    }).join('');
+
+    return ''
+      + '<div class="cfg">'
+      + '  <div class="cfg-stage">'
+      + '    <div class="peel"><span class="peel-board"></span>'
+      + '      <div class="dough" data-dough><span class="sauce"></span><span class="cheese"></span>'
+      + '        <div class="tops" data-tops></div></div></div>'
+      + '    <p class="readout"><b data-cfg-price>' + money(this.price()) + '</b>'
+      + '      <span data-cfg-note>just cheese</span></p>'
+      + '  </div>'
+      + '  <div class="cfg-ctrl">'
+      + '    <div class="ctrl"><h3>Size' + (this.sizeLocked
+            ? ' <em>set by the deal</em>' : '') + '</h3>'
+      + '      <div class="chips" data-sizes>' + sizes + '</div></div>'
+      + '    <div class="ctrl"><h3>Crust</h3><div class="chips" data-crusts>' + crusts + '</div></div>'
+      + '    <div class="ctrl"><h3>Toppings <em data-cfg-count></em></h3>'
+      + '      <p class="ctrl-hint" data-cfg-hint></p>'
+      + '      <div class="tops-grid" data-topgrid>' + this.toppingGrid() + '</div></div>'
+      + '    <button class="btn btn-red btn-wide" type="button" data-cfg-add>'
+      + '      <span data-cfg-cta>Add to my order</span></button>'
+      + '  </div>'
+      + '</div>';
+  };
+
+  Config.prototype.toppingGrid = function () {
+    var self = this;
+    return (root.TOPPINGS || []).map(function (name) {
+      var q = self.qtyOf(name);
+      return '<div class="topbtn' + (q ? ' is-on' : '') + '" data-top="' + esc(name) + '">'
+        + '<i class="tdot"></i>'
+        + '<span class="topname">' + esc(name) + '</span>'
+        + '<span class="topcost" data-topcost></span>'
+        + '<span class="topq">'
+        + (q ? '<button type="button" data-t="-1" aria-label="One less ' + esc(name) + '">&minus;</button>'
+             + '<b>' + q + '</b>' : '')
+        + '<button type="button" data-t="1" aria-label="Add ' + esc(name) + '">+</button>'
+        + '</span></div>';
+    }).join('');
+  };
+
+  /* ------------------------------------------------------------ painting */
+
+  Config.prototype.paint = function (el, bump) {
+    var B = root.BUILD, self = this;
+    var q = function (s) { return el.querySelector(s); };
+    var all = function (s) { return Array.prototype.slice.call(el.querySelectorAll(s)); };
+
+    var p = q('[data-cfg-price]');
+    if (p) {
+      p.textContent = (this.dealPrice != null && this.price() === 0) ? 'Included' : money(this.price());
+      if (bump) { p.setAttribute('data-bump', ''); setTimeout(function () { p.removeAttribute('data-bump'); }, 320); }
+    }
+    var note = q('[data-cfg-note]');
+    if (note) note.textContent = B.sizes[this.size] + ' · ' + this.label();
+
+    var n = this.count();
+    var cnt = q('[data-cfg-count]');
+    if (cnt) {
+      cnt.textContent = this.extras()
+        ? n + ' · ' + this.extras() + ' extra'
+        : n + ' of ' + this.included;
+    }
+
+    var hint = q('[data-cfg-hint]');
+    if (hint) {
+      hint.textContent = n < this.included
+        ? (this.included - n) + ' more included'
+        : 'Every extra topping is ' + money(B.extra[this.size]) + ' on this size.';
+      hint.hidden = false;
+    }
+
+    // once the allowance is used up, every topping wears its price
+    var cost = this.nextCost();
+    all('.topbtn').forEach(function (b) {
+      var name = b.getAttribute('data-top');
+      var qty = self.qtyOf(name);
+      b.classList.toggle('is-on', qty > 0);
+      var look = root.TOPPING_LOOK[name];
+      var dot = b.querySelector('.tdot');
+      if (look && dot && !dot.style.background) dot.style.background = look.c;
+      var c = b.querySelector('[data-topcost]');
+      if (c) { c.textContent = cost ? '+' + money(cost) : ''; c.hidden = !cost; }
+      var box = b.querySelector('.topq');
+      if (box) {
+        box.innerHTML = (qty
+          ? '<button type="button" data-t="-1" aria-label="One less ' + esc(name) + '">&minus;</button>'
+            + '<b>' + qty + '</b>' : '')
+          + '<button type="button" data-t="1" aria-label="Add ' + esc(name) + '">+</button>';
+      }
+    });
+
+    var dough = q('[data-dough]');
+    if (dough) {
+      if (n) dough.setAttribute('data-topped', ''); else dough.removeAttribute('data-topped');
+      dough.style.width = [78, 86, 94, 100][this.size] + '%';
+    }
+
+    var cta = q('[data-cfg-cta]');
+    if (cta) {
+      cta.textContent = this.dealPrice != null
+        ? (this.price() > 0 ? 'Save this pizza · +' + money(this.price()) : 'Save this pizza')
+        : 'Add to my order · ' + money(this.price());
+    }
+
+    all('[data-sizes] .chip').forEach(function (b) {
+      var on = parseInt(b.getAttribute('data-size'), 10) === self.size;
+      if (on) b.setAttribute('data-on', ''); else b.removeAttribute('data-on');
+    });
+
+    // a deal showing its running total needs to hear about every tap, not just
+    // the one that closes the slot
+    if (this.onChange) this.onChange(this);
+  };
+
+  /* the pieces that land on the dough, one per unit of quantity */
+  Config.prototype.sprinkle = function (el, name) {
+    var host = el.querySelector('[data-tops]'), look = root.TOPPING_LOOK[name];
+    if (!host || !look) return;
+    var seq = host.querySelectorAll('[data-for="' + name.replace(/"/g, '') + '"]').length;
+    for (var i = 0; i < 7; i++) {
+      var bit = document.createElement('span');
+      bit.className = 'bit';
+      bit.setAttribute('data-for', name);
+      var ang = (i + seq * 3) * 2.399 + Math.random() * 0.7;
+      var rad = 13 + Math.sqrt((i + 0.55) / 7) * 31;
+      bit.style.left = (50 + Math.cos(ang) * rad) + '%';
+      bit.style.top = (50 + Math.sin(ang) * rad) + '%';
+      bit.style.setProperty('--w', (look.size * (0.86 + Math.random() * 0.28)).toFixed(1) + 'px');
+      bit.style.setProperty('--rot', Math.round(Math.random() * 360) + 'deg');
+      bit.style.animationDelay = (i * 34) + 'ms';
+      bit.innerHTML = '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">' + look.svg + '</svg>';
+      host.appendChild(bit);
+    }
+  };
+
+  Config.prototype.unsprinkle = function (el, name, all) {
+    var bits = Array.prototype.slice.call(
+      el.querySelectorAll('[data-tops] [data-for="' + name.replace(/"/g, '') + '"]'));
+    var drop = all ? bits.length : 7;
+    bits.slice(-drop).forEach(function (b) { b.remove(); });
+  };
+
+  /* ------------------------------------------------------------ wiring */
+
+  Config.prototype.mount = function (el, onAdd) {
+    var self = this;
+    el.addEventListener('click', function (ev) {
+      var t = ev.target;
+
+      var size = t.closest('[data-size]');
+      if (size && !size.disabled) {
+        self.size = parseInt(size.getAttribute('data-size'), 10);
+        self.paint(el, true);
+        return;
+      }
+      var crust = t.closest('[data-crust]');
+      if (crust) {
+        self.crust = crust.getAttribute('data-crust');
+        self.sur = parseFloat(crust.getAttribute('data-sur')) || 0;
+        Array.prototype.slice.call(el.querySelectorAll('[data-crusts] .chip')).forEach(function (o) {
+          if (o === crust) o.setAttribute('data-on', ''); else o.removeAttribute('data-on');
+        });
+        self.paint(el, true);
+        return;
+      }
+      var step = t.closest('[data-t]');
+      if (step) {
+        var btn = step.closest('.topbtn');
+        var name = btn.getAttribute('data-top');
+        var d = parseInt(step.getAttribute('data-t'), 10);
+        self.bump(name, d);
+        if (d > 0) self.sprinkle(el, name); else self.unsprinkle(el, name, false);
+        self.paint(el, true);
+        return;
+      }
+      // tapping the body of an unselected topping adds one, same as +
+      var row = t.closest('.topbtn');
+      if (row) {
+        var nm = row.getAttribute('data-top');
+        self.bump(nm, 1);
+        self.sprinkle(el, nm);
+        self.paint(el, true);
+        return;
+      }
+      if (t.closest('[data-cfg-add]')) { onAdd(self); return; }
+    });
+    this.paint(el, false);
+  };
+
+  root.PizzaConfig = Config;
+})(window);
+</script>
+<script>/* Tasty Pizza — ordering behaviour.
+
+   Categories -> items -> cart -> checkout. No framework: page speed is a
+   conversion lever on a takeaway site, and the whole of this is smaller than
+   the smallest animation library.
+
+   Two ideas hold the funnel together:
+
+   * Nothing opens in a modal. A pizza row expands where it sits, a deal expands
+     into its slots, a slot expands into the builder. You can always see where
+     you came from, so there is never a moment of "how do I get back".
+   * The category rail never leaves. Once you are inside Seafood you are one tap
+     from Pizza, all the way down the list, without hunting for a back button.
+
+   Everything the customer builds is kept in localStorage, so closing the tab
+   by accident does not throw the order away. */
+(function () {
+  'use strict';
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var money = function (n) { return '$' + (Math.round(n * 100) / 100).toFixed(2); };
+  var esc = function (s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  };
+
+  var CFG = window.SHOP || {};
+  var BD = window.BUILD;
+
+  /* ------------------------------------------------------------ smooth wheel */
+  if (!calm && typeof Lenis !== 'undefined') {
+    window.__lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.95, anchors: true,
+      autoRaf: true, autoToggle: true });
+  }
+
+  /* ------------------------------------------------------------ reveal fallback */
+  if (!calm && !(window.CSS && CSS.supports && CSS.supports('animation-timeline', 'view()'))
+      && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        en.target.classList.add('in');
+        io.unobserve(en.target);
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+    $$('[data-anim],[data-stagger]').forEach(function (el) { io.observe(el); });
+  }
+
+  /* ------------------------------------------------------------ open / closed */
+  var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  function halifaxNow() {
+    try {
+      var p = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Halifax', weekday: 'long',
+        hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date());
+      var o = {};
+      p.forEach(function (x) { o[x.type] = x.value; });
+      return { day: o.weekday, mins: (parseInt(o.hour, 10) % 24) * 60 + parseInt(o.minute, 10) };
+    } catch (e) {
+      var d = new Date();
+      return { day: DAYS[d.getDay()], mins: d.getHours() * 60 + d.getMinutes() };
+    }
+  }
+  function hhmm(m) {
+    var h = Math.floor(m / 60) % 24, mm = m % 60;
+    return (h % 12 || 12) + (mm ? ':' + (mm < 10 ? '0' : '') + mm : '') + (h < 12 ? 'am' : 'pm');
+  }
+  function paintClock() {
+    var hours = CFG.hours || [];
+    if (!hours.length) return;
+    var now = halifaxNow(), idx = DAYS.indexOf(now.day), by = {};
+    hours.forEach(function (h) { by[h.day] = h; });
+    var prev = by[DAYS[(idx + 6) % 7]], today = by[now.day], txt, shut = true;
+
+    if (prev && !prev.closed && prev.close > 24 && now.mins < (prev.close - 24) * 60) {
+      shut = false; txt = 'Open till ' + hhmm((prev.close - 24) * 60);
+    } else if (today && !today.closed && now.mins >= today.open * 60 && now.mins < today.close * 60) {
+      shut = false; txt = 'Open till ' + hhmm(today.close * 60);
+    } else if (today && !today.closed && now.mins < today.open * 60) {
+      txt = 'Opens ' + hhmm(today.open * 60);
+    } else {
+      var nxt = null;
+      for (var i = 1; i <= 7 && !nxt; i++) {
+        var d = by[DAYS[(idx + i) % 7]];
+        if (d && !d.closed) nxt = { day: i === 1 ? 'tomorrow' : d.day, at: d.open };
+      }
+      txt = nxt ? 'Opens ' + nxt.day + ' ' + hhmm(nxt.at * 60) : 'Closed';
+    }
+    $$('[data-clock]').forEach(function (el) {
+      el.textContent = txt;
+      if (shut) el.setAttribute('data-shut', ''); else el.removeAttribute('data-shut');
+    });
+    $$('.hours div').forEach(function (r) {
+      if (r.getAttribute('data-day') === now.day) r.setAttribute('data-today', '');
+      else r.removeAttribute('data-today');
+    });
+  }
+
+  /* ------------------------------------------------------------ nav sheet */
+  var dots = $('[data-sheet-toggle]'), sheet = $('[data-sheet]');
+  if (dots && sheet) {
+    dots.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      var open = sheet.hasAttribute('data-open');
+      if (open) sheet.removeAttribute('data-open'); else sheet.setAttribute('data-open', '');
+      dots.setAttribute('aria-expanded', String(!open));
+    });
+    sheet.addEventListener('click', function (ev) { if (ev.target.closest('a')) closeSheet(); });
+    document.addEventListener('click', function (ev) {
+      if (!sheet.contains(ev.target) && !dots.contains(ev.target)) closeSheet();
+    });
+  }
+  function closeSheet() {
+    if (!sheet) return;
+    sheet.removeAttribute('data-open');
+    dots.setAttribute('aria-expanded', 'false');
+  }
+
+  /* ------------------------------------------------------------ the cart */
+  var KEY = 'tp.cart.v1', NKEY = 'tp.note.v1';
+  var cart = [];
+  try { cart = JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) { cart = []; }
+  if (!Array.isArray(cart)) cart = [];
+  var orderNote = '';
+  try { orderNote = localStorage.getItem(NKEY) || ''; } catch (e) { orderNote = ''; }
+
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(cart)); } catch (e) {} }
+  function count() { return cart.reduce(function (s, r) { return s + r.qty; }, 0); }
+  function subtotal() { return cart.reduce(function (s, r) { return s + r.price * r.qty; }, 0); }
+
+  function add(name, price, note) {
+    var hit = null;
+    cart.forEach(function (r) { if (r.name === name && r.note === note && r.price === price) hit = r; });
+    if (hit) hit.qty += 1; else cart.push({ name: name, note: note || '', price: price, qty: 1 });
+    save();
+    paintCart();
+    var btn = $('[data-cart-open]');
+    if (btn) { btn.setAttribute('data-bump', ''); setTimeout(function () { btn.removeAttribute('data-bump'); }, 440); }
+  }
+
+  function setQty(i, q) {
+    if (q <= 0) cart.splice(i, 1); else cart[i].qty = q;
+    save();
+    paintCart();
+  }
+
+  function totals() {
+    var sub = subtotal();
+    var tax = sub * (CFG.taxRate || 0.14);
+    return { sub: sub, tax: tax, total: sub + tax };
+  }
+
+  function paintCart() {
+    var n = count();
+    var btn = $('[data-cart-open]');
+    if (btn) {
+      btn.hidden = n === 0;
+      var b = btn.querySelector('b');
+      if (b) b.textContent = n;
+      btn.setAttribute('aria-label', n + (n === 1 ? ' item' : ' items') + ' in your order');
+    }
+    var list = $('[data-cart-list]');
+    if (!list) return;
+    if (!cart.length) {
+      list.innerHTML = '<div class="cart-empty"><p>Nothing here yet.</p>'
+        + '<button class="btn btn-line btn-sm" type="button" data-cart-close>Browse the menu</button></div>';
+    } else {
+      list.innerHTML = cart.map(function (r, i) {
+        return '<div class="cart-row">'
+          + '<div class="qty"><button type="button" data-q="' + i + '" data-d="-1" aria-label="One fewer">&minus;</button>'
+          + '<span>' + r.qty + '</span>'
+          + '<button type="button" data-q="' + i + '" data-d="1" aria-label="One more">+</button></div>'
+          + '<span class="n">' + esc(r.name) + (r.note ? '<small>' + esc(r.note) + '</small>' : '') + '</span>'
+          + '<span class="p">' + money(r.price * r.qty) + '</span></div>';
+      }).join('');
+    }
+    var t = totals();
+    var f = $('[data-cart-foot]');
+    if (f) f.hidden = !cart.length;
+    var set = function (sel, v) { var el = $(sel); if (el) el.textContent = v; };
+    set('[data-sub]', money(t.sub));
+    set('[data-tax]', money(t.tax));
+    set('[data-total]', money(t.total));
+    set('[data-taxlabel]', 'HST ' + Math.round((CFG.taxRate || 0.14) * 100) + '%');
+  }
+
+  function openCart(on) {
+    var c = $('[data-cart]'), s = $('[data-scrim]');
+    if (!c) return;
+    if (on) { c.setAttribute('data-open', ''); s.setAttribute('data-open', ''); }
+    else { c.removeAttribute('data-open'); s.removeAttribute('data-open'); showPay(false); }
+    document.body.style.overflow = on ? 'hidden' : '';
+  }
+
+  function showPay(on) {
+    var pay = $('[data-pay]'), list = $('[data-cart-list]'), cta = $('[data-checkout]'),
+        nf = $('[data-notefield]');
+    if (!pay) return;
+    pay.hidden = !on;
+    if (list) list.hidden = on;
+    if (cta) cta.hidden = on;
+    if (nf) nf.hidden = on;
+    var box = $('[data-paynote]'), txt = $('[data-paynote-text]');
+    if (box) {
+      box.hidden = !on || !orderNote;
+      if (txt) txt.textContent = orderNote;
+    }
+  }
+
+  var noteEl = $('[data-order-note]');
+  if (noteEl) {
+    noteEl.value = orderNote;
+    noteEl.addEventListener('input', function () {
+      orderNote = noteEl.value.slice(0, 280);
+      try { localStorage.setItem(NKEY, orderNote); } catch (e) {}
+    });
+  }
+
+  /* ------------------------------------------------------------ expanding panels
+
+     One mechanism for three jobs: a pizza row, a deal, a slot inside a deal.
+     The 0fr -> 1fr grid trick animates to the content's own height without
+     anyone having to measure anything. */
+  var panelSeq = 0;
+
+  function togglePanel(host, fill) {
+    var open = host.hasAttribute('data-open');
+    if (open) { host.removeAttribute('data-open'); host.removeAttribute('data-grown'); return false; }
+    // only one row open at a time inside the same list — two open accordions
+    // is where a simple page starts feeling like a form
+    var sibs = host.parentNode ? host.parentNode.children : [];
+    Array.prototype.slice.call(sibs).forEach(function (s) {
+      if (s !== host && s.hasAttribute && s.hasAttribute('data-open')) {
+        s.removeAttribute('data-open');
+        s.removeAttribute('data-grown');
+      }
+    });
+    var body = host.querySelector(':scope > .panel > .panel-in');
+    if (body && !body.getAttribute('data-filled')) {
+      body.setAttribute('data-filled', '1');
+      fill(body);
+    }
+    host.setAttribute('data-open', '');
+    // the 0fr -> 1fr height animation needs overflow:hidden, which also kills
+    // position:sticky on the pizza inside. Once the panel has finished growing
+    // the clipping has no more work to do, so it comes off and the pizza can
+    // follow you down the toppings list on a phone.
+    setTimeout(function () { if (host.hasAttribute('data-open')) host.setAttribute('data-grown', ''); }, 460);
+    // a panel that opens below the fold is a panel nobody knows opened
+    setTimeout(function () {
+      var r = host.getBoundingClientRect();
+      var bar = parseFloat(getComputedStyle(document.documentElement)
+        .getPropertyValue('--bar')) || 60;
+      if (r.top < bar + 8 || r.top > window.innerHeight * 0.55) {
+        window.scrollTo({ top: window.scrollY + r.top - bar - 70,
+          behavior: calm ? 'auto' : 'smooth' });
+      }
+    }, 90);
+    return true;
+  }
+
+  function mountBuilder(body, opts, onAdd) {
+    var cfg = new window.PizzaConfig(opts);
+    body.innerHTML = cfg.render();
+    cfg.mount(body, onAdd);
+    return cfg;
+  }
+
+  /* ------------------------------------------------------------ categories */
+  var grid = $('[data-cats]'), view = $('[data-catview]');
+
+  function openCategory(id, keepScroll) {
+    if (!view) return;
+    var data = (CFG.categories || []).filter(function (c) { return c.id === id; })[0];
+    if (!data) return;
+
+    // The rail is built once and then left alone. Re-rendering it on every
+    // category change is what made it snap back to the first pill: a brand new
+    // strip starts at scrollLeft 0, so whatever you had scrolled to was gone.
+    if (!$('[data-rail]', view)) view.innerHTML = rail() + '<div data-catbody></div>';
+    $$('.railbtn', view).forEach(function (b) {
+      var on = b.getAttribute('data-cat') === id;
+      if (on) { b.setAttribute('data-on', ''); b.setAttribute('aria-current', 'true'); }
+      else { b.removeAttribute('data-on'); b.removeAttribute('aria-current'); }
+    });
+    $('[data-catbody]', view).innerHTML = catBody(data);
+
+    view.hidden = false;
+    if (grid) grid.hidden = true;
+    var head = $('[data-order-head]');
+    if (head) head.hidden = true;
+    if (history.replaceState) history.replaceState(null, '', '#c-' + id);
+    if (!keepScroll) {
+      var anchor = $('#order');
+      if (anchor) anchor.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+    }
+    centreRail();
+    measureRail();
+  }
+
+  /* The builder's pizza sticks below the top bar, but the category rail is
+     sticky too and sits in that same space — so the pizza slid under it and
+     lost its top fifth. Tell the CSS how tall the rail actually is. */
+  function measureRail() {
+    var r = $('[data-rail]', view);
+    if (r) document.documentElement.style.setProperty('--rail', Math.round(r.offsetHeight) + 'px');
+  }
+
+  /* slide the active pill into view, clear of the back button, without
+     yanking the strip back to the start */
+  function centreRail() {
+    var on = $('.railbtn[data-on]', view), track = $('.rail-scroll', view);
+    if (!on || !track) return;
+    var want = on.offsetLeft - (track.clientWidth - on.offsetWidth) / 2;
+    want = Math.max(0, Math.min(want, track.scrollWidth - track.clientWidth));
+    if (Math.abs(track.scrollLeft - want) < 4) return;
+    track.scrollTo({ left: want, behavior: calm ? 'auto' : 'smooth' });
+  }
+
+  function closeCategory() {
+    if (!view) return;
+    view.hidden = true;
+    view.innerHTML = '';
+    if (grid) grid.hidden = false;
+    var head = $('[data-order-head]');
+    if (head) head.hidden = false;
+    if (history.replaceState) history.replaceState(null, '', '#order');
+  }
+
+  function tagsOf(it) {
+    return (it.tags || []).map(function (t) {
+      return t === 'veg' ? '<span class="tag tag-veg">Veg</span>' : '';
+    }).join('');
+  }
+
+  function media(photo, alt, cls) {
+    // An invisible spacer when there is no photo, so every name in a group
+    // starts at the same x. Without it the list edge zig-zags between the
+    // dishes that have a picture and the ones that do not.
+    if (!photo) return cls === 'keep' ? '<div class="item-media is-empty"></div>' : '';
+    return '<div class="item-media' + (cls ? ' ' + cls : '') + '">'
+      + '<img src="' + CFG.img + photo + '@sm.webp" width="400" height="300" loading="lazy"'
+      + ' alt="' + esc(alt || '') + '"></div>';
+  }
+
+  /* a row that opens the configurator rather than carrying a price */
+  function builderRow(it) {
+    var from = BD ? Math.min.apply(null, BD.prices[0]) : 0;
+    return '<li class="item item-x is-build" data-x="build">'
+      + '<button class="item-hit" type="button" data-x-toggle aria-expanded="false">'
+      + media(it.photo, it.alt || it.name)
+      + '<span class="item-body"><span class="h4">' + esc(it.name)
+      + '<span class="flag flag-build">Make it yours</span></span>'
+      + (it.desc ? '<span class="p">' + esc(it.desc) + '</span>' : '') + '</span>'
+      + '<span class="item-side"><span class="price"><small>from</small>' + money(from) + '</span>'
+      + '<span class="add add-ghost">Build it</span></span>'
+      + '</button>'
+      + '<div class="panel"><div class="panel-in"></div></div></li>';
+  }
+
+  function itemRow(it, extra, slot) {
+    if (it.builder) return builderRow(it);
+    var side;
+    if (it.sizes && it.sizes.length > 1) {
+      // Pick, then confirm. Tapping a size used to drop it straight in the
+      // basket, which is a lot of commitment for one tap on a phone — a
+      // mis-tap on 9" when you wanted 18" cost real money. Now the tile you
+      // picked grows and an Add button appears under the row.
+      side = '<div class="sizes" data-sizerow>' + it.sizes.map(function (s) {
+        return s.price == null ? '' :
+          '<button class="sizebtn" type="button" data-pick'
+          + ' data-name="' + esc(it.name) + '"'
+          + ' data-price="' + s.price + '" data-note="' + esc(s.label) + '">'
+          + '<i>' + esc(s.label) + '</i><b>' + money(s.price) + '</b></button>';
+      }).join('') + '</div>'
+        + '<div class="pickbar" data-pickbar hidden>'
+        + '<button class="add" type="button" data-add="" data-price="" data-note="">'
+        + 'Add to my order</button></div>';
+    } else {
+      var p = it.sizes && it.sizes[0] ? it.sizes[0].price : null;
+      side = p == null
+        ? '<span class="price"><small>Ask</small></span>'
+        : '<span class="price">' + money(p) + '</span>'
+          + '<button class="add" type="button" data-add="' + esc(it.name) + '"'
+          + ' data-price="' + p + '">Add</button>';
+    }
+    return '<li class="item' + (extra ? ' ' + extra : '') + '">'
+      + media(it.photo, it.alt || it.name, slot ? 'keep' : '')
+      + '<div class="item-body"><h4>' + esc(it.name) + tagsOf(it) + '</h4>'
+      + (it.desc ? '<p>' + esc(it.desc) + '</p>' : '') + '</div>'
+      + '<div class="item-side">' + side + '</div></li>';
+  }
+
+  function offerRow(d) {
+    var was = d.compareAt && d.compareAt > d.price
+      ? '<span class="was">' + money(d.compareAt) + '</span>' : '';
+    var slots = d.slots || [];
+    if (!slots.length) {
+      return '<li class="item offer">'
+        + media(d.photo, '')
+        + '<div class="item-body"><h4>' + esc(d.name) + '<span class="flag">Deal</span></h4>'
+        + '<p>' + esc(d.desc || '') + '</p></div>'
+        + '<div class="item-side"><span class="price">' + was + money(d.price) + '</span>'
+        + '<button class="add" type="button" data-add="' + esc(d.name) + '" data-price="' + d.price
+        + '" data-note="deal">Add</button></div></li>';
+    }
+    // a deal you have to build: it opens into its slots
+    var n = slots.filter(function (s) { return s.type === 'pizza'; }).length;
+    return '<li class="item item-x offer" data-x="deal" data-deal="' + esc(d.id) + '">'
+      + '<button class="item-hit" type="button" data-x-toggle aria-expanded="false">'
+      + media(d.photo, '')
+      + '<span class="item-body"><span class="h4">' + esc(d.name) + '<span class="flag">Deal</span></span>'
+      + '<span class="p">' + esc(d.desc || '') + '</span></span>'
+      + '<span class="item-side"><span class="price">' + was + money(d.price) + '</span>'
+      + '<span class="add add-ghost">' + (n > 1 ? 'Pick ' + n + ' pizzas' : 'Pick toppings') + '</span>'
+      + '</span></button>'
+      + '<div class="panel"><div class="panel-in"></div></div></li>';
+  }
+
+  function dealPanel(body, d) {
+    var slots = d.slots || [];
+    var cfgs = {};
+    body.innerHTML = '<div class="slots">'
+      + slots.map(function (s, i) {
+        if (s.type !== 'pizza') {
+          return '<div class="slot slot-fixed"><b>' + esc(s.label) + '</b>'
+            + '<span>Included</span></div>';
+        }
+        return '<div class="slot" data-slot="' + i + '">'
+          + '<button class="slot-hit" type="button" data-x-toggle aria-expanded="false">'
+          + '<b>' + esc(s.label) + '</b>'
+          + '<span data-slot-sum>' + (s.included ? s.included + ' toppings included'
+              + ' · tap to choose' : 'Tap to choose toppings') + '</span>'
+          + '<i class="chev" aria-hidden="true"></i></button>'
+          + '<div class="panel"><div class="panel-in"></div></div></div>';
+      }).join('')
+      + '</div>'
+      + '<div class="slots-foot"><p class="slots-note" data-deal-extra hidden></p>'
+      + '<button class="btn btn-red btn-wide" type="button" data-deal-add>'
+      + 'Add the deal · ' + money(d.price) + '</button></div>';
+
+    function extras() {
+      var x = 0;
+      Object.keys(cfgs).forEach(function (k) { x += cfgs[k].price(); });
+      return x;
+    }
+    function repaint() {
+      var x = extras();
+      var btn = body.querySelector('[data-deal-add]');
+      if (btn) btn.textContent = 'Add the deal · ' + money(d.price + x);
+      var note = body.querySelector('[data-deal-extra]');
+      if (note) {
+        note.hidden = x <= 0;
+        note.textContent = x > 0 ? money(x) + ' of extra toppings on top of the deal price.' : '';
+      }
+    }
+
+    body.addEventListener('click', function (ev) {
+      var hit = ev.target.closest('[data-x-toggle]');
+      var slot = hit && hit.closest('[data-slot]');
+      if (slot && body.contains(slot)) {
+        var i = parseInt(slot.getAttribute('data-slot'), 10);
+        var s = slots[i];
+        var opened = togglePanel(slot, function (inner) {
+          cfgs[i] = mountBuilder(inner, { size: s.size, included: s.included,
+            dealPrice: d.price }, function () {
+            slot.removeAttribute('data-open');
+            slot.removeAttribute('data-grown');
+            hit.setAttribute('aria-expanded', 'false');
+            var sum = slot.querySelector('[data-slot-sum]');
+            if (sum) {
+              var c = cfgs[i];
+              sum.textContent = BD.sizes[c.size] + ' · ' + c.label()
+                + (c.price() > 0 ? ' · +' + money(c.price()) : '');
+            }
+            slot.setAttribute('data-set', '');
+            repaint();
+          });
+          cfgs[i].onChange = repaint;
+        });
+        hit.setAttribute('aria-expanded', String(opened));
+        return;
+      }
+      if (ev.target.closest('[data-deal-add]')) {
+        var parts = slots.map(function (s, i) {
+          if (s.type !== 'pizza') return s.label;
+          var c = cfgs[i];
+          return s.label.replace(/^Your |^Pizza \d+ — /, '') + ': '
+            + (c ? c.label() : 'just cheese');
+        });
+        add(d.name, d.price + extras(), parts.join(' · '));
+        openCart(true);
+      }
+    });
+    repaint();
+  }
+
+  function rail() {
+    var cats = CFG.categories || [];
+    return '<div class="rail" data-rail>'
+      + '<button class="rail-back" type="button" data-back aria-label="All categories">'
+      + '<i class="chev-l" aria-hidden="true"></i></button>'
+      + '<div class="rail-scroll">'
+      + cats.map(function (c) {
+        return '<button class="railbtn" type="button" data-cat="' + esc(c.id) + '">'
+          + esc(c.name) + '</button>';
+      }).join('')
+      + '</div></div>';
+  }
+
+  function catBody(c) {
+    // One decision for the whole category, not per group: if anything in here
+    // has a photo, every row reserves the slot. Deciding it per group left the
+    // list edge stepping in and out at each heading.
+    var slot = c.groups.some(function (g) {
+      return g.items.some(function (it) { return !!it.photo; });
+    });
+    var html = '<div class="catview-head"><h2>' + esc(c.name) + '</h2></div>'
+      + (c.blurb ? '<p class="catview-blurb">' + esc(c.blurb) + '</p>' : '');
+
+    // offers first — that is the whole point of an offer
+    var offers = (CFG.deals || []).filter(function (d) { return (d.cats || []).indexOf(c.id) >= 0; });
+    if (offers.length) {
+      html += '<h3 class="grouphead">Deals on these</h3><ul class="items">'
+        + offers.map(offerRow).join('') + '</ul>';
+    }
+    // then the ones people actually order
+    var pop = [];
+    c.groups.forEach(function (g) {
+      g.items.forEach(function (it) { if ((it.tags || []).indexOf('popular') >= 0) pop.push(it); });
+    });
+    if (pop.length) {
+      html += '<h3 class="grouphead">Most ordered</h3><ul class="items">'
+        + pop.map(function (it) { return itemRow(it, '', slot); }).join('') + '</ul>';
+    }
+    // then everything, in the shop's own groupings
+    c.groups.forEach(function (g) {
+      if (!g.items.length) return;
+      html += '<h3 class="grouphead">' + esc(g.name) + '</h3>'
+        + (g.note ? '<p class="groupnote">' + esc(g.note) + '</p>' : '')
+        + '<ul class="items">'
+        + g.items.map(function (it) { return itemRow(it, '', slot); }).join('') + '</ul>';
+    });
+    return html;
+  }
+
+  /* ------------------------------------------------------------ one click handler */
+  document.addEventListener('click', function (ev) {
+    var t = ev.target;
+
+    // an expanding row. Deal slots are handled by their own panel's listener.
+    var toggle = t.closest('[data-x-toggle]');
+    if (toggle) {
+      // a slot toggle lives inside a deal's panel and is that panel's business.
+      // Without this it would walk up to the deal row and shut the whole thing.
+      if (toggle.closest('.panel-in')) return;
+      var host = toggle.closest('[data-x]');
+      if (host) {
+        ev.preventDefault();
+        var kind = host.getAttribute('data-x');
+        var opened = togglePanel(host, function (body) {
+          if (kind === 'deal') {
+            var id = host.getAttribute('data-deal');
+            var d = (CFG.deals || []).filter(function (x) { return x.id === id; })[0];
+            if (d) dealPanel(body, d);
+          } else {
+            mountBuilder(body, {}, function (cfg) {
+              add(cfg.name(), cfg.price(), cfg.label()
+                + (cfg.crust !== 'White' ? ' · ' + cfg.crust + ' crust' : ''));
+              host.removeAttribute('data-open');
+              host.removeAttribute('data-grown');
+              toggle.setAttribute('aria-expanded', 'false');
+              openCart(true);
+            });
+          }
+        });
+        toggle.setAttribute('aria-expanded', String(opened));
+      }
+      return;
+    }
+
+    var cat = t.closest('[data-cat]');
+    if (cat) { ev.preventDefault(); openCategory(cat.getAttribute('data-cat')); return; }
+    if (t.closest('[data-back]')) { closeCategory(); return; }
+
+    // a size tile: show the confirm button rather than adding on the spot
+    var pick = t.closest('[data-pick]');
+    if (pick) {
+      var row = pick.closest('[data-sizerow]');
+      var bar = row && row.parentNode.querySelector('[data-pickbar]');
+      var already = pick.hasAttribute('data-picked');
+      $$('[data-pick]', row).forEach(function (o) { o.removeAttribute('data-picked'); });
+      if (already) { if (bar) bar.hidden = true; return; }
+      pick.setAttribute('data-picked', '');
+      if (bar) {
+        var go = bar.querySelector('[data-add]');
+        go.setAttribute('data-add', pick.getAttribute('data-name'));
+        go.setAttribute('data-price', pick.getAttribute('data-price'));
+        go.setAttribute('data-note', pick.getAttribute('data-note'));
+        go.textContent = 'Add ' + pick.getAttribute('data-note') + ' · '
+          + money(parseFloat(pick.getAttribute('data-price')));
+        bar.hidden = false;
+      }
+      return;
+    }
+
+    var addBtn = t.closest('[data-add]');
+    if (addBtn) {
+      var price = parseFloat(addBtn.getAttribute('data-price'));
+      if (isNaN(price)) return;
+      add(addBtn.getAttribute('data-add'), price, addBtn.getAttribute('data-note') || '');
+      addBtn.setAttribute('data-done', '');
+      var was = addBtn.innerHTML;
+      if (addBtn.classList.contains('add')) addBtn.textContent = 'Added';
+      var bar2 = addBtn.closest('[data-pickbar]');
+      setTimeout(function () {
+        addBtn.removeAttribute('data-done');
+        addBtn.innerHTML = was;
+        if (bar2) {
+          bar2.hidden = true;
+          var r = bar2.parentNode.querySelector('[data-sizerow]');
+          if (r) $$('[data-pick]', r).forEach(function (o) { o.removeAttribute('data-picked'); });
+        }
+      }, 1100);
+      return;
+    }
+
+    if (t.closest('[data-cart-open]')) { openCart(true); return; }
+    if (t.closest('[data-cart-close]') || t.closest('[data-scrim]')) { openCart(false); return; }
+    if (t.closest('[data-checkout]')) { showPay(true); return; }
+    if (t.closest('[data-paydone]')) { showPay(false); return; }
+
+    var q = t.closest('[data-q]');
+    if (q) {
+      var i = parseInt(q.getAttribute('data-q'), 10);
+      setQty(i, cart[i].qty + parseInt(q.getAttribute('data-d'), 10));
+    }
+  });
+
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') openCart(false); });
+
+  /* ------------------------------------------------------------ the hero board
+
+     A wooden board that stays put, and pizzas that slide across it right to
+     left. The pies are cut out with an alpha edge, so what moves is the pizza
+     itself and not a disc of white. */
+  (function () {
+    var S = window.SLIDES || [];
+    var stage = $('[data-wheelstage]');
+    if (!stage || S.length < 2) return;
+
+    var discs = $$('.disc', stage), ticks = $('[data-ticks]'), dealEl = $('[data-deal]');
+    var badge = $('[data-badge]');
+    var HOLD = 2000;
+    var cur = 0, timer = null, busy = false;
+
+    S.forEach(function (s, i) {
+      var t = document.createElement('button');
+      t.type = 'button';
+      t.setAttribute('role', 'tab');
+      t.setAttribute('aria-label', s.name);
+      t.addEventListener('click', function () {
+        if (i === cur) return;
+        stop(); go(i, i > cur ? 1 : -1); start();
+      });
+      if (ticks) ticks.appendChild(t);
+    });
+
+    function paint() {
+      var s = S[cur];
+      var k = $('[data-kicker]', dealEl);
+      if (k) { k.textContent = s.kick; k.className = 'kicker ' + (s.cls || ''); }
+      var name = $('[data-dealname]', dealEl);
+      if (name) name.textContent = s.name;
+      if (dealEl && s.href) dealEl.setAttribute('href', s.href);
+      var cta = $('[data-dealcta]', dealEl);
+      if (cta) cta.textContent = s.build ? 'Build it now' : 'See it on the menu';
+      var desc = $('[data-dealdesc]', dealEl);
+      if (desc) desc.textContent = s.desc || '';
+      var was = $('[data-dealwas]', dealEl), save = $('[data-dealsave]', dealEl);
+      if (was && save) {
+        was.hidden = !s.was;
+        save.hidden = false;
+        if (s.was) {
+          was.textContent = money(s.was);
+          save.textContent = 'Save ' + money(s.was - s.price);
+          save.className = 'save';
+        } else {
+          save.textContent = (s.unit ? s.unit + ' · ' : '')
+            + (s.build ? 'from ' : '') + money(s.price);
+          save.className = 'unit';
+        }
+      }
+      if (badge) {
+        badge.querySelector('[data-badge-kick]').textContent =
+          s.was ? 'Deal' : (s.build ? 'Build' : 'From');
+        badge.querySelector('[data-badge-price]').textContent = money(s.price);
+        badge.querySelector('[data-badge-was]').textContent = s.was ? money(s.was) : '';
+        badge.setAttribute('data-pop', '');
+      }
+      if (dealEl) dealEl.setAttribute('data-flash', '');
+      requestAnimationFrame(function () {
+        if (dealEl) dealEl.removeAttribute('data-flash');
+        if (badge) badge.removeAttribute('data-pop');
+      });
+      if (ticks) {
+        $$('button', ticks).forEach(function (t, i) {
+          t.removeAttribute('data-on'); t.removeAttribute('data-run');
+          t.setAttribute('aria-selected', String(i === cur));
+          if (i !== cur) return;
+          if (timer && !calm) { void t.offsetWidth; t.setAttribute('data-run', ''); }
+          else t.setAttribute('data-on', '');
+        });
+      }
+    }
+
+    function go(next, dir) {
+      next = (next + S.length) % S.length;
+      if (busy || next === cur) return;
+      busy = true;
+      var from = discs[cur], to = discs[next], d = dir > 0 ? 'next' : 'prev';
+
+      // park the incoming pie off the right of the board with no transition,
+      // then release it in the same frame the outgoing one leaves
+      to.classList.add('is-drag', 'in-' + d);
+      to.classList.remove('is-cur');
+      void to.offsetWidth;
+      to.classList.remove('is-drag');
+
+      requestAnimationFrame(function () {
+        from.classList.remove('is-cur');
+        from.classList.add('out-' + d);
+        to.classList.remove('in-' + d);
+        to.classList.add('is-cur');
+      });
+      setTimeout(function () {
+        from.classList.remove('out-next', 'out-prev');
+        from.style.transform = '';
+        busy = false;
+      }, 780);
+
+      cur = next;
+      paint();
+    }
+
+    /* Reserve the tallest the offer block can ever be AT THIS WIDTH.
+       A fixed rem value cannot do it: at 600px "Medium Pizza + Medium Garlic
+       Fingers" wraps to two lines and at 900px it does not, so as the window
+       narrowed the block grew and shoved the headline up and the buttons down.
+       So measure all five for real, take the largest, and hold that. */
+    var inner = dealEl && $('.dealin', dealEl);
+    function sizeDeal() {
+      if (!inner) return;
+      var keep = {
+        name: $('[data-dealname]', dealEl).textContent,
+        desc: $('[data-dealdesc]', dealEl).textContent,
+        kick: $('[data-kicker]', dealEl).textContent
+      };
+      inner.style.minHeight = '0px';
+      var tall = 0;
+      S.forEach(function (s) {
+        $('[data-dealname]', dealEl).textContent = s.name;
+        $('[data-dealdesc]', dealEl).textContent = s.desc || '';
+        $('[data-kicker]', dealEl).textContent = s.kick;
+        tall = Math.max(tall, inner.scrollHeight);
+      });
+      $('[data-dealname]', dealEl).textContent = keep.name;
+      $('[data-dealdesc]', dealEl).textContent = keep.desc;
+      $('[data-kicker]', dealEl).textContent = keep.kick;
+      inner.style.minHeight = Math.ceil(tall) + 'px';
+    }
+
+    var rt;
+    addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(sizeDeal, 140);
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeDeal);
+
+    function start() { stop(); if (!calm) { timer = setInterval(function () { go(cur + 1, 1); }, HOLD); paint(); } }
+    function stop() { clearInterval(timer); timer = null; }
+
+    /* drag: the pizza follows your finger off the board */
+    var x0 = null, dx = 0, w = 1;
+    stage.addEventListener('pointerdown', function (ev) {
+      if (busy || ev.target.closest('a')) return;
+      x0 = ev.clientX; dx = 0;
+      w = stage.getBoundingClientRect().width || 1;
+      stage.classList.add('is-drag');
+      stage.setPointerCapture(ev.pointerId);
+      stop();
+    });
+    stage.addEventListener('pointermove', function (ev) {
+      if (x0 === null) return;
+      dx = ev.clientX - x0;
+      var f = dx / w;
+      discs[cur].style.transform = 'translateX(' + (f * 100) + '%) rotate(' + (f * 11)
+        + 'deg) scale(' + (1 - Math.min(Math.abs(f), .4) * .28) + ')';
+    });
+    function release() {
+      if (x0 === null) return;
+      var moved = dx;
+      x0 = null; dx = 0;
+      stage.classList.remove('is-drag');
+      discs[cur].style.transform = '';
+      if (Math.abs(moved) > 40) go(cur + (moved < 0 ? 1 : -1), moved < 0 ? 1 : -1);
+      // barely moved, so that was a tap, not a swipe: follow the offer
+      else if (Math.abs(moved) < 6 && S[cur].href) jump(S[cur].href);
+      start();
+    }
+
+    /* the hash alone would not open a category — the router only runs on load */
+    function jump(href) {
+      if (href.indexOf('#c-') === 0) openCategory(href.slice(3));
+      else {
+        var el = $(href);
+        if (el) el.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+      }
+    }
+    if (dealEl) {
+      dealEl.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        jump(dealEl.getAttribute('href') || '#order');
+      });
+    }
+    stage.addEventListener('pointerup', release);
+    stage.addEventListener('pointercancel', release);
+    stage.addEventListener('keydown', function (ev) {
+      if (ev.key === 'ArrowRight') { stop(); go(cur + 1, 1); start(); }
+      if (ev.key === 'ArrowLeft') { stop(); go(cur - 1, -1); start(); }
+    });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stop(); else start();
+    });
+
+    sizeDeal(); start(); paint();
+  })();
+
+  /* ------------------------------------------------------------ go */
+  paintClock();
+  setInterval(paintClock, 60000);
+  paintCart();
+
+  var mount = $('[data-build-mount]');
+  if (mount && window.PizzaConfig && BD) {
+    mountBuilder(mount, {}, function (cfg) {
+      add(cfg.name(), cfg.price(), cfg.label()
+        + (cfg.crust !== 'White' ? ' · ' + cfg.crust + ' crust' : ''));
+      openCart(true);
+    });
+  }
+
+  if (location.hash.indexOf('#c-') === 0) openCategory(location.hash.slice(3));
+})();
+</script>
+</body></html>

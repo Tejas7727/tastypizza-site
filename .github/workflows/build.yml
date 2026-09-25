@@ -11,6 +11,7 @@ on:
       - 'data/**'
       - 'src/**'
       - 'build.py'
+      - 'storefront.py'
       - 'audit.py'
       - 'assets/**'
       - '.github/workflows/build.yml'

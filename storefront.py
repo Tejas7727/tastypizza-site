@@ -1,4 +1,7 @@
-"""Direction 2 — the ordering experience.
+"""Build the Tasty Pizza website into docs/index.html.
+
+  This is the site. Everything it says comes from the JSON files in data/, so
+  the shop edits those (or the Excel workbook that writes them) and re-runs.
 
   hero          one locked screen: everything needed to start an order
   order         nine categories -> items -> cart. Never a 150-item list
@@ -6,22 +9,26 @@
   steps         how ordering works, for people who do not shop online much
   find          hours, areas served, map
 
-    python scripts/brand_study.py   ->  research/_brand-study.html
+    python storefront.py        (build.py runs this for you)
 """
 import json, sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "src"))
 
-OUT = ROOT / "research" / "_brand-study.html"
+OUT = ROOT / "docs" / "index.html"
 MENU = json.loads((ROOT / "data" / "menu.json").read_text(encoding="utf-8"))
 SITE = json.loads((ROOT / "data" / "site.json").read_text(encoding="utf-8"))
 DEALS = json.loads((ROOT / "data" / "deals.json").read_text(encoding="utf-8"))
 NAV = json.loads((ROOT / "data" / "nav.json").read_text(encoding="utf-8"))
 PHOTOS = json.loads((ROOT / "data" / "photos.json").read_text(encoding="utf-8"))["picks"]
 
-IMG = "../assets/img/"
+IMG = "assets/img/"
+
+# GitHub Pages serves the site from a sub-path; og: and canonical need the
+# full URL, so keep it in one place.
+CANON = "https://tejas7727.github.io/tastypizza-site/"
 
 
 def e(s):
@@ -252,7 +259,18 @@ def main():
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Tasty Pizza &mdash; Pizza, Donairs &amp; Garlic Fingers in Dartmouth, NS</title>
 <meta name="description" content="{SITE['seo']['description']}">
-<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="{CANON}">
+<meta property="og:type" content="restaurant">
+<meta property="og:site_name" content="Tasty Pizza">
+<meta property="og:title" content="Tasty Pizza &mdash; Dartmouth">
+<meta property="og:description" content="{SITE['seo']['description']}">
+<meta property="og:url" content="{CANON}">
+<meta property="og:image" content="{CANON}assets/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tasty Pizza &mdash; Dartmouth">
+<meta name="twitter:description" content="{SITE['seo']['description']}">
+<meta name="twitter:image" content="{CANON}assets/img/og.jpg">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.26/dist/lenis.css">
 <style>{css}</style>
 <script type="application/ld+json">{json.dumps(ld, separators=(',', ':'))}</script>
@@ -385,6 +403,10 @@ def main():
         <a class="btn btn-red" href="tel:{SITE['phoneLink']}">Call 902-435-5700</a>
         <a class="btn btn-line" href="{SITE['mapsDirectionsUrl']}" target="_blank" rel="noopener">Directions</a>
       </div>
+      <p class="findmail"><a href="mailto:{SITE['email']}">{SITE['email']}</a>
+        &middot; <a href="{SITE['ordering']['doordash']}" target="_blank" rel="noopener">DoorDash</a>
+        &middot; <a href="{SITE['ordering']['ubereats']}" target="_blank" rel="noopener">Uber&nbsp;Eats</a>
+      </div>
     </div>
     <a class="mapcard" href="{SITE['mapsUrl']}" target="_blank" rel="noopener"
        aria-label="Open Tasty Pizza in Google Maps" data-anim>
@@ -444,6 +466,7 @@ window.CRUSTS={json.dumps(MENU["crusts"], separators=(',', ':'))};
 <script>{cfgjs}</script>
 <script>{js}</script>
 </body></html>"""
+    OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(html, encoding="utf-8")
     items = sum(len(g["items"]) for c in cats for g in c["groups"])
     print(f"wrote {OUT}")

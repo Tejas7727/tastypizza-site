@@ -217,30 +217,33 @@ def check_data():
 
 
 def check_assets():
-    for f in ("assets/site.css", "assets/app.js", "assets/img/logo.webp",
-              "assets/img/chef.png", "assets/img/favicon.svg", "assets/img/og.jpg",
+    for f in ("assets/img/logo-clean.webp", "assets/img/favicon.svg", "assets/img/og.jpg",
               ".nojekyll", "robots.txt", "sitemap.xml"):
         if not (OUT / f).exists():
             fail(f"missing build output: {f}")
-    css = (OUT / "assets" / "site.css")
+    # The stylesheet and the script are inlined into index.html now, so the
+    # dead-class check reads them from the source rather than from docs/.
+    css = ROOT / "src" / "brand.css"
     if css.exists():
         text = css.read_text(encoding="utf-8")
-        # a class the stylesheet promises but nothing uses is a silent no-op
-        # app.js builds some markup at runtime, so it counts as usage too
-        sources = ("index.html", "menu.html", "assets/app.js")
-        html = " ".join((OUT / p).read_text(encoding="utf-8")
-                        for p in sources if (OUT / p).exists())
-        for cls in re.findall(r"\.([a-z][a-z0-9-]{3,})\s*\{", text):
-            if f'class="{cls}"' not in html and f"{cls} " not in html and f'"{cls}"' not in html:
-                if cls not in html:
-                    warn(f"CSS defines .{cls} but no element uses it")
+        # a class the stylesheet promises but nothing uses is a silent no-op;
+        # brand.js and config.js build markup at runtime, so they count as usage
+        html = (OUT / "index.html").read_text(encoding="utf-8")
+        for src in ("brand.js", "config.js"):
+            f = ROOT / "src" / src
+            if f.exists():
+                html += f.read_text(encoding="utf-8")
+        for cls in re.findall(r"\.([a-z][a-z0-9-]{3,})\s*[,{]", text):
+            if cls not in html:
+                warn(f"CSS defines .{cls} but no element uses it")
 
 
 def main():
     print("auditing docs/ ...")
     check_assets()
     check_page("index.html")
-    check_page("menu.html")
+    # menu.html is a redirect stub kept so old links do not 404; auditing it
+    # for og tags and JSON-LD would only ever report that a stub is a stub
     check_data()
     print()
     for w in warns:
