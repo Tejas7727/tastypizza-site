@@ -198,8 +198,10 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .board::after{content:'';position:absolute;inset:5%;border-radius:50%;
   box-shadow:inset 0 0 0 2px rgba(255,241,214,.09)}
 
-.pies{position:relative}
-.disc{position:absolute;inset:-4%;opacity:0;
+/* the pie is deliberately smaller than the board, or the board never shows
+   and the wood may as well not be there */
+.pies{position:relative;width:calc(var(--pie,430px) * .8)}
+.disc{position:absolute;inset:0;opacity:0;
   transition:transform .72s var(--slide),opacity .4s var(--ease)}
 .disc img{width:100%;height:100%;object-fit:contain;
   filter:drop-shadow(0 14px 16px rgba(60,30,6,.42))}
