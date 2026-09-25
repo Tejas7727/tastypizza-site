@@ -34,8 +34,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install Pillow (image processing only)
-        run: python -m pip install --quiet Pillow
+      - name: Install Pillow and openpyxl
+        run: python -m pip install --quiet Pillow openpyxl
 
       - name: Check the data files are valid JSON
         run: |
@@ -53,11 +53,14 @@ jobs:
       - name: Audit
         run: python audit.py
 
+      - name: Refresh the control sheet from the data
+        run: python scripts/control_sheet.py export
+
       - name: Commit the built site
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs
+          git add docs TastyPizza-Control.xlsx
           if git diff --staged --quiet; then
             echo "nothing changed"
           else

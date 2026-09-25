@@ -23,6 +23,7 @@ SITE = json.loads((ROOT / "data" / "site.json").read_text(encoding="utf-8"))
 DEALS = json.loads((ROOT / "data" / "deals.json").read_text(encoding="utf-8"))
 NAV = json.loads((ROOT / "data" / "nav.json").read_text(encoding="utf-8"))
 PHOTOS = json.loads((ROOT / "data" / "photos.json").read_text(encoding="utf-8"))["picks"]
+HOME = SITE["home"]
 
 IMG = "assets/img/"
 
@@ -158,6 +159,14 @@ def main():
     b = MENU["builder"]
     a = SITE["address"]
     cats = categories_json()
+
+    # Both slogans come from data/site.json so the shop can change them from
+    # the control sheet. The last line of each is the one set in red.
+    wide, phone = HOME["sloganWide"], HOME["sloganPhone"]
+    slogan = (f'<span class="wide">{"".join(f"{e(x)}<br>" for x in wide[:-1])}</span>'
+              f'<span class="narrow">{"".join(f"{e(x)}<br>" for x in phone[:-1])}</span>'
+              f'<em>{e(wide[-1])}</em>')
+    facts = "".join(f"<span><b>{e(a)}</b> {e(b)}</span>" for a, b in HOME["facts"])
     live = [d for d in DEALS["deals"] if d.get("active")]
 
     # the nine doors, plus deals as the tenth tile
@@ -307,21 +316,16 @@ def main():
 <section class="hero">
   <div class="wrap hero-in">
     <div class="hero-copy">
-      <p class="eyebrow" data-anim>760 Main Street &middot; Dartmouth</p>
-      <h1 class="display" data-anim><span class="wide">Fresh daily.<br>Hot nightly.<br></span><span class="narrow">Fresh. Hot.<br></span><em>Always tasty.</em></h1>
-      <p class="lede" data-anim>Fresh dough every morning, hand-stretched, out of a deck oven.
-        {SITE['owner']}.</p>
+      <p class="eyebrow" data-anim>{HOME['eyebrow']}</p>
+      <h1 class="display" data-anim>{slogan}</h1>
+      <p class="lede" data-anim>{HOME['lede']}</p>
     </div>
     <div class="hero-cta">
       <div class="acts" data-anim>
         <a class="btn btn-red" href="#order">Start your order</a>
         <a class="btn btn-line" href="tel:{SITE['phoneLink']}">Call</a>
       </div>
-      <p class="hero-facts" data-anim>
-        <span><b>20&ndash;30 min</b> pickup</span>
-        <span><b>{money(SITE['delivery']['fee'])}</b> delivery</span>
-        <span><b>Free</b> parking</span>
-      </p>
+      <p class="hero-facts" data-anim>{facts}</p>
     </div>
     <div class="herofig" data-anim="grow">
       <div class="turntable" data-wheelstage tabindex="0" role="group"
