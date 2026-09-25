@@ -290,7 +290,7 @@ def main():
   <div class="wrap hero-in">
     <div class="hero-copy">
       <p class="eyebrow" data-anim>760 Main Street &middot; Dartmouth</p>
-      <h1 class="display" data-anim>Fresh daily.<br>Hot nightly.<br><em>Always tasty.</em></h1>
+      <h1 class="display" data-anim><span class="wide">Fresh daily.<br>Hot nightly.<br></span><span class="narrow">Fresh. Hot.<br></span><em>Always tasty.</em></h1>
       <p class="lede" data-anim>Fresh dough every morning, hand-stretched, out of a deck oven.
         {SITE['owner']}.</p>
     </div>

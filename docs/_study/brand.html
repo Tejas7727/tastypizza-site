@@ -30,7 +30,7 @@
 @font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-800.woff2') format('woff2');font-weight:800;font-display:swap}
 
 :root{
-  --white:#FFFFFF; --paper:#F8F7F4;
+  --white:#FFFFFF; --paper:#FFFFFF; --wash:#F3F3F5;
   --ink:#111113; --ink-2:#4A4A50; --ink-3:#6B6B73;
   --red:#B70017; --red-hot:#DC0A22;
   --green:#0B5C3F; --green-soft:#EAF3EE;
@@ -51,6 +51,14 @@ body{margin:0;background:var(--white);color:var(--ink);
 /* clip, not hidden: hidden makes body a scroll container and quietly breaks
    every position:sticky on the page (the rail, the pizza). */
 @supports (overflow:clip){body{overflow-x:clip}}
+/* Barely-there grain. Pure white across a whole page looks like an unstyled
+   document; this gives the paper a surface without tinting it. */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .055 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* only main needs lifting above the grain; the bar, cart, sheet and scrim are
+   already positioned with their own z-index, and re-declaring position here
+   turned the cart from fixed into an in-flow 420px block */
+main{position:relative;z-index:1}
 img,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 h1,h2,h3,h4{margin:0;font-weight:800;letter-spacing:-.03em;line-height:.95}
@@ -88,7 +96,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 
 .tag{display:inline-flex;align-items:center;align-self:flex-start;font-size:.62rem;
   font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.24rem .5rem;
-  border-radius:999px;background:var(--paper);color:var(--ink-2)}
+  border-radius:999px;background:var(--wash);color:var(--ink-2)}
 .tag-veg{background:var(--green-soft);color:var(--green)}
 .tag-hot{background:var(--red);color:#fff}
 
@@ -112,9 +120,12 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .bar nav a:hover{border-color:var(--red)}
 .bar-right{margin-left:auto;display:flex;align-items:center;gap:.55rem}
 .bar nav + .bar-right{margin-left:0}
+/* nav is display:none on a phone but still a sibling, so the rule above was
+   cancelling the auto margin and parking the dots against the logo */
+@media (max-width:900px){.bar nav + .bar-right{margin-left:auto}}
 
 .dots{display:none;width:42px;height:42px;cursor:pointer;place-items:center;border-radius:999px}
-.dots:hover{background:var(--paper)}
+.dots:hover{background:var(--wash)}
 .dots i{display:block;width:5px;height:5px;border-radius:99px;background:var(--ink);
   box-shadow:0 -8px 0 var(--ink),0 8px 0 var(--ink)}
 
@@ -162,6 +173,10 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 @media (min-width:901px){.hero{--pie:min(40vw,56svh)}}
 .hero h1{margin:.5rem 0 .5rem}
 .hero .display{font-size:min(clamp(1.85rem,6.5vw,3.7rem),7.4svh)}
+/* Three beats fit a wide column. A phone gets the same three ideas folded
+   into two lines — "Fresh. Hot." carries what the first two lines said — so
+   the headline stops eating the screen the pizza needs. */
+.display .narrow{display:none}
 .hero .lede{font-size:min(clamp(.95rem,.4vw + .86rem,1.08rem),2.5svh)}
 .hero-facts{display:flex;flex-wrap:wrap;gap:.3rem .95rem;margin-top:.7rem;
   font-size:.82rem;font-weight:600;color:var(--ink-2)}
@@ -231,7 +246,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .deal{display:grid;gap:.2rem;min-width:0;margin-top:.9rem;color:inherit;
   text-decoration:none;cursor:pointer;border-radius:14px;
   transition:background-color .18s var(--ease)}
-.deal:hover{background:var(--paper)}
+.deal:hover{background:var(--wash)}
 .dealgo{display:inline-flex;align-items:center;gap:.3rem;font-size:.76rem;font-weight:800;
   letter-spacing:.02em;color:var(--red);margin-top:.15rem}
 .dealgo::after{content:'';width:6px;height:6px;border-right:2px solid currentColor;
@@ -241,15 +256,21 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .turntable{cursor:pointer}
 .deal[data-flash] .dealin{animation:dealin .46s var(--ease)}
 @keyframes dealin{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
-.dealin{display:grid;gap:.22rem;min-width:0}
+.dealin{display:grid;gap:.22rem;min-width:0;align-content:start}
 .kicker{display:flex;align-items:center;gap:.45rem;font-size:.6rem;font-weight:800;
   letter-spacing:.15em;text-transform:uppercase;color:var(--red)}
 .kicker.is-green{color:var(--green)}
 .kicker.is-grey{color:var(--ink-3)}
 .kicker::after{content:'';height:1px;flex:1;background:var(--line);min-width:12px}
 .deal h2{font-size:min(clamp(1.1rem,4.2vw,1.7rem),4.4svh);letter-spacing:-.028em;
-  text-transform:none}
-.deal .sub{font-size:min(.86rem,2.2svh);color:var(--ink-3)}
+  text-transform:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden}
+/* Every offer has a different amount to say. Left to itself the tallest one
+   pushed the headline up and the buttons down as the carousel turned, so the
+   text is clamped and the block holds one height for all five. */
+.deal .sub{font-size:min(.86rem,2.2svh);color:var(--ink-3);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dealin{min-height:var(--dealh,7.2rem)}
 .saveline{display:flex;align-items:baseline;gap:.45rem;flex-wrap:wrap;font-size:.84rem}
 .saveline .was{color:var(--ink-3);text-decoration:line-through;font-weight:600;margin:0}
 .saveline .save{color:var(--green);font-weight:800}
@@ -314,9 +335,9 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   border-bottom:1px solid var(--line);background:none;
   transition:background-color .16s var(--ease)}
 .item:last-child{border-bottom:0}
-.item:hover{background:var(--paper)}
+.item:hover{background:var(--wash)}
 .item-media{width:72px;height:72px;border-radius:14px;overflow:hidden;flex:none;
-  background:var(--paper)}
+  background:var(--wash)}
 .item-media img{width:100%;height:100%;object-fit:cover}
 .item-media.is-empty{background:none}
 .item-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:.15rem}
@@ -341,12 +362,22 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .sizebtn{border:1.5px solid var(--line);border-radius:11px;padding:.32rem .55rem;cursor:pointer;
   display:grid;gap:.05rem;text-align:center;min-width:62px;background:var(--white);
   transition:border-color .16s,background-color .16s,transform .14s}
-.sizebtn:hover{border-color:var(--red);background:var(--paper)}
+.sizebtn:hover{border-color:var(--red);background:var(--wash)}
 .sizebtn:active{transform:scale(.95)}
 .sizebtn[data-done]{border-color:var(--green);background:var(--green-soft)}
 .sizebtn i{font-style:normal;font-size:.6rem;font-weight:800;letter-spacing:.06em;
   text-transform:uppercase;color:var(--ink-3)}
 .sizebtn b{font-size:.86rem;font-weight:800;font-variant-numeric:tabular-nums}
+/* the tile you picked lifts out of the row so it is obvious which one the
+   Add button underneath is talking about */
+.sizebtn[data-picked]{border-color:var(--ink);background:var(--ink);color:#fff;
+  transform:translateY(-2px) scale(1.04);box-shadow:var(--sh)}
+.sizebtn[data-picked] i{color:rgba(255,255,255,.72)}
+.pickbar{display:flex;justify-content:flex-end;width:100%;margin-top:.5rem;
+  animation:pickin .26s var(--ease)}
+.pickbar .add{background:var(--red);padding:.5rem 1.2rem}
+.pickbar .add:hover{background:var(--red-hot)}
+@keyframes pickin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 
 /* an offer is marked by its flag and its price, not by a red box round it */
 .offer{background:none}
@@ -367,7 +398,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   padding:1rem 1.1rem;border-bottom:1px solid var(--line);flex:none}
 .cart-head h2{font-size:1.25rem;text-transform:uppercase}
 .x{width:38px;height:38px;border-radius:999px;display:grid;place-items:center;cursor:pointer}
-.x:hover{background:var(--paper)}
+.x:hover{background:var(--wash)}
 .cart-list{flex:1;overflow:auto;padding:.8rem 1.1rem;display:grid;gap:.5rem;align-content:start}
 .cart-row{display:flex;align-items:center;gap:.7rem;padding:.55rem .65rem;border-radius:13px;
   background:var(--paper)}
@@ -378,7 +409,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   padding:.12rem;border:1px solid var(--line)}
 .qty button{width:28px;height:28px;border-radius:999px;cursor:pointer;display:grid;
   place-items:center;font-weight:800;font-size:1rem;line-height:1}
-.qty button:hover{background:var(--paper)}
+.qty button:hover{background:var(--wash)}
 .qty span{min-width:22px;text-align:center;font-weight:800;font-size:.88rem;
   font-variant-numeric:tabular-nums}
 .cart-empty{text-align:center;color:var(--ink-3);padding:2.5rem 1rem;display:grid;gap:.8rem;
@@ -399,9 +430,10 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .paybox p{font-size:.84rem;color:var(--ink-3)}
 
 /* ---------------------------------------------------------------- builder */
-.cfg{display:grid;gap:clamp(1rem,2.6vw,2.4rem);
+.cfg{display:grid;gap:clamp(1rem,2.6vw,2.4rem);min-width:0;
   grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start}
-.cfg-stage{position:sticky;top:calc(var(--bar) + .4rem);z-index:5;display:grid;
+.cfg-ctrl{min-width:0}
+.cfg-stage{position:sticky;top:calc(var(--bar) + .4rem);z-index:5;display:grid;min-width:0;
   justify-items:center;gap:.6rem;background:var(--white);padding-bottom:.5rem}
 .cfg .btn-wide{margin-top:.2rem}
 .peel{position:relative;width:min(100%,300px);aspect-ratio:1;display:grid;place-items:center}
@@ -434,8 +466,9 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   58%{opacity:1;transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(.82)}
   78%{transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(1.06)}
   100%{opacity:1;transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(1)}}
-.readout{display:flex;align-items:center;gap:.8rem;padding:.5rem .9rem;border-radius:999px;
-  background:var(--ink);color:#fff;font-weight:700;white-space:nowrap}
+.readout{display:flex;align-items:center;justify-content:center;gap:.5rem .8rem;
+  flex-wrap:wrap;padding:.5rem .9rem;border-radius:18px;max-width:100%;
+  background:var(--ink);color:#fff;font-weight:700}
 .readout b{font-size:1.25rem;font-variant-numeric:tabular-nums}
 .readout span{font-size:.76rem;color:rgba(255,255,255,.72);font-weight:500}
 .readout b[data-bump]{animation:bump .3s var(--ease)}
@@ -494,11 +527,12 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .item-x[data-open] .add-ghost{background:var(--red)}
 .flag-build{background:var(--green-soft);color:var(--green)}
 
-.panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s var(--ease)}
-.panel>.panel-in{overflow:hidden}
+.panel{display:grid;grid-template-rows:0fr;min-width:0;
+  transition:grid-template-rows .42s var(--ease)}
+.panel>.panel-in{overflow:hidden;min-width:0}
 [data-open]>.panel{grid-template-rows:1fr}
 [data-grown]>.panel>.panel-in{overflow:visible}
-.item-x[data-open]{background:var(--paper);border-radius:var(--r)}
+.item-x[data-open]{background:var(--wash);border-radius:var(--r)}
 .item-x>.panel>.panel-in>*{padding:.2rem .75rem 1rem}
 .item-x[data-open]>.panel>.panel-in{border-top:1px solid var(--line);margin-top:.1rem}
 
@@ -609,6 +643,12 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
       transition:opacity .6s var(--ease),transform .7s var(--ease)}
     [data-anim].in,[data-stagger].in>*{opacity:1;transform:none}
   }
+  /* The hero is above the fold, so a view() timeline leaves whatever sits low
+     in the first screen stranded part-way through its fade — which is why the
+     order button rendered as washed-out pink on a phone and solid red on a
+     laptop. Nothing in the hero animates on scroll; it is finished at rest. */
+  .hero [data-anim],.hero [data-stagger]>*{
+    animation:none!important;opacity:1!important;transform:none!important}
 }
 @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 @keyframes grow{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
@@ -629,6 +669,9 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
      says what this is; the space is worth more to the pizza and the price. */
   .hero .lede{display:none}
   .hero{--pie:min(86vw,42svh)}
+  .display .wide{display:none}
+  .display .narrow{display:inline}
+  .display{font-size:min(clamp(2rem,9vw,2.9rem),8.6svh)}
   .deal h2{font-size:min(1.32rem,4.6svh)}
   .deal .sub{font-size:.9rem}
   .saveline{font-size:.92rem}
@@ -654,7 +697,8 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .item,.item-hit{display:grid;grid-template-columns:auto minmax(0,1fr);
     grid-template-areas:"media body" "side side";column-gap:.7rem;row-gap:.5rem;
     align-items:center;padding:.6rem}
-  .item-x{padding:0}
+  .item,.item-hit{padding:.65rem 0}
+  .item-x{display:block;padding:0}
   .item-media{grid-area:media}
   .item-body{grid-area:body}
   .item-side{grid-area:side}
@@ -665,8 +709,12 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .sizes{flex:1;flex-wrap:nowrap;justify-content:stretch;gap:.3rem}
   .sizebtn{flex:1;min-width:0;padding:.34rem .3rem}
   .item-side>.price{order:-1}
-  .add,.add-ghost{flex:none}
-  .item-x .item-side .add-ghost{flex:1;text-align:center}
+  /* every pill on a row is the same pill: the Build it button was stretching
+     to fill while Add stayed small, and the two read as different controls */
+  .add,.add-ghost{flex:none;padding:.46rem 1.15rem;font-size:.84rem}
+  .item-side{flex-wrap:wrap}
+  .pickbar{justify-content:stretch}
+  .pickbar .add{flex:1;text-align:center;padding:.6rem 1rem}
   .tops-grid{grid-template-columns:repeat(auto-fill,minmax(146px,1fr))}
   /* the rail runs to both edges on a phone so it reads as a bar, not a widget */
   .rail{margin:0 -1.1rem;padding:.5rem 1.1rem}
@@ -734,7 +782,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   <div class="wrap hero-in">
     <div class="hero-copy">
       <p class="eyebrow" data-anim>760 Main Street &middot; Dartmouth</p>
-      <h1 class="display" data-anim>Fresh daily.<br>Hot nightly.<br><em>Always tasty.</em></h1>
+      <h1 class="display" data-anim><span class="wide">Fresh daily.<br>Hot nightly.<br></span><span class="narrow">Fresh. Hot.<br></span><em>Always tasty.</em></h1>
       <p class="lede" data-anim>Fresh dough every morning, hand-stretched, out of a deck oven.
         Owned and operated by the Patel family.</p>
     </div>
@@ -1624,13 +1672,20 @@ window.TOPPING_LOOK = {
     if (it.builder) return builderRow(it);
     var side;
     if (it.sizes && it.sizes.length > 1) {
-      // picking a size IS adding it — one tap, no modal
-      side = '<div class="sizes">' + it.sizes.map(function (s) {
+      // Pick, then confirm. Tapping a size used to drop it straight in the
+      // basket, which is a lot of commitment for one tap on a phone — a
+      // mis-tap on 9" when you wanted 18" cost real money. Now the tile you
+      // picked grows and an Add button appears under the row.
+      side = '<div class="sizes" data-sizerow>' + it.sizes.map(function (s) {
         return s.price == null ? '' :
-          '<button class="sizebtn" type="button" data-add="' + esc(it.name) + '"'
+          '<button class="sizebtn" type="button" data-pick'
+          + ' data-name="' + esc(it.name) + '"'
           + ' data-price="' + s.price + '" data-note="' + esc(s.label) + '">'
           + '<i>' + esc(s.label) + '</i><b>' + money(s.price) + '</b></button>';
-      }).join('') + '</div>';
+      }).join('') + '</div>'
+        + '<div class="pickbar" data-pickbar hidden>'
+        + '<button class="add" type="button" data-add="" data-price="" data-note="">'
+        + 'Add to my order</button></div>';
     } else {
       var p = it.sizes && it.sizes[0] ? it.sizes[0].price : null;
       side = p == null
@@ -1836,6 +1891,27 @@ window.TOPPING_LOOK = {
     if (cat) { ev.preventDefault(); openCategory(cat.getAttribute('data-cat')); return; }
     if (t.closest('[data-back]')) { closeCategory(); return; }
 
+    // a size tile: show the confirm button rather than adding on the spot
+    var pick = t.closest('[data-pick]');
+    if (pick) {
+      var row = pick.closest('[data-sizerow]');
+      var bar = row && row.parentNode.querySelector('[data-pickbar]');
+      var already = pick.hasAttribute('data-picked');
+      $$('[data-pick]', row).forEach(function (o) { o.removeAttribute('data-picked'); });
+      if (already) { if (bar) bar.hidden = true; return; }
+      pick.setAttribute('data-picked', '');
+      if (bar) {
+        var go = bar.querySelector('[data-add]');
+        go.setAttribute('data-add', pick.getAttribute('data-name'));
+        go.setAttribute('data-price', pick.getAttribute('data-price'));
+        go.setAttribute('data-note', pick.getAttribute('data-note'));
+        go.textContent = 'Add ' + pick.getAttribute('data-note') + ' · '
+          + money(parseFloat(pick.getAttribute('data-price')));
+        bar.hidden = false;
+      }
+      return;
+    }
+
     var addBtn = t.closest('[data-add]');
     if (addBtn) {
       var price = parseFloat(addBtn.getAttribute('data-price'));
@@ -1844,7 +1920,16 @@ window.TOPPING_LOOK = {
       addBtn.setAttribute('data-done', '');
       var was = addBtn.innerHTML;
       if (addBtn.classList.contains('add')) addBtn.textContent = 'Added';
-      setTimeout(function () { addBtn.removeAttribute('data-done'); addBtn.innerHTML = was; }, 1100);
+      var bar2 = addBtn.closest('[data-pickbar]');
+      setTimeout(function () {
+        addBtn.removeAttribute('data-done');
+        addBtn.innerHTML = was;
+        if (bar2) {
+          bar2.hidden = true;
+          var r = bar2.parentNode.querySelector('[data-sizerow]');
+          if (r) $$('[data-pick]', r).forEach(function (o) { o.removeAttribute('data-picked'); });
+        }
+      }, 1100);
       return;
     }
 

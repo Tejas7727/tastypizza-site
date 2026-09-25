@@ -356,13 +356,20 @@
     if (it.builder) return builderRow(it);
     var side;
     if (it.sizes && it.sizes.length > 1) {
-      // picking a size IS adding it — one tap, no modal
-      side = '<div class="sizes">' + it.sizes.map(function (s) {
+      // Pick, then confirm. Tapping a size used to drop it straight in the
+      // basket, which is a lot of commitment for one tap on a phone — a
+      // mis-tap on 9" when you wanted 18" cost real money. Now the tile you
+      // picked grows and an Add button appears under the row.
+      side = '<div class="sizes" data-sizerow>' + it.sizes.map(function (s) {
         return s.price == null ? '' :
-          '<button class="sizebtn" type="button" data-add="' + esc(it.name) + '"'
+          '<button class="sizebtn" type="button" data-pick'
+          + ' data-name="' + esc(it.name) + '"'
           + ' data-price="' + s.price + '" data-note="' + esc(s.label) + '">'
           + '<i>' + esc(s.label) + '</i><b>' + money(s.price) + '</b></button>';
-      }).join('') + '</div>';
+      }).join('') + '</div>'
+        + '<div class="pickbar" data-pickbar hidden>'
+        + '<button class="add" type="button" data-add="" data-price="" data-note="">'
+        + 'Add to my order</button></div>';
     } else {
       var p = it.sizes && it.sizes[0] ? it.sizes[0].price : null;
       side = p == null
@@ -568,6 +575,27 @@
     if (cat) { ev.preventDefault(); openCategory(cat.getAttribute('data-cat')); return; }
     if (t.closest('[data-back]')) { closeCategory(); return; }
 
+    // a size tile: show the confirm button rather than adding on the spot
+    var pick = t.closest('[data-pick]');
+    if (pick) {
+      var row = pick.closest('[data-sizerow]');
+      var bar = row && row.parentNode.querySelector('[data-pickbar]');
+      var already = pick.hasAttribute('data-picked');
+      $$('[data-pick]', row).forEach(function (o) { o.removeAttribute('data-picked'); });
+      if (already) { if (bar) bar.hidden = true; return; }
+      pick.setAttribute('data-picked', '');
+      if (bar) {
+        var go = bar.querySelector('[data-add]');
+        go.setAttribute('data-add', pick.getAttribute('data-name'));
+        go.setAttribute('data-price', pick.getAttribute('data-price'));
+        go.setAttribute('data-note', pick.getAttribute('data-note'));
+        go.textContent = 'Add ' + pick.getAttribute('data-note') + ' · '
+          + money(parseFloat(pick.getAttribute('data-price')));
+        bar.hidden = false;
+      }
+      return;
+    }
+
     var addBtn = t.closest('[data-add]');
     if (addBtn) {
       var price = parseFloat(addBtn.getAttribute('data-price'));
@@ -576,7 +604,16 @@
       addBtn.setAttribute('data-done', '');
       var was = addBtn.innerHTML;
       if (addBtn.classList.contains('add')) addBtn.textContent = 'Added';
-      setTimeout(function () { addBtn.removeAttribute('data-done'); addBtn.innerHTML = was; }, 1100);
+      var bar2 = addBtn.closest('[data-pickbar]');
+      setTimeout(function () {
+        addBtn.removeAttribute('data-done');
+        addBtn.innerHTML = was;
+        if (bar2) {
+          bar2.hidden = true;
+          var r = bar2.parentNode.querySelector('[data-sizerow]');
+          if (r) $$('[data-pick]', r).forEach(function (o) { o.removeAttribute('data-picked'); });
+        }
+      }, 1100);
       return;
     }
 
