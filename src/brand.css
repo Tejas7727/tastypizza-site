@@ -677,8 +677,11 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .cfg-stage{box-shadow:0 14px 20px -14px rgba(17,17,19,.25)}
   .peel{width:min(52vw,210px)}
   .cats{grid-template-columns:repeat(2,1fr)}
-  .hero .acts{margin-top:1rem}
-  .hero .acts .btn{flex:1;min-width:0}
+  .hero .acts{margin-top:.8rem;gap:.5rem}
+  /* flex:1 made both buttons the same width, and "Start your order" is longer
+     than "Call", so it wrapped to two lines and doubled the button's height.
+     Let each take the width its label needs, then share what is left. */
+  .hero .acts .btn{flex:1 1 auto;min-width:0;white-space:nowrap;padding-inline:1rem}
 }
 @media (max-width:620px){
   .display{font-size:min(clamp(1.8rem,8vw,2.4rem),7.2svh)}
