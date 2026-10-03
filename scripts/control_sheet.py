@@ -123,7 +123,7 @@ def pick_list(ws, col, first, last, list_col, n):
 # --------------------------------------------------------------------- export
 
 def export():
-    site, menu, deals = load("site"), load("menu"), load("deals")
+    site, menu, deals, faq = load("site"), load("menu"), load("deals"), load("faq")
     pies, photo_names = available_pies(), available_photos()
     wb = Workbook()
     wb.remove(wb.active)
@@ -295,6 +295,19 @@ def export():
         row(ws, r, [key, label, value], locked=2)
         r += 1
 
+    # ---- Questions ----
+    # The FAQ page already answers hours, delivery, crusts and the rest from the
+    # sheets above; this is for anything else customers keep asking.
+    ws = sheet(wb, "Questions",
+               "Extra questions for the FAQ page. Hours, delivery areas, crusts and "
+               "vegetarian pizzas are answered automatically from the other sheets. Fill a "
+               "blank row to add one; clear a row to remove it.",
+               ["Question", "Answer"], [48, 90])
+    r = 5
+    for q in faq["faq"] + [{}] * 10:
+        row(ws, r, [q.get("q"), q.get("a")])
+        r += 1
+
     # ---- the dropdown sources, out of sight ----
     ws = wb.create_sheet("Lists")
     for i, name in enumerate(pies, 1):
@@ -357,7 +370,7 @@ def do_import(dry):
         print(f"no {BOOK.name} — run:  python scripts/control_sheet.py export")
         return 1
     wb = load_workbook(BOOK, data_only=True)
-    site, menu, deals = load("site"), load("menu"), load("deals")
+    site, menu, deals, faq = load("site"), load("menu"), load("deals"), load("faq")
     rep = Report()
 
     # ---- Home page ----
@@ -587,6 +600,21 @@ def do_import(dry):
         rep.change(key, target.get(last[-1]), v)
         target[last[-1]] = v
 
+    # ---- Questions ----
+    # an older workbook has no Questions sheet; then the FAQ is left alone
+    if "Questions" in wb.sheetnames:
+        ws = wb["Questions"]
+        qs = []
+        for r in range(5, ws.max_row + 1):
+            q, a = text(ws.cell(r, 1).value), text(ws.cell(r, 2).value)
+            if q and a:
+                qs.append({"q": q, "a": a})
+            elif q or a:
+                rep.problem("Questions", f"A{r}", "a question needs both the question and the answer")
+        if [(x["q"], x["a"]) for x in qs] != [(x["q"], x["a"]) for x in faq["faq"]]:
+            rep.changes.append(f"FAQ: {len(faq['faq'])} extra question(s) -> {len(qs)}")
+        faq["faq"] = qs
+
     # ---- report ----
     print()
     if rep.problems:
@@ -609,6 +637,7 @@ def do_import(dry):
     save("site", site)
     save("menu", menu)
     save("deals", deals)
+    save("faq", faq)
     print("\nwritten to data/")
     return 0
 

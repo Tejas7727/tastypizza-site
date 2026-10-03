@@ -1,26 +1,22 @@
-/* Tasty Pizza — ordering experience.
+/* Tasty Pizza — one stylesheet for every page.
 
    Built phone-first, because that is where nearly every order starts.
-
-   WHAT THE RESEARCH DECIDED
-   * ~10 choices is the overwhelm point, so ordering starts at 9 categories,
-     never at a 150-item list
-   * categories must be the top-level thing on mobile — a third of sites get
-     this wrong and bury them
-   * ONE thing highlighted per group. If everything is flagged, nothing is
-   * page speed is a conversion lever (1s load converts ~40%, 3s ~29%), so no
-     framework, no animation engine, CSS-driven motion only
 
    COLOUR RULES
      black  every piece of text and all structure
      red    one job — the thing you click, and the price
      green  one job — fresh, open, vegetarian, saving
-     red and green never touch; white or black always separates them */
+     red and green never touch; white or black always separates them
 
-@font-face{font-family:'Archivo';src:url('assets/fonts/archivo-400.woff2') format('woff2');font-weight:400;font-display:swap}
-@font-face{font-family:'Archivo';src:url('assets/fonts/archivo-500.woff2') format('woff2');font-weight:500;font-display:swap}
-@font-face{font-family:'Archivo';src:url('assets/fonts/archivo-700.woff2') format('woff2');font-weight:700;font-display:swap}
-@font-face{font-family:'Archivo';src:url('assets/fonts/archivo-800.woff2') format('woff2');font-weight:800;font-display:swap}
+   LAYOUT RULES (learned from the menus people already know how to use)
+     * a dish is a card you can order from without opening anything
+     * the way back and the way sideways are always on screen
+     * a photo appears only when it is the shop's own food */
+
+@font-face{font-family:'Archivo';src:url('fonts/archivo-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Archivo';src:url('fonts/archivo-500.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Archivo';src:url('fonts/archivo-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Archivo';src:url('fonts/archivo-800.woff2') format('woff2');font-weight:800;font-display:swap}
 
 :root{
   --white:#FFFFFF; --paper:#FFFFFF; --wash:#F3F3F5;
@@ -101,7 +97,6 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.24rem .5rem;
   border-radius:999px;background:var(--wash);color:var(--ink-2)}
 .tag-veg{background:var(--green-soft);color:var(--green)}
-.tag-hot{background:var(--red);color:#fff}
 
 .openpill{display:inline-flex;align-items:center;gap:.45rem;font-size:.78rem;font-weight:700;
   padding:.34rem .75rem;border-radius:999px;background:var(--green-soft);color:var(--green);
@@ -132,7 +127,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .dots i{display:block;width:5px;height:5px;border-radius:99px;background:var(--ink);
   box-shadow:0 -8px 0 var(--ink),0 8px 0 var(--ink)}
 
-/* the cart: one circle, top right, only there once it has something in it */
+/* the order: one circle, top right, on every page; a count once it has something */
 .cartbtn{position:relative;width:44px;height:44px;border-radius:999px;background:var(--ink);
   color:#fff;display:grid;place-items:center;cursor:pointer;flex:none;
   transition:background-color .18s,transform .2s var(--ease)}
@@ -293,173 +288,8 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .ticks button[data-run]::after{animation:none;transform:scaleX(1)}
 }
 
-/* ---------------------------------------------------------------- ordering */
-.order-wrap{min-height:100vh}
-@supports (min-height:100svh){.order-wrap{min-height:100svh}}
-.band{padding:clamp(2.4rem,5vw,4.5rem) 0}
-.band-paper{background:var(--paper)}
-.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
-  gap:.9rem;margin-bottom:clamp(1.1rem,2.4vw,1.8rem)}
-.sec-head p{color:var(--ink-3);font-size:.93rem;margin-top:.35rem}
 
-/* nine doors. Never a 150-item list. */
-.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.6rem,1.4vw,1rem)}
-.cat{position:relative;border-radius:var(--r);overflow:hidden;background:var(--ink);
-  color:#fff;cursor:pointer;text-align:left;display:block;aspect-ratio:5/3;
-  transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
-.cat:hover{transform:translateY(-3px);box-shadow:var(--sh-lift)}
-.cat img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.62;
-  transition:transform .6s var(--ease),opacity .3s}
-.cat:hover img{transform:scale(1.07);opacity:.72}
-.cat-in{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;
-  justify-content:flex-end;padding:.8rem .9rem;
-  background:linear-gradient(180deg,rgba(17,17,19,.08) 30%,rgba(17,17,19,.85))}
-.cat b{font-size:1.06rem;font-weight:800;letter-spacing:-.015em;line-height:1.1}
-.cat small{font-size:.76rem;color:rgba(255,255,255,.76);font-weight:500}
-.cat.is-deals{background:var(--red)}
-.cat.is-deals .cat-in{background:linear-gradient(180deg,rgba(183,0,23,.25),rgba(140,0,18,.9))}
-
-/* the category view swaps in where the grid was */
-/* A flex item defaults to min-width:auto, which means it refuses to shrink
-   below its own content. The rail's nine pills measure about 1000px, so on a
-   phone they forced this grid wide, which forced the page wide, and the phone
-   zoomed the whole site out to fit. Every link in that chain needs a floor of
-   zero before the strip will scroll inside itself instead of stretching. */
-.catview{display:grid;gap:1rem;grid-template-columns:minmax(0,1fr)}
-.catview-head{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
-.back{display:inline-flex;align-items:center;gap:.45rem;font-weight:700;cursor:pointer;
-  padding:.5rem .95rem;border:2px solid var(--line);border-radius:999px;font-size:.9rem}
-.back:hover{border-color:var(--ink)}
-.catview h2{font-size:clamp(1.5rem,3vw,2.2rem);text-transform:uppercase}
-.catview-blurb{color:var(--ink-3);font-size:.93rem;max-width:56ch}
-.grouphead{font-size:.7rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--ink-3);margin:1.4rem 0 .6rem;padding-bottom:.4rem;border-bottom:2px solid var(--ink)}
-.grouphead:first-of-type{margin-top:.4rem}
-.groupnote{font-size:.86rem;color:var(--ink-3);margin:-.2rem 0 .7rem}
-
-/* An item row. No card, no border, no fill — a hairline between neighbours is
-   enough to separate them, and the food photo does the rest. Boxes around
-   every dish make a menu look like a spreadsheet. */
-.items{display:grid;list-style:none;margin:0;padding:0}
-.item{display:flex;align-items:center;gap:.9rem;padding:.7rem 0;
-  border-bottom:1px solid var(--line);background:none;
-  transition:background-color .16s var(--ease)}
-.item:last-child{border-bottom:0}
-@media (hover:hover){.item:hover{background:var(--wash)}}
-.item-media{width:72px;height:72px;border-radius:14px;overflow:hidden;flex:none;
-  background:var(--wash)}
-.item-media img{width:100%;height:100%;object-fit:cover}
-.item-media.is-empty{background:none}
-
-/* A dish with the shop's own photo gets a big frame where it already sits in
-   the list. Real food is the strongest reason to order; a 72px thumbnail threw
-   it away. Stock photos stay small, so the page weights what is true. */
-.item.is-big{padding:.9rem 0}
-.item.is-big .item-media{width:200px;height:150px;border-radius:18px}
-@media (max-width:620px){
-  .item.is-big{grid-template-columns:minmax(0,1fr);
-    grid-template-areas:"media" "body" "side";row-gap:.6rem;padding:.9rem 0 1rem}
-  .item.is-big .item-media{width:100%;height:auto;aspect-ratio:16/10;border-radius:18px}
-  .item.is-big .item-body h4{font-size:1.06rem}
-  .item.is-big .item-body p{-webkit-line-clamp:3}
-}
-.item-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:.15rem}
-.item-body h4{font-size:1rem;font-weight:700;letter-spacing:-.01em;display:flex;
-  align-items:center;gap:.4rem;flex-wrap:wrap}
-.item-body p{font-size:.84rem;color:var(--ink-3);
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.item-side{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;flex:none}
-.price{font-weight:800;font-variant-numeric:tabular-nums;font-size:1.02rem;white-space:nowrap}
-.price small{font-weight:600;color:var(--ink-3);font-size:.66rem;text-transform:uppercase;
-  letter-spacing:.09em;margin-right:.25rem}
-.was{color:var(--ink-3);text-decoration:line-through;font-weight:600;font-size:.82rem;
-  margin-right:.35rem}
-.add{background:var(--ink);color:#fff;border-radius:999px;font-weight:700;font-size:.84rem;
-  padding:.44rem 1rem;cursor:pointer;transition:background-color .18s,transform .15s}
-.add:hover{background:var(--red)}
-.add:active{transform:scale(.95)}
-.add[data-done]{background:var(--green)}
-
-/* sizes as a row of buttons, so picking a size IS adding to the cart */
-.sizes{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:flex-end}
-.sizebtn{border:1.5px solid var(--line);border-radius:11px;padding:.32rem .55rem;cursor:pointer;
-  display:grid;gap:.05rem;text-align:center;min-width:62px;background:var(--white);
-  transition:border-color .16s,background-color .16s,transform .14s}
-.sizebtn:hover{border-color:var(--red);background:var(--wash)}
-.sizebtn:active{transform:scale(.95)}
-.sizebtn[data-done]{border-color:var(--green);background:var(--green-soft)}
-.sizebtn i{font-style:normal;font-size:.6rem;font-weight:800;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--ink-3)}
-.sizebtn b{font-size:.86rem;font-weight:800;font-variant-numeric:tabular-nums}
-/* the tile you picked lifts out of the row so it is obvious which one the
-   Add button underneath is talking about */
-.sizebtn[data-picked]{border-color:var(--ink);background:var(--ink);color:#fff;
-  transform:translateY(-2px) scale(1.04);box-shadow:var(--sh)}
-.sizebtn[data-picked] i{color:rgba(255,255,255,.72)}
-.pickbar{display:flex;justify-content:flex-end;width:100%;margin-top:.5rem;
-  animation:pickin .26s var(--ease)}
-.pickbar .add{background:var(--red);padding:.5rem 1.2rem}
-.pickbar .add:hover{background:var(--red-hot)}
-@keyframes pickin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-
-/* an offer is marked by its flag and its price, not by a red box round it */
-.offer{background:none}
-.offer .item-media{border-radius:14px}
-.flag{background:var(--red);color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.09em;
-  text-transform:uppercase;padding:.2rem .45rem;border-radius:999px}
-.flag-save{background:var(--green-soft);color:var(--green)}
-
-/* ---------------------------------------------------------------- cart */
-.scrim{position:fixed;inset:0;z-index:70;background:rgba(17,17,19,.45);
-  opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
-.scrim[data-open]{opacity:1;pointer-events:auto}
-.cart{position:fixed;z-index:72;right:0;top:0;bottom:0;width:min(100%,420px);background:var(--white);
-  display:flex;flex-direction:column;transform:translateX(102%);
-  transition:transform .32s var(--ease);box-shadow:-10px 0 40px rgba(17,17,19,.18)}
-.cart[data-open]{transform:none}
-.cart-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;
-  padding:1rem 1.1rem;border-bottom:1px solid var(--line);flex:none}
-.cart-head h2{font-size:1.25rem;text-transform:uppercase}
-.x{width:38px;height:38px;border-radius:999px;display:grid;place-items:center;cursor:pointer}
-.x:hover{background:var(--wash)}
-.cart-list{flex:1;overflow:auto;padding:.8rem 1.1rem;display:grid;gap:.5rem;align-content:start}
-.cart-row{display:flex;align-items:center;gap:.7rem;padding:.55rem .65rem;border-radius:13px;
-  background:var(--paper)}
-.cart-row .n{flex:1;min-width:0;font-weight:600;font-size:.92rem;line-height:1.25}
-.cart-row .n small{display:block;font-weight:500;color:var(--ink-3);font-size:.78rem}
-.cart-row .p{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
-.qty{display:flex;align-items:center;gap:.1rem;background:var(--white);border-radius:999px;
-  padding:.12rem;border:1px solid var(--line)}
-.qty button{width:28px;height:28px;border-radius:999px;cursor:pointer;display:grid;
-  place-items:center;font-weight:800;font-size:1rem;line-height:1}
-.qty button:hover{background:var(--wash)}
-.qty span{min-width:22px;text-align:center;font-weight:800;font-size:.88rem;
-  font-variant-numeric:tabular-nums}
-.cart-empty{text-align:center;color:var(--ink-3);padding:2.5rem 1rem;display:grid;gap:.8rem;
-  justify-items:center}
-.cart-foot{flex:none;padding:1rem 1.1rem calc(1rem + env(safe-area-inset-bottom,0px));
-  border-top:1px solid var(--line);display:grid;gap:.5rem;background:var(--white)}
-.tot{display:flex;justify-content:space-between;font-size:.92rem;color:var(--ink-2)}
-.tot.grand{font-size:1.15rem;font-weight:800;color:var(--ink);padding-top:.5rem;
-  border-top:2px solid var(--ink);margin-top:.2rem}
-.tot b{font-variant-numeric:tabular-nums}
-.cart-note{font-size:.78rem;color:var(--ink-3);text-align:center}
-
-/* checkout is a step inside the same panel, not a new page */
-.pay{display:grid;gap:.6rem}
-.paybox{border:2px dashed var(--line);border-radius:var(--r);padding:1rem;display:grid;gap:.45rem;
-  background:var(--paper)}
-.paybox h3{font-size:.95rem;text-transform:uppercase}
-.paybox p{font-size:.84rem;color:var(--ink-3)}
-
-/* ---------------------------------------------------------------- builder */
-.cfg{display:grid;gap:clamp(1rem,2.6vw,2.4rem);min-width:0;
-  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start}
-.cfg-ctrl{min-width:0}
-.cfg-stage{position:sticky;top:calc(var(--bar) + var(--rail,0px) + .5rem);z-index:5;
-  display:grid;min-width:0;
-  justify-items:center;gap:.6rem;background:var(--white);padding-bottom:.5rem}
-.cfg .btn-wide{margin-top:.2rem}
+/* ---------------------------------------------------------------- pizza drawing (build page) */
 .peel{position:relative;width:min(100%,300px);aspect-ratio:1;display:grid;place-items:center}
 .peel-board{position:absolute;inset:0;border-radius:50%;
   background:radial-gradient(circle at 38% 32%,#D6A96E,#B0814A 62%,#94683A);
@@ -532,82 +362,6 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .topq b{min-width:1.1ch;text-align:center;font-variant-numeric:tabular-nums;font-size:.86rem}
 .tdot{width:13px;height:13px;border-radius:99px;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
 
-/* ---------------------------------------------------------------- expanding rows
-   A pizza is not a thing you pick, it is a thing you build, so the row opens
-   where it stands instead of throwing a dialog over the menu. Same mechanism
-   for a deal opening into its pizzas. */
-.item-x{display:block;padding:0;overflow:visible}
-.item-hit{display:flex;align-items:center;gap:.9rem;width:100%;text-align:left;
-  padding:.7rem 0;cursor:pointer;border-radius:var(--r)}
-.item-x .item-body{display:flex;flex-direction:column;gap:.15rem;flex:1;min-width:0}
-.item-body .h4{font-size:1rem;font-weight:700;letter-spacing:-.01em;display:flex;
-  align-items:center;gap:.4rem;flex-wrap:wrap}
-.item-body .p{font-size:.84rem;color:var(--ink-3);font-weight:400;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.item-x .item-side{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;flex:none}
-.add-ghost{background:var(--ink);color:#fff;border-radius:999px;font-weight:700;font-size:.84rem;
-  padding:.44rem 1rem;white-space:nowrap;transition:background-color .18s}
-.item-x:hover .add-ghost{background:var(--red)}
-.item-x[data-open] .add-ghost{background:var(--red)}
-.flag-build{background:var(--green-soft);color:var(--green)}
-
-.panel{display:grid;grid-template-rows:0fr;min-width:0;
-  transition:grid-template-rows .42s var(--ease)}
-.panel>.panel-in{overflow:hidden;min-width:0}
-[data-open]>.panel{grid-template-rows:1fr}
-[data-grown]>.panel>.panel-in{overflow:visible}
-.item-x[data-open]{background:var(--wash);border-radius:var(--r)}
-.item-x>.panel>.panel-in>*{padding:.2rem .75rem 1rem}
-.item-x[data-open]>.panel>.panel-in{border-top:1px solid var(--line);margin-top:.1rem}
-
-/* a deal's slots: Pizza 1, Pizza 2, each opening the same builder */
-.slots{display:grid;gap:.45rem;padding-top:.8rem!important}
-.slot{border:2px solid var(--line);border-radius:14px;overflow:visible;background:var(--white)}
-.slot[data-set]{border-color:var(--green)}
-.slot-hit{display:grid;grid-template-columns:1fr auto;align-items:center;gap:.2rem .7rem;
-  width:100%;text-align:left;padding:.62rem .8rem;cursor:pointer}
-.slot-hit b{font-size:.95rem;font-weight:800;letter-spacing:-.01em}
-.slot-hit span{grid-column:1;font-size:.78rem;color:var(--ink-3);font-weight:500}
-.slot[data-set] .slot-hit span{color:var(--green);font-weight:700}
-.chev,.chev-l{width:9px;height:9px;border-right:2.4px solid currentColor;
-  border-bottom:2.4px solid currentColor;transform:rotate(45deg);
-  transition:transform .28s var(--ease);opacity:.5}
-.slot-hit .chev{grid-column:2;grid-row:1 / span 2}
-.slot[data-open] .chev{transform:rotate(-135deg);opacity:1}
-.chev-l{transform:rotate(135deg);opacity:.75}
-.slot-fixed{display:flex;align-items:center;justify-content:space-between;gap:.7rem;
-  border:2px dashed var(--line);border-radius:14px;padding:.62rem .8rem}
-.slot-fixed b{font-size:.95rem;font-weight:800;letter-spacing:-.01em}
-.slot-fixed span{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--green)}
-.slot>.panel>.panel-in>*{padding:.1rem .7rem .9rem}
-.slots-foot{display:grid;gap:.45rem;padding:.9rem 0 0!important}
-.slots-note{font-size:.8rem;color:var(--red);font-weight:700}
-
-/* ---------------------------------------------------------------- category rail
-   Once you are inside a category the way out and the way sideways have to be
-   permanently visible, or every change of mind costs a scroll to the top. */
-.rail{position:sticky;top:var(--bar);z-index:20;display:flex;align-items:center;gap:.5rem;
-  padding:.55rem 0;background:var(--white);min-width:0;max-width:100%;
-  box-shadow:0 1px 0 var(--line),0 10px 14px -14px rgba(17,17,19,.4)}
-.rail-back{flex:none;width:36px;height:36px;border-radius:999px;display:grid;place-items:center;
-  border:2px solid var(--line);cursor:pointer;background:var(--white)}
-.rail-back:hover{border-color:var(--ink)}
-.rail-scroll{flex:1 1 0%;min-width:0;display:flex;gap:.35rem;overflow-x:auto;
-  overscroll-behavior-x:contain;scroll-behavior:smooth;
-  scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:.15rem 0;
-  /* fade both ends: a pill scrolled half under the back button and cut off
-     square looks like a mistake, where a fade reads as "there is more" */
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,
-    #000 calc(100% - 26px),transparent);
-  mask-image:linear-gradient(90deg,transparent,#000 18px,
-    #000 calc(100% - 26px),transparent)}
-.rail-scroll::-webkit-scrollbar{display:none}
-.railbtn{flex:none;border:2px solid var(--line);border-radius:999px;padding:.34rem .8rem;
-  font-size:.83rem;font-weight:700;cursor:pointer;white-space:nowrap;background:var(--white);
-  transition:border-color .16s,background-color .16s,color .16s}
-.railbtn:hover{border-color:var(--ink)}
-.railbtn[data-on]{background:var(--ink);border-color:var(--ink);color:#fff}
 
 /* ---------------------------------------------------------------- order note */
 .note-field{display:grid;gap:.35rem;margin-bottom:.2rem}
@@ -623,13 +377,8 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   color:var(--green)}
 .paynote span{font-size:.86rem;color:var(--ink-2)}
 
-/* ---------------------------------------------------------------- steps + find */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.9rem,2.2vw,1.8rem);counter-reset:s}
-.step{counter-increment:s;position:relative;padding-top:1rem;border-top:3px solid var(--ink)}
-.step::before{content:counter(s);position:absolute;top:-1.1rem;right:0;font-size:2.3rem;
-  font-weight:800;color:var(--line);line-height:1}
-.step h3{font-size:1.04rem;text-transform:uppercase;margin-bottom:.25rem}
-.step p{font-size:.9rem;color:var(--ink-2)}
+
+/* ---------------------------------------------------------------- find us */
 .find{display:grid;gap:clamp(1rem,2.6vw,2.4rem);grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   align-items:start}
 .hours{display:grid;margin:1rem 0;border-top:1px solid var(--line)}
@@ -646,53 +395,271 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   box-shadow:var(--sh-lift);white-space:nowrap;font-size:.92rem}
 .mapattr{position:absolute;right:.5rem;bottom:.35rem;font-size:.58rem;color:var(--ink-3);
   background:rgba(255,255,255,.85);padding:.1rem .3rem;border-radius:4px}
-.findmail{font-size:.86rem;color:var(--ink-3);margin-top:.8rem}
-.findmail a{font-weight:700;color:var(--ink);border-bottom:2px solid var(--line)}
-.findmail a:hover{border-color:var(--red);color:var(--red)}
 .areas{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.8rem}
 .areas span{font-size:.8rem;font-weight:600;padding:.3rem .65rem;border-radius:999px;
   background:var(--paper);color:var(--ink-2)}
 
-/* ---------------------------------------------------------------- reveals */
-@media (prefers-reduced-motion:no-preference){
-  @supports (animation-timeline:view()){
-    [data-anim]{animation:rise .01s both;animation-timeline:view();animation-range:entry 3% cover 22%}
-    [data-anim="grow"]{animation-name:grow}
-    [data-stagger]>*{animation:rise .01s both;animation-timeline:view();animation-range:entry 2% cover 20%}
-    [data-stagger]>*:nth-child(2){animation-range:entry 3% cover 21%}
-    [data-stagger]>*:nth-child(3){animation-range:entry 4% cover 22%}
-    [data-stagger]>*:nth-child(4){animation-range:entry 5% cover 23%}
-    [data-stagger]>*:nth-child(5){animation-range:entry 6% cover 24%}
-    [data-stagger]>*:nth-child(6){animation-range:entry 7% cover 25%}
-  }
-  @supports not (animation-timeline:view()){
-    [data-anim],[data-stagger]>*{opacity:0;transform:translateY(22px);
-      transition:opacity .6s var(--ease),transform .7s var(--ease)}
-    [data-anim].in,[data-stagger].in>*{opacity:1;transform:none}
-  }
-  /* The hero is above the fold, so a view() timeline leaves whatever sits low
-     in the first screen stranded part-way through its fade — which is why the
-     order button rendered as washed-out pink on a phone and solid red on a
-     laptop. Nothing in the hero animates on scroll; it is finished at rest. */
-  .hero [data-anim],.hero [data-stagger]>*{
-    animation:none!important;opacity:1!important;transform:none!important}
-}
-@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-@keyframes grow{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+/* ---------------------------------------------------------------- page frame */
+.band{padding:clamp(1.8rem,4.4vw,3.6rem) 0}
+.band-tiles{padding-top:clamp(1.4rem,3vw,2.6rem)}
+.pagehead{display:grid;gap:.45rem;margin-bottom:clamp(1rem,2.4vw,1.6rem)}
+.pagehead p{color:var(--ink-3);font-size:.95rem;max-width:60ch}
+.sec-big{font-size:clamp(1.9rem,4.6vw,3.1rem);text-transform:uppercase;letter-spacing:-.04em}
+h2.sec{font-size:.74rem;font-weight:800;letter-spacing:.16em;color:var(--ink-3);
+  margin:1.6rem 0 .7rem}
+h2.sec:first-of-type{margin-top:0}
+.find h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);letter-spacing:-.03em;color:var(--ink);margin:0 0 .6rem}
+.small{font-size:.84rem;color:var(--ink-3);margin-top:.8rem}
+.narrowcol{max-width:760px}
+.backlink{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;font-size:.9rem;
+  padding:.4rem .9rem .4rem .7rem;margin:0 0 1rem -.2rem;border-radius:999px;
+  transition:background-color .16s}
+.backlink::before{content:'';width:8px;height:8px;border-left:2.4px solid currentColor;
+  border-bottom:2.4px solid currentColor;transform:rotate(45deg)}
+@media (hover:hover){.backlink:hover{background:var(--wash)}}
+.bar nav a[aria-current]{border-color:var(--ink)}
+
+/* ---------------------------------------------------------------- category doors
+   Same shape every time: the name, how many, and the shop's own photo when
+   there is one. A list you can read in one pass, not a wall of pictures. */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.6rem}
+.tile{display:flex;align-items:center;gap:.8rem;min-height:84px;padding:.6rem .6rem .6rem 1.05rem;
+  border:1px solid var(--line);border-radius:16px;background:var(--white);
+  transition:border-color .16s,box-shadow .2s var(--ease),transform .2s var(--ease)}
+@media (hover:hover){.tile:hover{border-color:var(--ink);box-shadow:var(--sh);transform:translateY(-2px)}}
+.tile-text{flex:1;min-width:0;display:grid;gap:.1rem}
+.tile b{font-size:1.06rem;font-weight:800;letter-spacing:-.015em;line-height:1.15}
+.tile small{font-size:.8rem;color:var(--ink-3);font-weight:500}
+.tile img{width:88px;height:66px;object-fit:cover;border-radius:11px;flex:none}
+.tile::after{content:'';width:8px;height:8px;border-right:2.4px solid var(--ink-3);
+  border-bottom:2.4px solid var(--ink-3);transform:rotate(-45deg);flex:none;margin-right:.45rem}
+.tile:has(img)::after{display:none}
+.tile.is-deal{background:var(--red);border-color:var(--red);color:#fff}
+.tile.is-deal small{color:rgba(255,255,255,.82)}
+.tile.is-deal::after{border-color:#fff}
+.tiles-pizza .tile.is-wide b{font-size:1.18rem}
+
+/* ---------------------------------------------------------------- category rail
+   Inside a category the way out (the arrow) and the way sideways (the pills)
+   stay on screen all the way down, so a change of mind never costs a scroll. */
+.rail{position:sticky;top:var(--bar);z-index:20;background:rgba(255,255,255,.96);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.rail-in{display:flex;align-items:center;gap:.5rem;padding:.5rem 0;min-width:0}
+.rail-back{flex:none;width:36px;height:36px;border-radius:999px;display:grid;place-items:center;
+  border:2px solid var(--line);transition:border-color .16s}
+.rail-back i{width:8px;height:8px;border-left:2.4px solid var(--ink);border-bottom:2.4px solid var(--ink);
+  transform:translateX(1px) rotate(45deg)}
+@media (hover:hover){.rail-back:hover{border-color:var(--ink)}}
+.rail-track{flex:1 1 0%;min-width:0;display:flex;gap:.35rem;overflow-x:auto;scrollbar-width:none;
+  overscroll-behavior-x:contain;padding:.1rem 0;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 14px,#000 calc(100% - 24px),transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 14px,#000 calc(100% - 24px),transparent)}
+.rail-track::-webkit-scrollbar{display:none}
+.pill{flex:none;border:2px solid var(--line);border-radius:999px;padding:.34rem .85rem;
+  font-size:.86rem;font-weight:700;white-space:nowrap;transition:border-color .16s}
+.pill:first-child{margin-left:10px}
+.pill:last-child{margin-right:20px}
+@media (hover:hover){.pill:hover{border-color:var(--ink)}}
+.pill[aria-current]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* ---------------------------------------------------------------- dish cards
+   Name and words on the left, the shop's photo on the right, sizes as one row
+   of choices, then quantity and Add. Everything needed to order is on the card. */
+.band-menu{padding-top:clamp(1.2rem,3vw,2.2rem)}
+.grouphead{font-size:clamp(1.15rem,2vw,1.45rem);font-weight:800;letter-spacing:-.02em;
+  text-transform:uppercase;margin:2.2rem 0 .8rem;scroll-margin-top:calc(var(--bar) + 70px)}
+.pagehead + .grouphead{margin-top:.6rem}
+.groupnote{font-size:.88rem;color:var(--ink-3);margin:-.4rem 0 .9rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:.75rem}
+.card{display:flex;flex-direction:column;gap:.85rem;padding:1rem;border:1px solid var(--line);
+  border-radius:18px;background:var(--white);scroll-margin-top:calc(var(--bar) + 76px);
+  transition:border-color .16s,box-shadow .2s var(--ease)}
+@media (hover:hover){.card:hover{border-color:rgba(17,17,19,.28);box-shadow:var(--sh)}}
+.card:target{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink)}
+.card-top{display:flex;gap:.9rem;align-items:flex-start}
+.card-text{flex:1;min-width:0;display:grid;gap:.3rem;align-content:start}
+.card h3{font-size:1.06rem;font-weight:800;letter-spacing:-.015em;line-height:1.2}
+.card-text p{font-size:.86rem;color:var(--ink-3);line-height:1.45;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-tags{display:flex;gap:.3rem;flex-wrap:wrap}
+.tag-deal{background:var(--red);color:#fff}
+.card-img{width:112px;height:112px;object-fit:cover;border-radius:14px;flex:none;background:var(--wash)}
+.card-foot{display:flex;align-items:center;gap:.5rem;margin-top:auto}
+.card-foot .btn-add{margin-left:auto}
+.card-from{font-size:.88rem;color:var(--ink-3);margin-right:auto}
+.card-from b{color:var(--ink);font-size:1.02rem}
+.card-price{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap}
+.card-price b{font-size:1.3rem;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums}
+.card-price s{color:var(--ink-3);font-weight:600;font-size:.88rem}
+.card-price .save{color:var(--green);font-weight:800;font-size:.86rem}
+.card-deal .card-foot .btn{margin-left:auto}
+.card-text .card-price{display:flex;margin-top:.25rem;overflow:visible;-webkit-line-clamp:unset}
+/* build-your-own is one card; it runs the full width as a banner instead of
+   leaving two thirds of a row empty */
+.card-build{grid-column:1 / -1;flex-direction:row;align-items:center;gap:1rem 1.4rem}
+.card-build .card-top{flex:1}
+.card-build .card-foot{margin:0;gap:1rem}
+.btn-add{min-width:8.4rem;font-variant-numeric:tabular-nums}
+.btn-add[data-done]{background:var(--green);border-color:var(--green)}
+
+/* sizes: one row of choices, the picked one filled black */
+.sizes{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:.35rem;border:0;padding:0;margin:0;min-width:0}
+.sz{position:relative;cursor:pointer;min-width:0}
+.sz input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.sz span{display:grid;gap:.05rem;text-align:center;padding:.4rem .25rem;border:1.5px solid var(--line);
+  border-radius:11px;transition:border-color .14s,background-color .14s,color .14s}
+.sz i{font-style:normal;font-size:.64rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sz b{font-size:.88rem;font-weight:800;font-variant-numeric:tabular-nums}
+@media (hover:hover){.sz:hover span{border-color:var(--ink)}}
+.sz input:checked + span{background:var(--ink);border-color:var(--ink);color:#fff}
+.sz input:checked + span i{color:rgba(255,255,255,.75)}
+.sz input:focus-visible + span{outline:3px solid var(--red);outline-offset:2px}
+
+/* quantity: minus, number, plus */
+.stepper{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:999px;
+  padding:.12rem;flex:none}
+.stepper button{width:32px;height:32px;border-radius:999px;cursor:pointer;display:grid;place-items:center;
+  font-size:1.1rem;font-weight:800;line-height:1;transition:background-color .14s}
+@media (hover:hover){.stepper button:hover{background:var(--wash)}}
+.stepper button:disabled{opacity:.3;cursor:default;background:none}
+.stepper output{min-width:1.6rem;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+
+/* ---------------------------------------------------------------- toast
+   "Added" with the way to the order, then it gets out of the way. */
+.toast{position:fixed;z-index:80;left:50%;bottom:calc(1rem + env(safe-area-inset-bottom,0px));
+  transform:translate(-50%,0);width:max-content;max-width:calc(100% - 2rem);
+  display:flex;align-items:center;gap:1rem;padding:.75rem .8rem .75rem 1.1rem;border-radius:16px;
+  background:var(--ink);color:#fff;font-weight:600;font-size:.92rem;box-shadow:var(--sh-lift);
+  animation:toastin .32s var(--ease)}
+.toast[data-out]{opacity:0;transform:translate(-50%,12px);transition:opacity .25s,transform .25s var(--ease)}
+.toast a{flex:none;background:var(--white);color:var(--ink);font-weight:800;border-radius:999px;
+  padding:.42rem .9rem;font-size:.84rem}
+.toast span{min-width:0}
+@keyframes toastin{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}
+.cartbtn[data-bump]{animation:bounce .42s var(--ease)}
+@keyframes bounce{0%{transform:scale(1)}35%{transform:scale(1.22)}100%{transform:scale(1)}}
+.cartbtn[aria-current]{background:var(--red)}
+
+/* ---------------------------------------------------------------- build page */
+.band-build{padding-top:clamp(1rem,2.4vw,1.8rem)}
+.build-head{margin-bottom:1.2rem}
+.build-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,380px);gap:clamp(1.2rem,3vw,3rem);
+  align-items:start}
+.step{padding:1.2rem 0 1.4rem;border-top:1px solid var(--line)}
+.step:first-child{border-top:0;padding-top:0}
+.step-h{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem}
+.step-h h2{font-size:1.12rem;font-weight:800;letter-spacing:-.015em;text-transform:none}
+.step-h em{font-style:normal;font-size:.84rem;font-weight:700;color:var(--red)}
+.step-n{width:26px;height:26px;border-radius:99px;background:var(--ink);color:#fff;font-size:.8rem;
+  font-weight:800;display:grid;place-items:center;flex:none;align-self:center}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{border:2px solid var(--line);border-radius:999px;padding:.5rem 1rem;font-weight:700;
+  font-size:.9rem;cursor:pointer;transition:border-color .16s,background-color .16s,color .16s}
+@media (hover:hover){.chip:hover{border-color:var(--ink)}}
+.chip[data-on]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip:disabled{opacity:.4;cursor:default}
+.chip em{font-style:normal;opacity:.7;font-size:.76rem;margin-left:.3rem}
+.ctrl-hint{font-size:.84rem;color:var(--ink-3);margin:-.35rem 0 .7rem}
+.tops-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:.4rem}
+.topbtn{grid-template-columns:auto 1fr auto;gap:.1rem .55rem;border-width:1.5px;min-height:46px;
+  padding:.35rem .4rem .35rem .65rem;font-size:.88rem}
+.topq{gap:.15rem}
+.topq button{width:28px;height:28px;font-size:1rem}
+.fixedslot{display:flex;align-items:center;gap:.6rem;padding:.8rem 1rem;border:1.5px dashed var(--line);
+  border-radius:14px;font-weight:700;font-size:.92rem;margin-top:1rem}
+.fixedslot::before{content:'Included';font-size:.66rem;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--green)}
+.seg{display:flex;gap:.3rem;padding:.25rem;background:var(--wash);border-radius:999px;margin-bottom:1.2rem;
+  width:max-content;max-width:100%}
+.seg button{border-radius:999px;padding:.5rem 1.1rem;font-weight:700;font-size:.9rem;cursor:pointer}
+.seg button[aria-selected="true"]{background:var(--white);box-shadow:var(--sh)}
+.seg button[data-set]::after{content:'\2713';margin-left:.4rem;color:var(--green)}
+.special{width:100%;font:inherit;font-size:.92rem;border:2px solid var(--line);border-radius:12px;
+  padding:.6rem .75rem;resize:vertical;min-height:3.2rem}
+.special:focus{border-color:var(--ink);outline:none}
+
+/* the summary: the pizza as it is, what is on it, and the one button */
+.summary{position:sticky;top:calc(var(--bar) + 1rem);display:grid;gap:1rem;padding:1.2rem;
+  border:1px solid var(--line);border-radius:22px;background:var(--white);box-shadow:var(--sh)}
+.summary-pie{display:grid;place-items:center}
+.summary .peel{width:min(100%,250px);margin-inline:auto}
+/* every pizza starts as sauce and cheese, so the drawing does too */
+.summary .sauce,.summary .cheese{opacity:1}
+.summary-which{font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:.4rem}
+.summary-lines{margin:0;display:grid;gap:.25rem;font-size:.88rem}
+.summary-lines div{display:flex;justify-content:space-between;gap:1rem}
+.summary-lines dt{color:var(--ink-3);flex:none}
+.summary-lines dd{margin:0;text-align:right;font-weight:600}
+.summary-price{display:flex;justify-content:space-between;align-items:baseline;padding-top:.6rem;
+  margin-top:.6rem;border-top:2px solid var(--ink)}
+.summary-price span{font-weight:700}
+.summary-price b{font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums}
+.summary-price b[data-bump]{animation:bounce .3s var(--ease)}
+.summary-foot{display:flex;gap:.6rem;align-items:center}
+.summary-foot .btn{flex:1;white-space:nowrap}
+.summary-foot .btn b{font-variant-numeric:tabular-nums}
+
+/* ---------------------------------------------------------------- order page */
+.order-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,360px);gap:clamp(1.2rem,3vw,3rem);
+  align-items:start}
+.order-empty{display:grid;gap:1rem;justify-items:start;padding:.4rem 0 2rem;color:var(--ink-3);font-size:1.05rem}
+.lines{list-style:none;margin:0 0 1.4rem;padding:0;border-top:1px solid var(--line)}
+.line{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:.4rem 1rem;align-items:center;
+  padding:1rem 0;border-bottom:1px solid var(--line)}
+.line-n b{display:block;font-weight:800;letter-spacing:-.01em}
+.line-n small{display:block;color:var(--ink-3);font-size:.84rem}
+.line-p{font-weight:800;font-variant-numeric:tabular-nums;min-width:4.6rem;text-align:right}
+.line-x{grid-column:1;justify-self:start;font-size:.8rem;font-weight:700;color:var(--ink-3);cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px;padding:0}
+@media (hover:hover){.line-x:hover{color:var(--red)}}
+.totals{position:sticky;top:calc(var(--bar) + 1rem);display:grid;gap:.55rem;padding:1.2rem;
+  border:1px solid var(--line);border-radius:22px;box-shadow:var(--sh);background:var(--white)}
+.tot{display:flex;justify-content:space-between;font-size:.94rem;color:var(--ink-2)}
+.tot.grand{font-size:1.2rem;font-weight:800;color:var(--ink);padding-top:.55rem;border-top:2px solid var(--ink);
+  margin:.2rem 0 .4rem}
+.tot b{font-variant-numeric:tabular-nums}
+.pay{display:grid;gap:.55rem;margin-top:.3rem}
+.paybox{border:2px dashed var(--line);border-radius:16px;padding:1rem;display:grid;gap:.4rem}
+.paybox h3{font-size:.95rem;text-transform:uppercase}
+.paybox p{font-size:.86rem;color:var(--ink-3)}
+.totals .small{margin-top:.2rem}
+
+/* ---------------------------------------------------------------- about + faq */
+.prose{display:grid;gap:1rem;font-size:1.05rem;color:var(--ink-2);max-width:62ch}
+.faq{border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{display:flex;justify-content:space-between;align-items:center;gap:1rem;cursor:pointer;
+  padding:1.05rem 0;font-weight:800;font-size:1.04rem;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';font-size:1.4rem;font-weight:500;color:var(--red);flex:none;
+  transition:transform .2s var(--ease)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 0 1.1rem;color:var(--ink-2);max-width:62ch}
+
+/* ---------------------------------------------------------------- footer */
+.foot{position:relative;z-index:1;border-top:1px solid var(--line);padding:2.4rem 0 1.4rem;
+  font-size:.9rem;margin-top:2rem}
+.foot-in{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:2rem}
+.foot-logo{width:96px;height:auto;margin-bottom:.8rem}
+.foot p{color:var(--ink-2)}
+.foot a{font-weight:600}
+@media (hover:hover){.foot a:hover{color:var(--red)}}
+.foot-hours{margin:0;display:grid;gap:.25rem;align-content:start}
+.foot-hours div{display:flex;justify-content:space-between;gap:1rem;max-width:240px}
+.foot-hours dt{color:var(--ink-3)}
+.foot-hours dd{margin:0;font-variant-numeric:tabular-nums}
+.foot-links{display:grid;gap:.35rem;align-content:start}
+.foot-fine{font-size:.78rem;color:var(--ink-3);margin-top:1.6rem}
 
 /* ---------------------------------------------------------------- responsive */
-@media (min-width:1500px){ .cats{grid-template-columns:repeat(3,1fr)} }
-@media (max-width:1040px){ .cfg,.find{grid-template-columns:1fr} }
+@media (max-width:1040px){ .find{grid-template-columns:1fr} }
 @media (max-width:900px){
   /* On a phone the pizza goes between the sentence and the buttons: you read
      what the place is, you see the food, and the buttons are the last thing
-     under your thumb. */
-  /* The pizza takes whatever height is left, never a fixed share of the
-     screen. A fixed 42svh fitted a bare 375x812 test window and overflowed a
-     real phone, where Chrome's address bar takes ~100px — and because the hero
-     clips, the overflow cut the headline at the top and the facts at the
-     bottom. Now the headline, the offer and the buttons take what they need,
-     and .stage (a size container) hands the rest to the pizza. */
+     under your thumb. The pizza takes whatever height is left (.stage is a
+     size container), never a fixed share of a screen whose address bar varies. */
   .hero{align-content:stretch}
   .hero-in{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr) auto;
     gap:clamp(.4rem,1.4vh,.9rem);text-align:left;min-height:0}
@@ -700,83 +667,70 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   .herofig{grid-column:1;grid-row:2;align-self:stretch;min-height:0;
     display:flex;flex-direction:column;align-items:center}
   .stage{flex:1 1 0;min-height:0;container-type:size}
-  /* the ring of words reaches ~6% past the pie on each side; 84% of the
-     height leaves it room, 78% of the width keeps it off the edges */
   .stage .turntable{--pie:min(78cqw,84cqh)}
   .herofig .deal{align-self:stretch}
   .hero-cta{grid-column:1;grid-row:3}
-  /* On a phone the paragraph is the first thing to go. The slogan already
-     says what this is; the space is worth more to the pizza and the price. */
-  /* the address is in the footer, the map and the call button; above the
-     slogan on a phone it is just a line of small grey text in the way */
   .hero .lede,.hero .eyebrow{display:none}
   .display .wide{display:none}
   .display .narrow{display:inline}
   .display{font-size:min(clamp(2rem,9vw,2.9rem),8.6svh)}
   .deal h2{font-size:min(1.32rem,4.6svh)}
-  /* one line on a phone: the offer block reserves room for its tallest slide
-     so nothing jumps, and a second line of description was buying an empty
-     band above the buttons on every other slide. The pizza gets that space. */
   .deal .sub{font-size:.9rem;-webkit-line-clamp:1}
   .saveline{font-size:.92rem}
-  /* the bar earns its 60px: mark, basket, dots. Phone and open-status live in
+  .hero .acts{margin-top:.8rem;gap:.5rem}
+  .hero .acts .btn{flex:1 1 auto;min-width:0;white-space:nowrap;padding-inline:1rem}
+  /* the bar earns its 60px: mark, order, dots. Phone and open-status live in
      the sheet, where they are not competing with the order button. */
   .bar nav,.bar .openpill,.bar .btn-sm{display:none}
   .dots{display:grid}
   .bar{gap:.5rem}
-  .steps{grid-template-columns:1fr;gap:1rem}
-  .cfg-stage{box-shadow:0 14px 20px -14px rgba(17,17,19,.25)}
-  .peel{width:min(52vw,210px)}
-  .cats{grid-template-columns:repeat(2,1fr)}
-  .hero .acts{margin-top:.8rem;gap:.5rem}
-  /* flex:1 made both buttons the same width, and "Start your order" is longer
-     than "Call", so it wrapped to two lines and doubled the button's height.
-     Let each take the width its label needs, then share what is left. */
-  .hero .acts .btn{flex:1 1 auto;min-width:0;white-space:nowrap;padding-inline:1rem}
+  .build-grid,.order-grid{grid-template-columns:minmax(0,1fr)}
+  .totals{position:static}
+  .foot-in{grid-template-columns:1fr 1fr}
+  .foot-in>div:first-child{grid-column:1 / -1}
+
+  /* The build page on a phone: the pizza sits at the top where you can watch
+     it, the steps follow, and the price and Add stay under your thumb. */
+  .build-grid{display:flex;flex-direction:column;align-items:stretch;gap:0}
+  .summary{display:contents}
+  .summary-pie{order:-1;margin-bottom:1.2rem}
+  .summary .peel{width:min(46vw,190px)}
+  .summary-text{order:2;padding-top:1.2rem;border-top:1px solid var(--line)}
+  .summary-price{display:none}
+  .summary-foot{position:fixed;z-index:40;left:0;right:0;bottom:0;padding:.7rem 1rem
+    calc(.7rem + env(safe-area-inset-bottom,0px));background:var(--white);
+    border-top:1px solid var(--line);box-shadow:0 -8px 24px -12px rgba(17,17,19,.25)}
+  body[data-page="build"] .foot{padding-bottom:6rem}
+  body[data-page="build"] .toast{bottom:calc(5.4rem + env(safe-area-inset-bottom,0px))}
 }
 @media (max-width:620px){
   .display{font-size:min(clamp(1.8rem,8vw,2.4rem),7.2svh)}
-  /* On a laptop the price column sits beside the description. On a phone that
-     column steals the width the food name needs and leaves a ragged gutter
-     down the left. So the prices drop to their own full-width line and spread
-     out — the row uses all of the screen instead of a third of it. */
-  .item-media{width:64px;height:64px}
-  .item,.item-hit{display:grid;grid-template-columns:auto minmax(0,1fr);
-    grid-template-areas:"media body" "side side";column-gap:.7rem;row-gap:.5rem;
-    align-items:center;padding:.6rem}
-  .item,.item-hit{padding:.65rem 0}
-  .item-x{display:block;padding:0}
-  .item-media{grid-area:media}
-  .item-body{grid-area:body}
-  .item-side{grid-area:side}
-  .item-body h4,.item-body .h4{font-size:.95rem}
-  .item-body p,.item-body .p{font-size:.79rem;-webkit-line-clamp:2}
-  .item-side,.item-x .item-side{flex-direction:row;align-items:center;
-    justify-content:space-between;gap:.5rem;width:100%}
-  .sizes{flex:1;flex-wrap:nowrap;justify-content:stretch;gap:.3rem}
-  .sizebtn{flex:1;min-width:0;padding:.34rem .3rem}
-  .item-side>.price{order:-1}
-  /* every pill on a row is the same pill: the Build it button was stretching
-     to fill while Add stayed small, and the two read as different controls */
-  .add,.add-ghost{flex:none;padding:.46rem 1.15rem;font-size:.84rem}
-  .item-side{flex-wrap:wrap}
-  .pickbar{justify-content:stretch}
-  .pickbar .add{flex:1;text-align:center;padding:.6rem 1rem}
-  .tops-grid{grid-template-columns:repeat(auto-fill,minmax(146px,1fr))}
-  /* the rail runs to both edges on a phone so it reads as a bar, not a widget */
-  .rail{margin:0 -1.1rem;padding:.5rem 1.1rem}
-  /* the rows run to the gutter on a phone; the old card padding
-     left a dead strip down the left of every dish */
-  .item{padding:.65rem 0}
-  .item-media{width:66px;height:66px}
-  .cat{aspect-ratio:4/3}
-  .cat b{font-size:.96rem}
-  .cat small{display:none}
+  .tiles{grid-template-columns:minmax(0,1fr)}
+  .tile{min-height:76px}
+  .tile img{width:80px;height:60px}
+  .card{padding:.9rem;border-radius:16px}
+  .card-img{width:92px;height:92px;border-radius:12px}
+  .card-text p{-webkit-line-clamp:2}
+  .card-foot .btn-add{flex:1;min-width:0}
+  .card-build{flex-direction:column;align-items:stretch}
+  /* deals ride in a strip you swipe, so the dishes start in the first screen */
+  .cards-strip{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:84%;
+    overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -1.1rem;
+    padding:0 1.1rem .2rem;scroll-padding:0 1.1rem}
+  .cards-strip::-webkit-scrollbar{display:none}
+  .cards-strip>.card{scroll-snap-align:start}
+  .card-foot .btn-line{padding-inline:.85rem}
+  .tops-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .topbtn{font-size:.84rem}
+  .foot-in{grid-template-columns:minmax(0,1fr)}
+  .line{grid-template-columns:minmax(0,1fr) auto}
+  .line .stepper{grid-column:1;grid-row:2;justify-self:start}
+  .line-p{grid-column:2;grid-row:1}
+  .line-x{grid-column:2;grid-row:2;justify-self:end}
 }
 
 /* Short screens give up the address line and the pickup facts before they give
-   up anything you would actually order with. The pizza shrinks rather than
-   pushing the buttons past the fold. */
+   up anything you would actually order with. */
 @media (max-height:680px){
   .hero{--pie:min(58vw,29svh)}
   .hero .eyebrow,.hero-facts{display:none}

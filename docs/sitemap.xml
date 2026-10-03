@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://tastypizza.ca/</loc><lastmod>2026-10-03</lastmod><priority>1.0</priority></url>
+<url><loc>https://tastypizza.ca/about.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/build.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/deals.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/faq.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/menu.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/menu/burgers.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/menu/chicken.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/menu/donairs.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/menu/garlic-fingers.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/menu/pizza.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/menu/salads.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/menu/seafood.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/menu/sides.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/menu/subs.html</loc><lastmod>2026-10-03</lastmod></url>
+<url><loc>https://tastypizza.ca/order.html</loc><lastmod>2026-10-03</lastmod></url>
 </urlset>

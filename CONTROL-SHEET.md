@@ -26,6 +26,7 @@ stay on that machine — `photos-in/` is gitignored because the repo is public.
 | **Pizza builder** | What a build-your-own costs by topping count, and each extra topping |
 | **Hours** | Opening and closing times, days off |
 | **Shop details** | Phone, email, delivery fee and minimum, tax rate, DoorDash / Uber Eats / Skip links, the Google description |
+| **Questions** | Extra questions for the FAQ page. Hours, delivery, crusts and vegetarian pizzas are answered automatically; add anything else customers ask |
 
 Turning a deal off with `Showing = no` takes it off the site without deleting
 it, so a seasonal offer can come back next year unchanged.

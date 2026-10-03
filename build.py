@@ -427,10 +427,6 @@ def build_menu(site, menu, deals):
 
 def copy_assets():
     (OUT / "assets").mkdir(parents=True, exist_ok=True)
-    for name in ("site.css", "app.js"):
-        src = SRC / name
-        if src.exists():
-            shutil.copy2(src, OUT / "assets" / name)
     fonts = ROOT / "assets" / "fonts"
     if fonts.exists():
         dst = OUT / "assets" / "fonts"
@@ -459,28 +455,18 @@ def copy_assets():
                   "# tastypizza.ca, and search engines will be allowed in.\n"
                   "User-agent: *\nDisallow: /\n")
     (OUT / "robots.txt").write_text(robots, encoding="utf-8")
+
+
+def write_sitemap():
+    """Every page the generator wrote, so search finds the menu pages too."""
+    pages = sorted(p.relative_to(OUT).as_posix() for p in OUT.rglob("*.html"))
+    urls = "".join(
+        f'<url><loc>https://tastypizza.ca/{"" if p == "index.html" else p}</loc>'
+        f'<lastmod>{date.today()}</lastmod></url>\n' for p in pages)
     (OUT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f'<url><loc>https://tastypizza.ca/</loc><lastmod>{date.today()}</lastmod><priority>1.0</priority></url>\n'
-        '</urlset>\n', encoding="utf-8")
-
-
-# The old two-page site (a video hero plus a long printed-style menu) has been
-# replaced by the ordering experience in site.py. Anything still pointing at
-# menu.html lands on the menu section of the new home page rather than a 404.
-MENU_REDIRECT = """<!doctype html>
-<html lang="en-CA"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tasty Pizza menu</title>
-<link rel="canonical" href="https://tejas7727.github.io/tastypizza-site/">
-<meta http-equiv="refresh" content="0; url=index.html#order">
-<meta name="robots" content="noindex">
-</head><body>
-<p>The menu now lives on the home page. <a href="index.html#order">Open the menu</a>.</p>
-<script>location.replace('index.html#order');</script>
-</body></html>
-"""
+        + urls + '</urlset>\n', encoding="utf-8")
 
 
 def main():
@@ -489,7 +475,7 @@ def main():
     copy_assets()
 
     storefront.main()
-    (OUT / "menu.html").write_text(MENU_REDIRECT, encoding="utf-8")
+    write_sitemap()
 
     n_items = sum(len(visible(g["items"]))
                   for c in visible(menu["categories"]) for g in c["groups"])

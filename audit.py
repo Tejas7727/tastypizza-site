@@ -129,13 +129,13 @@ def check_page(name):
         if img.get("alt") is None:
             fail(f"{name}: <img src={src}> has no alt attribute")
         if src and not src.startswith(("http", "data:")):
-            f = OUT / src
+            f = (OUT / name).parent / src
             if not f.exists():
                 fail(f"{name}: image not found -> {src}")
         if not (img.get("width") and img.get("height")):
             warn(f"{name}: <img src={src}> has no width/height (causes layout shift)")
         for s2 in re.findall(r"([^\s,]+\.webp)", img.get("srcset", "")):
-            if not (OUT / s2).exists():
+            if not ((OUT / name).parent / s2).exists():
                 fail(f"{name}: srcset image not found -> {s2}")
 
     # --- internal links and fragments ------------------------------------
@@ -146,11 +146,12 @@ def check_page(name):
                 fail(f"{name}: link to #{h[1:]} but nothing on the page has that id")
             continue
         target, _, frag = h.partition("#")
-        if target and not (OUT / target).exists():
+        target = target.split("?")[0]
+        if target and not ((OUT / name).parent / target).exists():
             fail(f"{name}: dead link -> {target}")
 
     # --- structured data --------------------------------------------------
-    if not s.ld:
+    if name == "index.html" and not s.ld:
         fail(f"{name}: no JSON-LD — Google can't show hours, menu or price range")
     for blob in s.ld:
         try:
@@ -158,7 +159,8 @@ def check_page(name):
         except Exception as err:
             fail(f"{name}: JSON-LD is not valid JSON ({err})")
             continue
-        for k in ("name", "address", "telephone", "openingHoursSpecification"):
+        for k in (("name", "address", "telephone", "openingHoursSpecification")
+                  if j.get("@type") == "Restaurant" else ()):
             if k not in j:
                 fail(f"{name}: JSON-LD missing {k}")
 
@@ -223,15 +225,16 @@ def check_assets():
               ".nojekyll", "robots.txt", "sitemap.xml"):
         if not (OUT / f).exists():
             fail(f"missing build output: {f}")
-    # The stylesheet and the script are inlined into index.html now, so the
-    # dead-class check reads them from the source rather than from docs/.
-    css = ROOT / "src" / "brand.css"
+    for f in ("assets/tasty.css", "assets/tasty.js", "assets/config.js"):
+        if not (OUT / f).exists():
+            fail(f"missing build output: {f}")
+    css = ROOT / "src" / "tasty.css"
     if css.exists():
         text = css.read_text(encoding="utf-8")
         # a class the stylesheet promises but nothing uses is a silent no-op;
-        # brand.js and config.js build markup at runtime, so they count as usage
-        html = (OUT / "index.html").read_text(encoding="utf-8")
-        for src in ("brand.js", "config.js"):
+        # tasty.js and config.js build markup at runtime, so they count as usage
+        html = "".join(f.read_text(encoding="utf-8") for f in OUT.rglob("*.html"))
+        for src in ("tasty.js", "config.js"):
             f = ROOT / "src" / src
             if f.exists():
                 html += f.read_text(encoding="utf-8")
@@ -243,9 +246,8 @@ def check_assets():
 def main():
     print("auditing docs/ ...")
     check_assets()
-    check_page("index.html")
-    # menu.html is a redirect stub kept so old links do not 404; auditing it
-    # for og tags and JSON-LD would only ever report that a stub is a stub
+    for f in sorted(OUT.rglob("*.html")):
+        check_page(f.relative_to(OUT).as_posix())
     check_data()
     print()
     for w in warns:
