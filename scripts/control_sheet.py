@@ -97,10 +97,34 @@ def yesno(ws, col, first, last):
     dv.add(f"{col}{first}:{col}{last}")
 
 
+def available_pies():
+    """The home-page pizza art that exists, e.g. 'pepperoni' for pie-pepperoni.webp."""
+    img = ROOT / "docs" / "assets" / "img"
+    return sorted(p.stem[4:] for p in img.glob("pie-*.webp"))
+
+
+def available_photos():
+    return sorted(k for k in json.loads((DATA / "photos.json").read_text(encoding="utf-8"))["picks"])
+
+
+def pick_list(ws, col, first, last, list_col, n):
+    """A dropdown fed from the hidden Lists sheet. Excel caps a typed-in list at
+    255 characters, and there are more photo names than that."""
+    if n < 1 or last < first:
+        return
+    dv = DataValidation(type="list", formula1=f"=Lists!${list_col}$1:${list_col}${n}",
+                        allow_blank=True, showErrorMessage=True,
+                        errorTitle="Not on the list",
+                        error="Pick one from the dropdown, or leave it empty.")
+    ws.add_data_validation(dv)
+    dv.add(f"{col}{first}:{col}{last}")
+
+
 # --------------------------------------------------------------------- export
 
 def export():
     site, menu, deals = load("site"), load("menu"), load("deals")
+    pies, photo_names = available_pies(), available_photos()
     wb = Workbook()
     wb.remove(wb.active)
 
@@ -113,17 +137,23 @@ def export():
         ("This workbook is the website. Change something here, publish, and the live "
          "site follows.", EDIT_FONT),
         ("", None),
-        ("HOW TO PUBLISH", RED_FONT),
+        ("HOW TO PUBLISH — from any computer, nothing to install", RED_FONT),
         ("1.  Change what you want on any of the sheets. Save the file (Ctrl+S).", EDIT_FONT),
-        ('2.  Close Excel. It has to be closed or the file stays locked.', EDIT_FONT),
-        ('3.  Double-click "Publish website" in the same folder as this file.', EDIT_FONT),
-        ("4.  A black window opens and tells you what it is doing. When it says DONE, "
-         "the site is live in about a minute.", EDIT_FONT),
+        ("2.  Go to github.com/Tejas7727/tastypizza-site and click  Add file  ->  Upload files.",
+         EDIT_FONT),
+        ("3.  Drop this file in, and click  Commit changes.", EDIT_FONT),
+        ("4.  The site updates in about two minutes. If something in the sheet is wrong, "
+         "nothing changes and the Actions tab says which cell.", EDIT_FONT),
+        ("", None),
+        ('Or, on the computer that has the website folder: close Excel and double-click '
+         '"Publish website". It also picks up new photos dropped in assets\\photos-in.',
+         NOTE_FONT),
         ("", None),
         ("WHAT EACH SHEET IS FOR", RED_FONT),
         ("Home page      the big slogan, the sentence under it, the three little facts", EDIT_FONT),
-        ("Deals          your offers: turn them on and off, change the price or the wording", EDIT_FONT),
-        ("Menu           every dish, its description and its prices", EDIT_FONT),
+        ("Deals          your offers: on and off, price, wording, and which ones go on the "
+         "front page", EDIT_FONT),
+        ("Menu           every dish, its description, its prices and its photo", EDIT_FONT),
         ("Pizza builder  what a build-your-own pizza costs, and extra toppings", EDIT_FONT),
         ("Hours          opening and closing times", EDIT_FONT),
         ("Shop details   phone, email, delivery fee, tax, DoorDash and Uber Eats links", EDIT_FONT),
@@ -169,25 +199,29 @@ def export():
     ws = sheet(wb, "Deals",
                "Your offers. \"Showing\" turns one on or off on the website — no need to "
                "delete it. \"Was price\" is the crossed-out price; leave it empty for no "
-               "saving. Prices are numbers only, no dollar sign.",
-               ["id", "Showing", "Name", "Description", "Price", "Was price"],
-               [22, 11, 34, 52, 11, 11], locked=1)
+               "saving. Prices are numbers only, no dollar sign. Pick a \"Home page pizza\" "
+               "to put the deal on the front page; leave it empty to keep it off.",
+               ["id", "Showing", "Name", "Description", "Price", "Was price", "Home page pizza"],
+               [22, 11, 34, 52, 11, 11, 18], locked=1)
     r = 5
     for d in deals["deals"]:
         row(ws, r, [d["id"], "yes" if d.get("active") else "no", d["name"],
-                    d.get("desc", ""), d.get("price"), d.get("compareAt")], locked=1)
+                    d.get("desc", ""), d.get("price"), d.get("compareAt"),
+                    d.get("homePie", "")], locked=1)
         r += 1
     yesno(ws, "B", 5, r - 1)
+    pick_list(ws, "G", 5, r - 1, "A", len(pies))
 
     # ---- Menu ----
     ws = sheet(wb, "Menu",
                "Every dish on the site. Change a name, a description or any price. Prices "
                "are numbers only. Leave a price empty if that size is not sold. Items "
                "priced by a shared tier show their tier's prices — changing one changes "
-               "every dish on that tier, which is how the printed menu works.",
+               "every dish on that tier, which is how the printed menu works. \"Photo\" "
+               "picks the picture; the shop's own photos show big on the site.",
                ["id", "Section", "Dish", "Description",
-                "Price 1", "Price 2", "Price 3", "Price 4", "Sizes"],
-               [30, 22, 26, 46, 10, 10, 10, 10, 22], locked=1)
+                "Price 1", "Price 2", "Price 3", "Price 4", "Sizes", "Photo"],
+               [30, 22, 26, 46, 10, 10, 10, 10, 22, 22], locked=1)
     r = 5
     for c in menu["categories"]:
         for g in c["groups"]:
@@ -205,8 +239,10 @@ def export():
                 tag = f"tier {it['tier']}" if "tier" in it else ""
                 row(ws, r, [f"{g['id']}/{it['name']}", g["name"], it["name"],
                             it.get("desc", ""), *prices,
-                            " / ".join(sizes) if sizes else tag], locked=1)
+                            " / ".join(sizes) if sizes else tag, it.get("photo", "")],
+                    locked=1)
                 r += 1
+    pick_list(ws, "J", 5, r - 1, "B", len(photo_names))
 
     # ---- Pizza builder ----
     b = menu["builder"]
@@ -258,6 +294,14 @@ def export():
     ):
         row(ws, r, [key, label, value], locked=2)
         r += 1
+
+    # ---- the dropdown sources, out of sight ----
+    ws = wb.create_sheet("Lists")
+    for i, name in enumerate(pies, 1):
+        ws.cell(row=i, column=1, value=name)
+    for i, name in enumerate(photo_names, 1):
+        ws.cell(row=i, column=2, value=name)
+    ws.sheet_state = "hidden"
 
     wb.save(BOOK)
     print(f"wrote {BOOK.name}")
@@ -350,6 +394,13 @@ def do_import(dry):
     if facts:
         rep.change("home.facts", home["facts"], facts); home["facts"] = facts
 
+    # A workbook saved before a column existed reads that column as empty. Taking
+    # empty at its word would strip every deal off the home page and every photo
+    # off the menu, so a column only counts when its header is really there.
+    pies, photo_names = available_pies(), available_photos()
+    has_pie_col = text(wb["Deals"].cell(4, 7).value) == "Home page pizza"
+    has_photo_col = text(wb["Menu"].cell(4, 10).value) == "Photo"
+
     # ---- Deals ----
     ws = wb["Deals"]
     by_id = {d["id"]: d for d in deals["deals"]}
@@ -380,6 +431,16 @@ def do_import(dry):
                 rep.problem("Deals", f"F{r}",
                             f"was price {was} is not above the price {price}, so no saving shows")
             rep.change(f"deal {d['id']}.compareAt", d.get("compareAt"), was); d["compareAt"] = was
+        if has_pie_col:
+            pie = text(ws.cell(r, 7).value)
+            if pie and pie not in pies:
+                rep.problem("Deals", f"G{r}", f"there is no home page pizza called {pie!r}")
+            else:
+                rep.change(f"deal {d['id']}.homePie", d.get("homePie", ""), pie)
+                if pie:
+                    d["homePie"] = pie
+                else:
+                    d.pop("homePie", None)
 
     # ---- Menu ----
     ws = wb["Menu"]
@@ -411,6 +472,16 @@ def do_import(dry):
             it["desc"] = desc
         else:
             it.pop("desc", None)
+        if has_photo_col:
+            photo = text(ws.cell(r, 10).value)
+            if photo and photo not in photo_names:
+                rep.problem("Menu", f"J{r}", f"there is no photo called {photo!r}")
+            else:
+                rep.change(f"menu {key}.photo", it.get("photo", ""), photo)
+                if photo:
+                    it["photo"] = photo
+                else:
+                    it.pop("photo", None)
 
         if "prices" in it:
             slots = len(it["prices"])

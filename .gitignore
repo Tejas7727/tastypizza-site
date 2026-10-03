@@ -11,6 +11,11 @@ research/**/_*.jpg
 research/**/_*.png
 research/_pick-hashes.json
 
+# The shop's own photos, full resolution. The repo is public, so only the
+# web-sized versions build_photos.py writes into docs/assets/img/ are published.
+# Keep the originals on the machine that runs "Publish website".
+assets/photos-in/
+
 # Working files
 research/current-site/home.html
 

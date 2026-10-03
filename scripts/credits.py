@@ -21,7 +21,10 @@ def main():
 
     rows, real = [], []
     for slug, spec in sorted(picks.items()):
-        if any((REAL / f"{slug}{ext}").exists() for ext in (".jpg", ".jpeg", ".png", ".webp")):
+        # "real" is recorded in photos.json because the originals in photos-in/
+        # are gitignored — anywhere but the owner's machine the folder is empty
+        if spec.get("real") or any((REAL / f"{slug}{ext}").exists()
+                                   for ext in (".jpg", ".jpeg", ".png", ".webp")):
             real.append(slug)
             continue
         meta = None

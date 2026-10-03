@@ -17,70 +17,98 @@
     "'photo' is any slug from data/photos.json.",
     "'blurb' shows under the category name once it is open."
   ],
-
   "categories": [
     {
       "id": "pizza",
       "name": "Pizza",
       "blurb": "Dough and sauce made fresh every morning. Build your own or take one we already figured out.",
-      "photo": "meat-lovers-pizza",
-      "groups": ["build-your-own", "gourmet", "pizza-extras"]
+      "photo": "bbq-chicken-pizza",
+      "groups": [
+        "build-your-own",
+        "gourmet",
+        "pizza-extras"
+      ]
     },
     {
       "id": "garlic-fingers",
       "name": "Garlic Fingers",
       "blurb": "Served with donair sauce. The Yum Yums are in here too.",
       "photo": "garlic-fingers",
-      "groups": ["garlic-fingers", "bread-sticks"]
+      "groups": [
+        "garlic-fingers",
+        "bread-sticks"
+      ]
     },
     {
       "id": "donairs",
       "name": "Donairs",
       "blurb": "On the pita, on a plate, in an egg roll, or on a stick.",
-      "photo": "donair",
-      "groups": ["donair", "donair-plates", "donair-fried", "donair-sauce"]
+      "photo": "donair-pogo",
+      "groups": [
+        "donair",
+        "donair-plates",
+        "donair-fried",
+        "donair-sauce"
+      ]
     },
     {
       "id": "subs",
       "name": "Subs & Pockets",
       "blurb": "Small or large. Oven baked or deep fried.",
-      "photo": "cold-cut-sub",
-      "groups": ["subs", "wraps-pockets"]
+      "photo": "pocket",
+      "groups": [
+        "subs",
+        "wraps-pockets"
+      ]
     },
     {
       "id": "chicken",
       "name": "Chicken & Wings",
       "blurb": "Wings in seven sauces, fingers, nuggets and the family pack.",
       "photo": "chicken-wings",
-      "groups": ["wings", "chicken"]
+      "groups": [
+        "wings",
+        "chicken"
+      ]
     },
     {
       "id": "seafood",
       "name": "Seafood",
       "blurb": "Fresh haddock, scallops, clams and shrimp.",
       "photo": "fish-and-chips",
-      "groups": ["fish", "seafood"]
+      "groups": [
+        "fish",
+        "seafood"
+      ]
     },
     {
       "id": "burgers",
       "name": "Burgers & Poutine",
       "blurb": "Burger or platter. Every poutine is real curds and homemade gravy.",
-      "photo": "hamburger",
-      "groups": ["burgers", "poutine"]
+      "photo": "cheeseburger",
+      "groups": [
+        "burgers",
+        "poutine"
+      ]
     },
     {
       "id": "sides",
       "name": "Sides & Nachos",
       "blurb": "Fries, rings, mozza sticks, gravy and the loaded nachos.",
       "photo": "onion-rings",
-      "groups": ["sides", "nachos"]
+      "groups": [
+        "sides",
+        "nachos"
+      ]
     },
     {
       "id": "salads",
       "name": "Salads & Pasta",
       "blurb": "Something green, or lasagna with garlic bread.",
       "photo": "salad",
-      "groups": ["salads-pasta"]
+      "groups": [
+        "salads-pasta"
+      ]
     }
   ]
 }

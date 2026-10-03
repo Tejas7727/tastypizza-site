@@ -3,6 +3,11 @@ name: Build the site
 # Runs whenever the menu, prices, offers or code change. Rebuilds docs/ and commits it,
 # which is what GitHub Pages serves. A failing audit blocks the commit, so a typo in
 # menu.json can never take the live site down.
+#
+# The control sheet works from a browser too: upload a new TastyPizza-Control.xlsx on
+# github.com (Add file -> Upload files) and this imports it, rebuilds and publishes —
+# no Python or git needed on the shop's computer. If the sheet has a mistake, the run
+# fails, names the cell, and the live site stays as it was.
 
 on:
   push:
@@ -14,6 +19,7 @@ on:
       - 'storefront.py'
       - 'audit.py'
       - 'assets/**'
+      - 'TastyPizza-Control.xlsx'
       - '.github/workflows/build.yml'
   workflow_dispatch:
 
@@ -29,6 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # to see what this push changed
 
       - uses: actions/setup-python@v5
         with:
@@ -43,6 +51,25 @@ jobs:
             python -c "import json,sys; json.load(open(sys.argv[1],encoding='utf-8'))" "$f" \
               || { echo "::error file=$f::$f is not valid JSON — check for a missing or extra comma"; exit 1; }
           done
+
+      # Sheet uploaded -> the sheet wins, and its values go into data/. Anything
+      # else changed -> data/ wins, and the sheet is refreshed from it after the
+      # build. Deciding by what this push touched is what stops a stale sheet
+      # from quietly reverting a hand edit to the JSON.
+      - name: Was the control sheet uploaded in this push?
+        id: sheet
+        run: |
+          before="${{ github.event.before }}"
+          if [ -n "$before" ] && [ "$before" != "0000000000000000000000000000000000000000" ] \
+             && git diff --name-only "$before" "${{ github.sha }}" | grep -qx 'TastyPizza-Control.xlsx'; then
+            echo "uploaded=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "uploaded=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Read the control sheet
+        if: steps.sheet.outputs.uploaded == 'true'
+        run: python scripts/control_sheet.py import
 
       - name: Rebuild photos if any real ones were added
         run: python scripts/build_photos.py
@@ -60,7 +87,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs TastyPizza-Control.xlsx
+          git add docs data TastyPizza-Control.xlsx
           if git diff --staged --quiet; then
             echo "nothing changed"
           else

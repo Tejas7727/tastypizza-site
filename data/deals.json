@@ -9,7 +9,9 @@
     "",
     "\"badge\" is the little tag on the corner of the card. Leave it as \"\" for none.",
     "\"compareAt\" is the normal price, used to show 'Save $x'. Leave it out if there's no saving to show.",
-    "\"until\" is optional. Format YYYY-MM-DD. After that date the deal hides itself automatically."
+    "\"until\" is optional. Format YYYY-MM-DD. After that date the deal hides itself automatically.",
+    "\"homePie\" puts the deal on the home page wheel, drawn with that pizza (a file called",
+    "pie-<name>.webp in docs/assets/img/). Leave it out and the deal stays off the wheel."
   ],
   "deals": [
     {
@@ -20,7 +22,8 @@
       "desc": "Any four toppings you like.",
       "price": 20.95,
       "compareAt": 22.95,
-      "photo": "all-dressed-pizza",
+      "photo": "custom-pizza",
+      "homePie": "pepperoni",
       "addOn": {
         "name": "Add medium garlic fingers with dipping sauce",
         "price": 12.45
@@ -55,8 +58,7 @@
           "label": "12\" garlic fingers with donair sauce"
         }
       ],
-      "heroPhoto": "cheese-pizza",
-      "_heroPhotoNote": "Which photo this deal uses on the home page wheel. The wheel draws everything as a circle, so it needs one of the square-cropped pizza slugs; the garlic fingers photo is not round. Menu rows still use 'photo'."
+      "homePie": "meat-lovers"
     },
     {
       "id": "two-mediums",
@@ -66,7 +68,8 @@
       "desc": "Four toppings on each.",
       "price": 32.95,
       "compareAt": 34.9,
-      "photo": "meat-lovers-pizza",
+      "photo": "two-topping-pizza",
+      "homePie": "greek",
       "slots": [
         {
           "type": "pizza",

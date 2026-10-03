@@ -341,8 +341,12 @@
     // starts at the same x. Without it the list edge zig-zags between the
     // dishes that have a picture and the ones that do not.
     if (!photo) return cls === 'keep' ? '<div class="item-media is-empty"></div>' : '';
-    return '<div class="item-media' + (cls ? ' ' + cls : '') + '">'
+    // a big frame needs the 800px file on a phone at 2-3x; a thumbnail does not
+    var big = cls === 'big';
+    return '<div class="item-media' + (cls && cls !== 'keep' ? ' ' + cls : '') + '">'
       + '<img src="' + CFG.img + photo + '@sm.webp" width="400" height="300" loading="lazy"'
+      + (big ? ' srcset="' + CFG.img + photo + '@sm.webp 400w, ' + CFG.img + photo
+        + '.webp 800w" sizes="(max-width:620px) 92vw, 260px"' : '')
       + ' alt="' + esc(alt || '') + '"></div>';
   }
 
@@ -387,8 +391,8 @@
           + '<button class="add" type="button" data-add="' + esc(it.name) + '"'
           + ' data-price="' + p + '">Add</button>';
     }
-    return '<li class="item' + (extra ? ' ' + extra : '') + '">'
-      + media(it.photo, it.alt || it.name, slot ? 'keep' : '')
+    return '<li class="item' + (extra ? ' ' + extra : '') + (it.real ? ' is-big' : '') + '">'
+      + media(it.photo, it.alt || it.name, it.real ? 'big' : (slot ? 'keep' : ''))
       + '<div class="item-body"><h4>' + esc(it.name) + tagsOf(it) + '</h4>'
       + (it.desc ? '<p>' + esc(it.desc) + '</p>' : '') + '</div>'
       + '<div class="item-side">' + side + '</div></li>';
@@ -722,6 +726,7 @@
       if (busy || next === cur) return;
       busy = true;
       var from = discs[cur], to = discs[next], d = dir > 0 ? 'next' : 'prev';
+      wake(to);
 
       // park the incoming pie off the right of the board with no transition,
       // then release it in the same frame the outgoing one leaves
@@ -835,6 +840,15 @@
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) stop(); else start();
     });
+
+    /* the pizzas after the first arrive as data-src, so the first screen pays
+       for one image, not five; they load once the page has, or on their turn */
+    function wake(disc) {
+      var img = disc && disc.querySelector('img[data-src]');
+      if (img) { img.src = img.getAttribute('data-src'); img.removeAttribute('data-src'); }
+    }
+    if (document.readyState === 'complete') discs.forEach(wake);
+    else addEventListener('load', function () { discs.forEach(wake); });
 
     sizeDeal(); start(); paint();
   })();

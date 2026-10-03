@@ -210,8 +210,10 @@ def check_data():
         warn(f"items with no price (show as 'Call for price'): {', '.join(no_price)}")
 
     # real vs stock photography — the number the client should watch
-    real = ROOT / "assets" / "photos-in"
-    n_real = len([f for f in real.glob("*") if f.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")]) if real.exists() else 0
+    # read from photos.json: the originals in assets/photos-in/ are gitignored,
+    # so counting that folder would report 0 real photos on every CI build
+    picks = json.loads((ROOT / "data" / "photos.json").read_text(encoding="utf-8"))["picks"]
+    n_real = len([s for s in used if picks.get(s, {}).get("real")])
     print(f"  photos: {len(used)} in use, {n_real} are real Tasty Pizza photos, "
           f"{len(used) - n_real} still stock")
 

@@ -31,6 +31,11 @@ IMG = "assets/img/"
 # full URL, so keep it in one place.
 CANON = "https://tejas7727.github.io/tastypizza-site/"
 
+# The preview must not compete with the real tastypizza.ca in search. robots.txt
+# stops crawling, but a blocked URL can still be indexed from links, so the page
+# says it too. Flip "live" in site.json when the site moves to its own domain.
+ROBOTS = "" if SITE.get("live") else '<meta name="robots" content="noindex,nofollow">\n'
+
 
 def e(s):
     return (str(s).replace("&", "&amp;").replace("<", "&lt;")
@@ -82,6 +87,10 @@ def item_json(it, g):
     if it.get("photo"):
         out["photo"] = it["photo"]
         out["alt"] = PHOTOS.get(it["photo"], {}).get("alt", it["name"])
+        # The shop's own photo earns a big frame; stock stays a thumbnail. As
+        # the owner sends photos, those dishes grow on the page by themselves.
+        if PHOTOS.get(it["photo"], {}).get("real"):
+            out["real"] = True
     if it.get("tags"):
         out["tags"] = it["tags"]
     if it.get("builder"):
@@ -187,15 +196,14 @@ def main():
     # we most want people to touch. Prices come from deals.json and menu.json,
     # so the shop edits one file and the home page follows.
     #
-    # The pie art is commissioned, not stock, so which pie fronts which deal is
-    # a deliberate pairing rather than a photo of that exact order.
-    PIE = {"large-4-topping": "pepperoni", "pizza-and-fingers": "meat-lovers",
-           "two-mediums": "greek"}
-    by_id = {d["id"]: d for d in live}
+    # Which deals ride the wheel is the shop's call: any running deal with a
+    # "homePie" (set from the Deals sheet) goes on, in the sheet's order. The pie
+    # art is commissioned, not stock, so it is a pairing, not a photo of that order.
     slides = []
-    for did, pie in PIE.items():
-        d = by_id.get(did)
-        if d:
+    for d in live:
+        pie = d.get("homePie")
+        if pie:
+            did = d["id"]
             # where tapping this offer should land; "cats" up top is the
             # whole category list, so do not reuse that name here
             dcats = DEAL_CATS.get(did) or ["pizza"]
@@ -220,10 +228,15 @@ def main():
                    "price": b["priceByToppingCount"][b["maxToppings"]][1],
                    "unit": b["sizes"][1]})
 
+    # Only the first pizza loads with the page. The rest sit stacked in the
+    # first screen, so loading="lazy" would fetch them all at once (~500 KB);
+    # brand.js fills them in once the page has loaded, well before each one's
+    # turn comes round two seconds apart.
     pies = "".join(
         f'<div class="disc{" is-cur" if not i else ""}">'
-        f'<img src="{IMG}pie-{s["pie"]}.webp" width="680" height="680" alt="{e(s["name"])}"'
-        f'{" fetchpriority=\"high\"" if not i else " loading=\"lazy\""}></div>'
+        + (f'<img src="{IMG}pie-{s["pie"]}.webp" fetchpriority="high"' if not i else
+           f'<img data-src="{IMG}pie-{s["pie"]}.webp"')
+        + f' width="680" height="680" alt="{e(s["name"])}"></div>'
         for i, s in enumerate(slides))
 
     hours = "".join(
@@ -268,7 +281,7 @@ def main():
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Tasty Pizza &mdash; Pizza, Donairs &amp; Garlic Fingers in Dartmouth, NS</title>
 <meta name="description" content="{SITE['seo']['description']}">
-<link rel="canonical" href="{CANON}">
+{ROBOTS}<link rel="canonical" href="{CANON}">
 <meta property="og:type" content="restaurant">
 <meta property="og:site_name" content="Tasty Pizza">
 <meta property="og:title" content="Tasty Pizza &mdash; Dartmouth">
@@ -280,7 +293,6 @@ def main():
 <meta name="twitter:description" content="{SITE['seo']['description']}">
 <meta name="twitter:image" content="{CANON}assets/img/og.jpg">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="https://unpkg.com/lenis@1.3.26/dist/lenis.css">
 <style>{css}</style>
 <script type="application/ld+json">{json.dumps(ld, separators=(',', ':'))}</script>
 </head>
@@ -332,9 +344,9 @@ def main():
            aria-roledescription="carousel" aria-label="Tonight&rsquo;s offers">
         <div class="pieclip" aria-hidden="true"><div class="pies">{pies}</div></div>
         <div class="orbit" aria-hidden="true">
-          <svg viewBox="0 0 120 120">
+          <svg viewBox="0 0 360 360">
             <defs><path id="ring"
-              d="M60,60 m-49,0 a49,49 0 1,1 98,0 a49,49 0 1,1 -98,0"/></defs>
+              d="M180,180 m-147,0 a147,147 0 1,1 294,0 a147,147 0 1,1 -294,0"/></defs>
             <g><text><textPath href="#ring" startOffset="0">
               Fresh dough daily &middot; Hand stretched &middot; Deck oven &middot; 760 Main St &middot;
             </textPath></text></g>

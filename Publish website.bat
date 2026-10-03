@@ -37,8 +37,10 @@ if errorlevel 1 (
 )
 
 echo.
-echo   [2 of 4]  Rebuilding the website...
+echo   [2 of 4]  Preparing photos and rebuilding the website...
 echo.
+python scripts\build_photos.py >nul
+if errorlevel 1 goto broke
 python build.py
 if errorlevel 1 goto broke
 

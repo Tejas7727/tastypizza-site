@@ -77,7 +77,7 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     REAL.mkdir(parents=True, exist_ok=True)
 
-    made, missing, real_count = 0, [], 0
+    made, missing, real_count, flagged = 0, [], 0, False
     for slug, spec in picks.items():
         if only and slug not in only:
             continue
@@ -86,6 +86,12 @@ def main():
             missing.append(slug)
             continue
         real_count += is_real
+        # Remember it in photos.json: the site gives the shop's own photos a big
+        # frame, and photos-in/ is gitignored, so this flag is the only record
+        # of it anywhere but the machine the photo was dropped on.
+        if is_real and not spec.get("real"):
+            spec["real"] = True
+            flagged = True
         try:
             im = Image.open(src).convert("RGB")
         except Exception as e:
@@ -104,6 +110,9 @@ def main():
         flag = " (REAL PHOTO)" if is_real else ""
         print(f"  {slug}{flag}")
 
+    if flagged:
+        (ROOT / "data" / "photos.json").write_text(
+            json.dumps(cfg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"\n{made} files written to {OUT}")
     print(f"{real_count} slugs using real photos, {len(picks) - real_count} still on stock")
     if missing:

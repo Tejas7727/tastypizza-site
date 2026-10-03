@@ -1,16 +1,28 @@
 # The control sheet
 
-`TastyPizza-Control.xlsx` is how the shop changes the website. Open it, change
-something, save, close Excel, double-click **Publish website**. The live site
-updates in about a minute.
+`TastyPizza-Control.xlsx` is how the shop changes the website. Two ways to publish:
+
+- **From any computer, nothing installed:** edit the workbook, then on github.com
+  use *Add file → Upload files*, drop it in, *Commit changes*. The Action imports
+  it, rebuilds and publishes in about two minutes.
+- **From the machine with the website folder:** close Excel, double-click
+  **Publish website**. This route also processes new photos (below).
+
+## Photos
+
+Drop the shop's own photo into `assets/photos-in/`, named after the dish's photo
+name (the **Photo** column on the Menu sheet), and publish with the button. Real
+photos are graded to the site's look, get a big frame on the menu automatically,
+and are marked `"real": true` in `data/photos.json`. The full-resolution originals
+stay on that machine — `photos-in/` is gitignored because the repo is public.
 
 ## What the shop can change
 
 | Sheet | Controls |
 |---|---|
 | **Home page** | The big slogan (a separate, shorter one for phones), the sentence under it, the three facts by the buttons |
-| **Deals** | Every offer: on/off, name, wording, price, crossed-out price |
-| **Menu** | Every dish: name, description, and each size's price |
+| **Deals** | Every offer: on/off, name, wording, price, crossed-out price, and **Home page pizza** — pick one to put the deal on the front-page wheel |
+| **Menu** | Every dish: name, description, each size's price, and **Photo** (dropdown) |
 | **Pizza builder** | What a build-your-own costs by topping count, and each extra topping |
 | **Hours** | Opening and closing times, days off |
 | **Shop details** | Phone, email, delivery fee and minimum, tax rate, DoorDash / Uber Eats / Skip links, the Google description |
@@ -67,7 +79,8 @@ sheet and the site agree again.
 
 ## What the sheet deliberately does not cover
 
-Photos, the topping list, category structure, deal slots (which pizzas a deal
+Photo files themselves (the sheet picks between them; adding one is the
+photos-in route above), the topping list, category structure, deal slots (which pizzas a deal
 contains), and the hidden flags. These change rarely and are easy to break from
 a spreadsheet. They stay in `data/*.json`.
 
