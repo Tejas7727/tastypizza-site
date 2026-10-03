@@ -1727,8 +1727,9 @@ window.TOPPING_LOOK = {
       + '<div class="panel"><div class="panel-in"></div></div></li>';
   }
 
-  function itemRow(it, extra, slot) {
+  function itemRow(it, extra, slot, small) {
     if (it.builder) return builderRow(it);
+    var big = it.real && !small;
     var side;
     if (it.sizes && it.sizes.length > 1) {
       // Pick, then confirm. Tapping a size used to drop it straight in the
@@ -1753,8 +1754,8 @@ window.TOPPING_LOOK = {
           + '<button class="add" type="button" data-add="' + esc(it.name) + '"'
           + ' data-price="' + p + '">Add</button>';
     }
-    return '<li class="item' + (extra ? ' ' + extra : '') + (it.real ? ' is-big' : '') + '">'
-      + media(it.photo, it.alt || it.name, it.real ? 'big' : (slot ? 'keep' : ''))
+    return '<li class="item' + (extra ? ' ' + extra : '') + (big ? ' is-big' : '') + '">'
+      + media(it.photo, it.alt || it.name, big ? 'big' : (slot ? 'keep' : ''))
       + '<div class="item-body"><h4>' + esc(it.name) + tagsOf(it) + '</h4>'
       + (it.desc ? '<p>' + esc(it.desc) + '</p>' : '') + '</div>'
       + '<div class="item-side">' + side + '</div></li>';
@@ -1886,6 +1887,15 @@ window.TOPPING_LOOK = {
     });
     var html = '<div class="catview-head"><h2>' + esc(c.name) + '</h2></div>'
       + (c.blurb ? '<p class="catview-blurb">' + esc(c.blurb) + '</p>' : '');
+    // A popular dish is listed twice, under Most ordered and in its own group.
+    // Its big frame goes to the first, near the top; the second is a thumbnail,
+    // or the same photo fills the screen twice.
+    var framed = {};
+    function rowOf(it) {
+      var small = it.real && framed[it.name];
+      if (it.real) framed[it.name] = true;
+      return itemRow(it, '', slot, small);
+    }
 
     // offers first — that is the whole point of an offer
     var offers = (CFG.deals || []).filter(function (d) { return (d.cats || []).indexOf(c.id) >= 0; });
@@ -1900,7 +1910,7 @@ window.TOPPING_LOOK = {
     });
     if (pop.length) {
       html += '<h3 class="grouphead">Most ordered</h3><ul class="items">'
-        + pop.map(function (it) { return itemRow(it, '', slot); }).join('') + '</ul>';
+        + pop.map(rowOf).join('') + '</ul>';
     }
     // then everything, in the shop's own groupings
     c.groups.forEach(function (g) {
@@ -1908,7 +1918,7 @@ window.TOPPING_LOOK = {
       html += '<h3 class="grouphead">' + esc(g.name) + '</h3>'
         + (g.note ? '<p class="groupnote">' + esc(g.note) + '</p>' : '')
         + '<ul class="items">'
-        + g.items.map(function (it) { return itemRow(it, '', slot); }).join('') + '</ul>';
+        + g.items.map(rowOf).join('') + '</ul>';
     });
     return html;
   }
