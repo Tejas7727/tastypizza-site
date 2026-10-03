@@ -173,6 +173,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .hero-copy{grid-column:1;grid-row:1;align-self:end}
 .hero-cta{grid-column:1;grid-row:2;align-self:start}
 .herofig{grid-column:2;grid-row:1 / span 2;min-width:0;display:grid;justify-items:center}
+.stage{width:100%;display:grid;place-items:center}
 @media (min-width:901px){.hero{--pie:min(40vw,56svh)}}
 .hero h1{margin:.5rem 0 .5rem}
 .hero .display{font-size:min(clamp(1.85rem,6.5vw,3.7rem),7.4svh)}
@@ -199,18 +200,26 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   display:grid;place-items:center;pointer-events:none}
 .pieclip>*{grid-area:1/1;width:calc(var(--pie,430px) * .78);aspect-ratio:1}
 .pies{position:relative}
+/* Two beats, not a crossing. The pizza on show is lifted away — it drifts
+   left, tilts and fades, accelerating as it goes. The next rises into place a
+   moment later and settles slowly, the way a pizza is set down. They overlap
+   only while the first is already faint, so two pizzas are never on screen.
+   Sliding both across each other at once read as a slideshow and left a ghost
+   of the outgoing one behind the new one. */
 .disc{position:absolute;inset:0;opacity:0;
-  transition:transform .72s var(--slide),opacity .4s var(--ease)}
+  transition:transform .66s cubic-bezier(.55,.06,.68,.19),opacity .5s cubic-bezier(.4,0,1,1)}
 .disc img{width:100%;height:100%;object-fit:contain;
   filter:drop-shadow(0 20px 24px rgba(17,17,19,.20))}
 .disc.is-cur{opacity:1;transform:none}
-/* right to left: the one on show leaves to the left, the next arrives from the
-   right, with a little rotation so it reads as a hand sliding it across */
-.disc.out-next{transform:translateX(-142%) rotate(-14deg) scale(.8);opacity:0}
-.disc.in-next{transform:translateX(142%) rotate(14deg) scale(.8);opacity:0}
-.disc.out-prev{transform:translateX(142%) rotate(14deg) scale(.8);opacity:0}
-.disc.in-prev{transform:translateX(-142%) rotate(-14deg) scale(.8);opacity:0}
-.turntable.is-drag .disc{transition:none}
+.disc.arrive{transition:transform 1.05s cubic-bezier(.16,1,.3,1) .4s,
+  opacity .75s cubic-bezier(0,0,.2,1) .4s}
+.disc.out-next{transform:translateX(-44%) rotate(-22deg) scale(.86);opacity:0}
+.disc.out-prev{transform:translateX(44%) rotate(22deg) scale(.86);opacity:0}
+.disc.in-next{transform:translateY(15%) rotate(14deg) scale(.86);opacity:0}
+.disc.in-prev{transform:translateY(15%) rotate(-14deg) scale(.86);opacity:0}
+/* parking the next pizza on its start mark must be instant, or it is still
+   travelling there when its entrance begins */
+.disc.is-drag,.turntable.is-drag .disc{transition:none}
 
 /* the ring of words, turning slowly around the pizza. The viewBox is padded
    well past the circle so no ascender is ever clipped, and the ring sits
@@ -246,14 +255,16 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .ticks button::after{content:'';position:absolute;inset:0;background:var(--ink);
   transform-origin:left;transform:scaleX(0)}
 .ticks button[data-on]::after{transform:scaleX(1);transition:transform .22s var(--ease)}
-.ticks button[data-run]::after{animation:fill 2000ms linear forwards}
+.ticks button[data-run]::after{animation:fill var(--hold,3400ms) linear forwards}
 @keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
 /* the offer, set on the page itself rather than boxed off from it */
 .deal{display:grid;gap:.2rem;min-width:0;margin-top:.9rem;color:inherit;
   text-decoration:none;cursor:pointer;border-radius:14px;
   transition:background-color .18s var(--ease)}
-.deal:hover{background:var(--wash)}
+/* hover only where there is a pointer to hover with: on a phone a tap leaves
+   :hover stuck, which left a grey box behind the offer after tapping it */
+@media (hover:hover){.deal:hover{background:var(--wash)}}
 .dealgo{display:inline-flex;align-items:center;gap:.3rem;font-size:.76rem;font-weight:800;
   letter-spacing:.02em;color:var(--red);margin-top:.15rem}
 .dealgo::after{content:'';width:6px;height:6px;border-right:2px solid currentColor;
@@ -342,7 +353,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   border-bottom:1px solid var(--line);background:none;
   transition:background-color .16s var(--ease)}
 .item:last-child{border-bottom:0}
-.item:hover{background:var(--wash)}
+@media (hover:hover){.item:hover{background:var(--wash)}}
 .item-media{width:72px;height:72px;border-radius:14px;overflow:hidden;flex:none;
   background:var(--wash)}
 .item-media img{width:100%;height:100%;object-fit:cover}
@@ -684,22 +695,37 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   /* On a phone the pizza goes between the sentence and the buttons: you read
      what the place is, you see the food, and the buttons are the last thing
      under your thumb. */
-  .hero-in{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;
-    gap:clamp(.4rem,1.4vh,.9rem);text-align:left}
+  /* The pizza takes whatever height is left, never a fixed share of the
+     screen. A fixed 42svh fitted a bare 375x812 test window and overflowed a
+     real phone, where Chrome's address bar takes ~100px — and because the hero
+     clips, the overflow cut the headline at the top and the facts at the
+     bottom. Now the headline, the offer and the buttons take what they need,
+     and .stage (a size container) hands the rest to the pizza. */
+  .hero{align-content:stretch}
+  .hero-in{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr) auto;
+    gap:clamp(.4rem,1.4vh,.9rem);text-align:left;min-height:0}
   .hero-copy{grid-column:1;grid-row:1}
-  .herofig{grid-column:1;grid-row:2;align-self:center}
+  .herofig{grid-column:1;grid-row:2;align-self:stretch;min-height:0;
+    display:flex;flex-direction:column;align-items:center}
+  .stage{flex:1 1 0;min-height:0;container-type:size}
+  /* the ring of words reaches ~6% past the pie on each side; 84% of the
+     height leaves it room, 78% of the width keeps it off the edges */
+  .stage .turntable{--pie:min(78cqw,84cqh)}
+  .herofig .deal{align-self:stretch}
   .hero-cta{grid-column:1;grid-row:3}
   /* On a phone the paragraph is the first thing to go. The slogan already
      says what this is; the space is worth more to the pizza and the price. */
   /* the address is in the footer, the map and the call button; above the
      slogan on a phone it is just a line of small grey text in the way */
   .hero .lede,.hero .eyebrow{display:none}
-  .hero{--pie:min(86vw,42svh)}
   .display .wide{display:none}
   .display .narrow{display:inline}
   .display{font-size:min(clamp(2rem,9vw,2.9rem),8.6svh)}
   .deal h2{font-size:min(1.32rem,4.6svh)}
-  .deal .sub{font-size:.9rem}
+  /* one line on a phone: the offer block reserves room for its tallest slide
+     so nothing jumps, and a second line of description was buying an empty
+     band above the buttons on every other slide. The pizza gets that space. */
+  .deal .sub{font-size:.9rem;-webkit-line-clamp:1}
   .saveline{font-size:.92rem}
   /* the bar earns its 60px: mark, basket, dots. Phone and open-status live in
      the sheet, where they are not competing with the order button. */

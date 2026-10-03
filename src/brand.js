@@ -668,7 +668,10 @@
 
     var discs = $$('.disc', stage), ticks = $('[data-ticks]'), dealEl = $('[data-deal]');
     var badge = $('[data-badge]');
-    var HOLD = 2000;
+    // 3.4s between changes: the move itself takes ~1.5s, which leaves each
+    // pizza about two seconds at rest — long enough to read its price
+    var HOLD = 3400;
+    if (ticks) ticks.style.setProperty('--hold', HOLD + 'ms');
     var cur = 0, timer = null, busy = false;
 
     S.forEach(function (s, i) {
@@ -749,16 +752,20 @@
         from.classList.remove('is-cur');
         from.classList.add('out-' + d);
         to.classList.remove('in-' + d);
-        to.classList.add('is-cur');
+        to.classList.add('is-cur', 'arrive');
       });
+      // the outgoing pizza is gone by 0.66s; the incoming has settled by 1.45s
       setTimeout(function () {
         from.classList.remove('out-next', 'out-prev');
         from.style.transform = '';
+        to.classList.remove('arrive');
         busy = false;
-      }, 780);
+      }, 1500);
 
       cur = next;
-      paint();
+      // the words change as the new pizza starts to arrive, not while the old
+      // one is still on screen with someone else's name under it
+      setTimeout(paint, 400);
     }
 
     /* Reserve the tallest the offer block can ever be AT THIS WIDTH.

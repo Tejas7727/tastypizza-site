@@ -340,6 +340,7 @@ def main():
       <p class="hero-facts" data-anim>{facts}</p>
     </div>
     <div class="herofig" data-anim="grow">
+      <div class="stage">
       <div class="turntable" data-wheelstage tabindex="0" role="group"
            aria-roledescription="carousel" aria-label="Tonight&rsquo;s offers">
         <div class="pieclip" aria-hidden="true"><div class="pies">{pies}</div></div>
@@ -354,6 +355,7 @@ def main():
         </div>
         <span class="badge" data-badge aria-hidden="true">
           <i data-badge-kick>Deal</i><b data-badge-price>&nbsp;</b><s data-badge-was></s></span>
+      </div>
       </div>
       <div class="ticks" data-ticks role="tablist" aria-label="Choose an offer"></div>
       <a class="deal" data-deal data-dealgo href="#order" aria-live="polite">
