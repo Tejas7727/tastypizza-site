@@ -218,26 +218,18 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
   display:grid;place-items:center;pointer-events:none}
 .pieclip>*{grid-area:1/1;width:calc(var(--pie,430px) * .78);aspect-ratio:1}
 .pies{position:relative}
-/* Two beats, not a crossing. The pizza on show is lifted away — it drifts
-   left, tilts and fades, accelerating as it goes. The next rises into place a
-   moment later and settles slowly, the way a pizza is set down. They overlap
-   only while the first is already faint, so two pizzas are never on screen.
-   Sliding both across each other at once read as a slideshow and left a ghost
-   of the outgoing one behind the new one. */
 .disc{position:absolute;inset:0;opacity:0;
-  transition:transform .66s cubic-bezier(.55,.06,.68,.19),opacity .5s cubic-bezier(.4,0,1,1)}
+  transition:transform .72s var(--slide),opacity .4s var(--ease)}
 .disc img{width:100%;height:100%;object-fit:contain;
   filter:drop-shadow(0 20px 24px rgba(17,17,19,.20))}
 .disc.is-cur{opacity:1;transform:none}
-.disc.arrive{transition:transform 1.05s cubic-bezier(.16,1,.3,1) .4s,
-  opacity .75s cubic-bezier(0,0,.2,1) .4s}
-.disc.out-next{transform:translateX(-44%) rotate(-22deg) scale(.86);opacity:0}
-.disc.out-prev{transform:translateX(44%) rotate(22deg) scale(.86);opacity:0}
-.disc.in-next{transform:translateY(15%) rotate(14deg) scale(.86);opacity:0}
-.disc.in-prev{transform:translateY(15%) rotate(-14deg) scale(.86);opacity:0}
-/* parking the next pizza on its start mark must be instant, or it is still
-   travelling there when its entrance begins */
-.disc.is-drag,.turntable.is-drag .disc{transition:none}
+/* right to left: the one on show leaves to the left, the next arrives from the
+   right, with a little rotation so it reads as a hand sliding it across */
+.disc.out-next{transform:translateX(-142%) rotate(-14deg) scale(.8);opacity:0}
+.disc.in-next{transform:translateX(142%) rotate(14deg) scale(.8);opacity:0}
+.disc.out-prev{transform:translateX(142%) rotate(14deg) scale(.8);opacity:0}
+.disc.in-prev{transform:translateX(-142%) rotate(-14deg) scale(.8);opacity:0}
+.turntable.is-drag .disc{transition:none}
 
 /* the ring of words, turning slowly around the pizza. The viewBox is padded
    well past the circle so no ascender is ever clipped, and the ring sits
@@ -273,7 +265,7 @@ h2.sec{font-size:clamp(1.55rem,3.2vw,2.5rem);text-transform:uppercase}
 .ticks button::after{content:'';position:absolute;inset:0;background:var(--ink);
   transform-origin:left;transform:scaleX(0)}
 .ticks button[data-on]::after{transform:scaleX(1);transition:transform .22s var(--ease)}
-.ticks button[data-run]::after{animation:fill var(--hold,3400ms) linear forwards}
+.ticks button[data-run]::after{animation:fill var(--hold,2000ms) linear forwards}
 @keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
 /* the offer, set on the page itself rather than boxed off from it */
@@ -2058,9 +2050,7 @@ window.TOPPING_LOOK = {
 
     var discs = $$('.disc', stage), ticks = $('[data-ticks]'), dealEl = $('[data-deal]');
     var badge = $('[data-badge]');
-    // 3.4s between changes: the move itself takes ~1.5s, which leaves each
-    // pizza about two seconds at rest — long enough to read its price
-    var HOLD = 3400;
+    var HOLD = 2000;
     if (ticks) ticks.style.setProperty('--hold', HOLD + 'ms');
     var cur = 0, timer = null, busy = false;
 
@@ -2142,20 +2132,16 @@ window.TOPPING_LOOK = {
         from.classList.remove('is-cur');
         from.classList.add('out-' + d);
         to.classList.remove('in-' + d);
-        to.classList.add('is-cur', 'arrive');
+        to.classList.add('is-cur');
       });
-      // the outgoing pizza is gone by 0.66s; the incoming has settled by 1.45s
       setTimeout(function () {
         from.classList.remove('out-next', 'out-prev');
         from.style.transform = '';
-        to.classList.remove('arrive');
         busy = false;
-      }, 1500);
+      }, 780);
 
       cur = next;
-      // the words change as the new pizza starts to arrive, not while the old
-      // one is still on screen with someone else's name under it
-      setTimeout(paint, 400);
+      paint();
     }
 
     /* Reserve the tallest the offer block can ever be AT THIS WIDTH.
