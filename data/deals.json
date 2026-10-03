@@ -19,9 +19,9 @@
       "active": true,
       "badge": "Most ordered",
       "name": "Large 16\" Pizza, 4 Toppings",
-      "desc": "Any four toppings you like.",
-      "price": 20.95,
-      "compareAt": 22.95,
+      "desc": "Any four toppings you like. Add medium garlic fingers for $13.45.",
+      "price": 22.95,
+      "compareAt": 23.95,
       "photo": "custom-pizza",
       "homePie": "pepperoni",
       "addOn": {
@@ -38,13 +38,22 @@
       ]
     },
     {
+      "id": "large-4-topping-fingers",
+      "active": true,
+      "name": "Medium Garlic Fingers with the 16\" Deal",
+      "desc": "12\" garlic fingers with dipping sauce, added to a 16\" four-topping pizza deal.",
+      "price": 13.45,
+      "compareAt": 15.45,
+      "photo": "garlic-fingers"
+    },
+    {
       "id": "pizza-and-fingers",
       "active": true,
       "badge": "",
       "name": "Medium Pizza + Medium Garlic Fingers",
       "desc": "12\" pizza with four toppings, plus 12\" garlic fingers with donair sauce.",
-      "price": 28.95,
-      "compareAt": 31.4,
+      "price": 32.95,
+      "compareAt": 34.4,
       "photo": "garlic-fingers",
       "slots": [
         {
@@ -66,8 +75,8 @@
       "badge": "Feeds 4",
       "name": "Two Medium Pizzas",
       "desc": "Four toppings on each.",
-      "price": 32.95,
-      "compareAt": 34.9,
+      "price": 36.95,
+      "compareAt": 37.9,
       "photo": "two-topping-pizza",
       "homePie": "greek",
       "slots": [
@@ -87,7 +96,7 @@
     },
     {
       "id": "party-box",
-      "active": true,
+      "active": false,
       "badge": "For the room",
       "name": "Tasty Party Box",
       "desc": "Onion rings, deep fried pepperoni, 9 mozza sticks, 12 chicken fries and 6 donair egg rolls. Honey mustard, sour cream and donair sauce. 2L pop included.",
@@ -100,8 +109,8 @@
       "badge": "",
       "name": "6 Donair Egg Rolls",
       "desc": "With donair sauce.",
-      "price": 13.95,
-      "compareAt": 15.0,
+      "price": 16.95,
+      "compareAt": 17.7,
       "photo": "donair-egg-roll"
     },
     {
@@ -110,8 +119,8 @@
       "badge": "",
       "name": "6 Donair Pogos",
       "desc": "With donair sauce.",
-      "price": 19.5,
-      "compareAt": 20.7,
+      "price": 22.95,
+      "compareAt": 23.7,
       "photo": "donair-pogo"
     },
     {
@@ -120,8 +129,9 @@
       "badge": "",
       "name": "Two Large Subs",
       "desc": "Cold cut, pizza or real turkey.",
-      "price": 22.45,
-      "photo": "cold-cut-sub"
+      "price": 25.95,
+      "photo": "cold-cut-sub",
+      "compareAt": 26.5
     },
     {
       "id": "two-can-dine",

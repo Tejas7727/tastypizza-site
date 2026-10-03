@@ -1,4 +1,9 @@
 {
   "_readme": "Extra questions for the FAQ page, after the ones the site writes itself from hours, delivery, crusts and the menu. Edit them on the Questions sheet of the workbook.",
-  "faq": []
+  "faq": [
+    {
+      "q": "How can I pay?",
+      "a": "Visa and Mastercard, and debit at the door on request. Prices do not include HST."
+    }
+  ]
 }

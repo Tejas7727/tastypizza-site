@@ -182,6 +182,8 @@ def check_data():
             continue
         for g in c["groups"]:
             for it in g["items"]:
+                if it.get("hidden"):
+                    continue
                 if it.get("photo"):
                     used.add(it["photo"])
                     if it["photo"] not in photos:

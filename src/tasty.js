@@ -181,12 +181,16 @@
   function paintCard(card) {
     var addBtn = $('[data-add]', card);
     if (!addBtn) return;
-    var picked = $('.sz input:checked', card);
+    var picked = $('[data-szpick] [aria-selected="true"]', card);
     if (picked) {
-      addBtn.setAttribute('data-price', picked.getAttribute('data-price'));
-      addBtn.setAttribute('data-note', picked.getAttribute('data-note'));
+      var price = picked.getAttribute('data-price'), note = picked.getAttribute('data-note');
+      addBtn.setAttribute('data-price', price);
+      addBtn.setAttribute('data-note', note);
+      $('[data-szlabel]', card).textContent = note;
+      $('[data-szprice]', card).textContent = money(parseFloat(price));
+      $('.pbox-btn', card).setAttribute('aria-label', 'Size: ' + note + ', ' + money(parseFloat(price)) + '. Change size');
       var cz = $('[data-customize]', card);
-      if (cz) cz.href = cz.href.replace(/&size=\d+$/, '') + '&size=' + picked.value;
+      if (cz) cz.href = cz.href.replace(/&size=\d+$/, '') + '&size=' + picked.getAttribute('data-i');
     }
     var q = qtyOf(card);
     $('[data-total]', addBtn).textContent = money(parseFloat(addBtn.getAttribute('data-price')) * q);
@@ -194,13 +198,53 @@
     if (minus) minus.disabled = q <= 1;
   }
 
+  /* the size box: a button that opens the list of sizes and their prices */
+  function closeSizes(except) {
+    $$('.pbox-btn[aria-expanded="true"]').forEach(function (b) {
+      if (b === except) return;
+      b.setAttribute('aria-expanded', 'false');
+      b.nextElementSibling.hidden = true;
+    });
+  }
+  function openSizes(btn, keyboard) {
+    closeSizes(btn);
+    btn.setAttribute('aria-expanded', 'true');
+    btn.nextElementSibling.hidden = false;
+    var on = $('[aria-selected="true"]', btn.nextElementSibling);
+    // keyboard users land in the list; a tap or click just shows it
+    if (on && keyboard) on.focus();
+  }
+
   if (PAGE === 'category') {
     $$('[data-card]').forEach(paintCard);
-    document.addEventListener('change', function (ev) {
-      var card = ev.target.closest('[data-card]');
-      if (card) paintCard(card);
+    document.addEventListener('keydown', function (ev) {
+      var list = ev.target.closest('.pbox-menu');
+      if (ev.key === 'Escape') {
+        var open = $('.pbox-btn[aria-expanded="true"]');
+        closeSizes();
+        if (open) open.focus();
+      } else if (list && (ev.key === 'ArrowDown' || ev.key === 'ArrowUp')) {
+        ev.preventDefault();
+        var opts = $$('[role="option"]', list), i = opts.indexOf(ev.target);
+        opts[(i + (ev.key === 'ArrowDown' ? 1 : -1) + opts.length) % opts.length].focus();
+      }
     });
     document.addEventListener('click', function (ev) {
+      var box = ev.target.closest('.pbox-btn');
+      if (box) {
+        if (box.getAttribute('aria-expanded') === 'true') closeSizes(); else openSizes(box, ev.detail === 0);
+        return;
+      }
+      var opt = ev.target.closest('.pbox-menu [role="option"]');
+      if (opt) {
+        var c = opt.closest('[data-card]');
+        $$('[role="option"]', c).forEach(function (o) { o.setAttribute('aria-selected', String(o === opt)); });
+        paintCard(c);
+        closeSizes();
+        if (ev.detail === 0) $('.pbox-btn', c).focus();
+        return;
+      }
+      closeSizes();
       var step = ev.target.closest('[data-stepper] [data-step]');
       var card = ev.target.closest('[data-card]');
       if (step && card) {
@@ -252,7 +296,7 @@
       $('[data-build-sub]').textContent = deal.desc;
       document.title = deal.name + ' — Tasty Pizza, Dartmouth';
     } else if (spec) {
-      cfgs.push(new window.PizzaConfig({ base: spec.prices, title: spec.name }));
+      cfgs.push(new window.PizzaConfig({ base: spec.prices, title: spec.name, tops: spec.tops, free: spec.free }));
       $('[data-build-title]').textContent = spec.name;
       $('[data-build-sub]').textContent = (spec.desc ? spec.desc + ' ' : '')
         + 'Change the size or crust, or add extra toppings.';
@@ -295,7 +339,7 @@
       html += step(1, 'Size', cfg.sizeLocked ? '<em>set by the deal</em>' : '',
         '<div class="chips" data-sizes>' + c.sizes + '</div>');
       html += step(2, 'Crust', '', '<div class="chips" data-crusts>' + c.crusts + '</div>');
-      html += step(3, cfg.base ? 'Extra toppings' : 'Toppings', '<em data-cfg-count></em>',
+      html += step(3, 'Toppings', '<em data-cfg-count></em>',
         '<p class="ctrl-hint" data-cfg-hint></p><div class="tops-grid">' + cfg.toppingGrid() + '</div>'
         + fixed.map(function (f) { return '<p class="fixedslot">' + esc(f) + '</p>'; }).join(''));
       html += step(4, 'Anything else?', '',
@@ -334,7 +378,7 @@
       } else {
         rows.push(['Size', B.sizes[cfg.size]]);
         rows.push(['Crust', cfg.crust + (cfg.sur ? ' +' + money(cfg.sur) : '')]);
-        rows.push([spec ? 'Extras' : 'Toppings', cfg.count() ? cfg.label().replace(/^extra /, '') : (spec ? 'none' : 'just cheese')]);
+        rows.push(['Toppings', cfg.label()]);
         if (notes[0]) rows.push(['Note', notes[0]]);
       }
       $('[data-lines]', root).innerHTML = rows.map(function (r) {

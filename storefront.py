@@ -93,6 +93,8 @@ def item_json(it, g):
     else:
         prices = [None]
     if sizes and len(prices) > 1:
+        if len(sizes) == len(MENU["builder"]["sizes"]) and sizes[0].startswith('9"'):
+            sizes = MENU["builder"]["sizes"]
         rows = [{"label": s, "price": p} for s, p in zip(sizes, prices)]
     else:
         rows = [{"label": "", "price": prices[0]}]
@@ -111,6 +113,9 @@ def item_json(it, g):
         out["tags"] = it["tags"]
     if it.get("builder"):
         out["builder"] = True
+    if "tops" in it:
+        out["tops"] = it["tops"]
+        out["free"] = it.get("free", 0)
     return out
 
 
@@ -336,14 +341,14 @@ def tiles(R, cats):
              f'{sum(len(g["items"]) for g in c["groups"])} to choose from', "")
             for c in cats if c["id"] != "pizza"]
 
-    # a door is a name and a count, with the shop's own photo beside it when
-    # there is one — the same shape every time, so the grid reads as a list
+    # A door is a tall window: the food fills it, the name sits at the foot.
+    # The shop's own photo when there is one, otherwise the category picture.
     def tile(name, href, photo, small, cls):
-        real = PHOTOS.get(photo, {}).get("real")
-        img = (f'<img src="{R}assets/img/{photo}@sm.webp" width="400" height="300" '
-               f'loading="lazy" alt="">' if real else "")
         return (f'<a class="tile {cls}" href="{href}">'
-                f'<span class="tile-text"><b>{e(name)}</b><small>{e(small)}</small></span>{img}</a>')
+                f'<img src="{R}assets/img/{photo}@sm.webp" srcset="{R}assets/img/{photo}@sm.webp 400w, '
+                f'{R}assets/img/{photo}.webp 800w" sizes="(max-width:620px) 50vw, 240px" '
+                f'width="400" height="300" loading="lazy" alt="">'
+                f'<span class="tile-text"><b>{e(name)}</b><small>{e(small)}</small></span></a>')
 
     return (f'<h2 class="sec">Pizza</h2><div class="tiles tiles-pizza">'
             + "".join(tile(*t) for t in first) + "</div>"
@@ -351,85 +356,89 @@ def tiles(R, cats):
             + "".join(tile(*t) for t in rest) + "</div>")
 
 
-def size_default(d):
-    # pizzas come in four sizes; the 12" medium is the one most people mean
-    return 1 if len(d["sizes"]) == 4 else 0
+def pricebox(d, uid):
+    """The price, top right of the card. One price is just the price; several
+    sizes are a box showing the smallest that opens into every size."""
+    priced = [(i, x) for i, x in enumerate(d["sizes"]) if x["price"] is not None]
+    if len(priced) == 1:
+        return f'<div class="pbox is-fixed"><b>{money(priced[0][1]["price"])}</b></div>'
+    i0, s0 = priced[0]
+    opts = "".join(
+        f'<li><button type="button" role="option" data-i="{i}" data-price="{x["price"]}" '
+        f'data-note="{e(x["label"])}" aria-selected="{"true" if i == i0 else "false"}">'
+        f'<span>{e(x["label"])}</span><b>{money(x["price"])}</b></button></li>' for i, x in priced)
+    return (f'<div class="pbox" data-szpick>'
+            f'<button type="button" class="pbox-btn" aria-haspopup="listbox" aria-expanded="false" '
+            f'aria-controls="{uid}-sz" aria-label="Size: {e(s0["label"])}, {money(s0["price"])}. Change size">'
+            f'<small data-szlabel>{e(s0["label"])}</small><b data-szprice>{money(s0["price"])}</b>'
+            f'<i class="caret" aria-hidden="true"></i></button>'
+            f'<ul class="pbox-menu" id="{uid}-sz" role="listbox" aria-label="Sizes" hidden>{opts}</ul></div>')
+
+
+def card_top(R, name, box, tags, desc, img):
+    return (f'<div class="card-top"><h3>{e(name)}</h3>{box}'
+            f'<div class="card-text">{f"<div class=card-tags>{tags}</div>" if tags else ""}'
+            f'{f"<p>{e(desc)}</p>" if desc else ""}</div>{img}</div>')
+
+
+def stepper():
+    return ('<div class="stepper" data-stepper><button type="button" data-step="-1" aria-label="One fewer">&minus;</button>'
+            '<output data-qty>1</output><button type="button" data-step="1" aria-label="One more">+</button></div>')
 
 
 def card(R, d, cat_id):
-    """A dish you can order without opening anything: pick a size, set a
-    quantity, Add. Pizzas also get Customize, which is its own page."""
+    """A dish you can order without opening anything: pick a size from the
+    price box, set a quantity, Add. Specialty pizzas also get Customize."""
     uid = slug(d["group"] + "-" + d["name"])
     tags = "".join({"veg": '<span class="tag tag-veg">Veg</span>',
                     "popular": '<span class="tag">Most ordered</span>'}.get(t, "")
                    for t in d.get("tags", []))
     img = img_tag(R, d["photo"], d.get("alt", d["name"]), "card-img") if d.get("real") else ""
-    top = (f'<div class="card-top"><div class="card-text"><h3>{e(d["name"])}</h3>'
-           f'{f"<div class=card-tags>{tags}</div>" if tags else ""}'
-           f'{f"<p>{e(d[chr(100)+chr(101)+chr(115)+chr(99)])}</p>" if d.get("desc") else ""}'
-           f'</div>{img}</div>')
 
     if d.get("builder"):
         b = MENU["builder"]
-        return (f'<article class="card card-build" id="{uid}">{top}'
-                f'<div class="card-foot"><span class="card-from">from <b>{money(min(b["priceByToppingCount"][0]))}</b></span>'
-                f'<a class="btn btn-red btn-sm" href="{R}build.html">Build it</a></div></article>')
+        box = f'<div class="pbox is-fixed"><small>from</small><b>{money(min(b["priceByToppingCount"][0]))}</b></div>'
+        return (f'<article class="card card-build" id="{uid}">'
+                f'{card_top(R, d["name"], box, tags, d.get("desc"), img)}'
+                f'<div class="card-foot"><a class="btn btn-red btn-sm" href="{R}build.html">Build it</a></div></article>')
 
     priced = [s for s in d["sizes"] if s["price"] is not None]
     if not priced:
-        return (f'<article class="card" id="{uid}">{top}<div class="card-foot">'
-                f'<span class="card-from">Ask in store</span>'
-                f'<a class="btn btn-line btn-sm" href="tel:{SITE["phoneLink"]}">Call</a></div></article>')
+        box = '<div class="pbox is-fixed"><small>Ask</small></div>'
+        return (f'<article class="card" id="{uid}">{card_top(R, d["name"], box, tags, d.get("desc"), img)}'
+                f'<div class="card-foot"><a class="btn btn-line btn-sm" href="tel:{SITE["phoneLink"]}">Call</a></div></article>')
 
-    sizes = ""
-    if len(d["sizes"]) > 1:
-        di = size_default(d)
-        opts = []
-        for i, s in enumerate(d["sizes"]):
-            if s["price"] is None:
-                continue
-            on = i == di or (d["sizes"][di]["price"] is None and s is priced[0])
-            opts.append(f'<label class="sz"><input type="radio" name="{uid}" value="{i}"'
-                        f' data-price="{s["price"]}" data-note="{e(s["label"])}"{" checked" if on else ""}>'
-                        f'<span><i>{e(s["label"])}</i><b>{money(s["price"])}</b></span></label>')
-        sizes = f'<fieldset class="sizes"><legend class="sr">Size</legend>{"".join(opts)}</fieldset>'
-        start = next(s for i, s in enumerate(d["sizes"])
-                     if s["price"] is not None and (i == di or d["sizes"][di]["price"] is None))
-    else:
-        start = priced[0]
-
+    start = priced[0]
     custom = ""
     if d["group"] == "gourmet":
+        idx = d["sizes"].index(start)
         key = quote(f'{d["group"]}/{d["name"]}')
-        custom = (f'<a class="btn btn-line btn-sm" href="{R}build.html?item={key}"'
+        custom = (f'<a class="btn btn-line btn-sm" href="{R}build.html?item={key}&amp;size={idx}"'
                   f' data-customize>Customize</a>')
-    return (f'<article class="card" id="{uid}" data-card data-name="{e(d["name"])}">{top}{sizes}'
-            f'<div class="card-foot">'
-            f'<div class="stepper" data-stepper><button type="button" data-step="-1" aria-label="One fewer">&minus;</button>'
-            f'<output data-qty>1</output><button type="button" data-step="1" aria-label="One more">+</button></div>'
+    return (f'<article class="card" id="{uid}" data-card data-name="{e(d["name"])}">'
+            f'{card_top(R, d["name"], pricebox(d, uid), tags, d.get("desc"), img)}'
+            f'<div class="card-foot">{stepper()}'
             f'{custom}<button class="btn btn-red btn-sm btn-add" type="button" data-add'
             f' data-price="{start["price"]}" data-note="{e(start["label"])}">Add '
             f'<span data-total>{money(start["price"])}</span></button></div></article>')
 
 
 def deal_card(R, d):
-    was = (f'<s>{money(d["compareAt"])}</s>' if d.get("compareAt") and d["compareAt"] > d["price"] else "")
-    save = (f'<span class="save">Save {money(d["compareAt"] - d["price"])}</span>' if was else "")
+    was = d.get("compareAt") and d["compareAt"] > d["price"]
+    box = (f'<div class="pbox is-fixed is-deal"><b>{money(d["price"])}</b>'
+           + (f'<s>{money(d["compareAt"])}</s>' if was else "") + '</div>')
+    tags = '<span class="tag tag-deal">Deal</span>' + (
+        f'<span class="tag tag-save">Save {money(d["compareAt"] - d["price"])}</span>' if was else "")
     real = PHOTOS.get(d.get("photo") or "", {}).get("real")
     img = img_tag(R, d["photo"], "", "card-img") if real else ""
-    top = (f'<div class="card-top"><div class="card-text"><h3>{e(d["name"])}</h3>'
-           f'<div class="card-tags"><span class="tag tag-deal">Deal</span></div>'
-           f'<p>{e(d.get("desc", ""))}</p>'
-           f'<p class="card-price"><b>{money(d["price"])}</b>{was}{save}</p></div>{img}</div>')
+    top = card_top(R, d["name"], box, tags, d.get("desc", ""), img)
     if d.get("slots"):
         n = len([s for s in d["slots"] if s["type"] == "pizza"])
         return (f'<article class="card card-deal" id="deal-{d["id"]}">{top}<div class="card-foot">'
                 f'<a class="btn btn-red btn-sm" href="{R}build.html?deal={d["id"]}">'
                 f'{"Choose your pizzas" if n > 1 else "Choose your toppings"}</a></div></article>')
     return (f'<article class="card card-deal" id="deal-{d["id"]}" data-card data-name="{e(d["name"])}">{top}'
-            f'<div class="card-foot"><div class="stepper" data-stepper>'
-            f'<button type="button" data-step="-1" aria-label="One fewer">&minus;</button>'
-            f'<output data-qty>1</output><button type="button" data-step="1" aria-label="One more">+</button></div>'
+            f'<div class="card-foot">{stepper()}'
             f'<button class="btn btn-red btn-sm btn-add" type="button" data-add data-price="{d["price"]}"'
             f' data-note="deal">Add <span data-total>{money(d["price"])}</span></button></div></article>')
 
@@ -691,7 +700,8 @@ def main():
                 if d["group"] == "gourmet":
                     pizzas[f'{d["group"]}/{d["name"]}'] = {
                         "name": d["name"], "desc": d.get("desc", ""),
-                        "prices": [s["price"] for s in d["sizes"]]}
+                        "prices": [s["price"] for s in d["sizes"]],
+                        "tops": d.get("tops", []), "free": d.get("free", 0)}
     build_body = f"""<section class="band band-build">
   <div class="wrap">
     <a class="backlink" href="menu/pizza.html" data-back>Back</a>
