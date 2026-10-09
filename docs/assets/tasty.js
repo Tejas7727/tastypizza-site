@@ -357,7 +357,6 @@
       html += step(2, 'Crust', '', '<div class="chips" data-crusts>' + c.crusts + '</div>');
       html += step(3, 'Toppings', '<em data-cfg-count></em>',
         '<p class="ctrl-hint" data-cfg-hint></p><div class="tops-grid">' + cfg.toppingGrid() + '</div>'
-        + '<p class="half-note">Half toppings: tap a topping, then pick the left or right half under it.</p>'
         + fixed.map(function (f) { return '<p class="fixedslot">' + esc(f) + '</p>'; }).join(''));
       html += step(4, 'Special toppings &amp; extra cheese', '',
         '<p class="ctrl-hint">Priced on their own, by size.</p><div class="tops-grid">'

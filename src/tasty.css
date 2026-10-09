@@ -594,7 +594,6 @@ h2.sec:first-of-type{margin-top:0}
 .sides button svg{width:20px;height:20px}
 .sides button[aria-pressed="true"]{color:#fff;border-color:#fff}
 @media (hover:hover){.sides button:hover{color:#fff}}
-.half-note{font-size:.82rem;color:var(--ink-3);margin-top:.7rem}
 .fixedslot{display:flex;align-items:center;gap:.6rem;padding:.8rem 1rem;border:1.5px dashed var(--line);
   border-radius:14px;font-weight:700;font-size:.92rem;margin-top:1rem}
 .fixedslot::before{content:'Included';font-size:.66rem;font-weight:800;letter-spacing:.1em;
