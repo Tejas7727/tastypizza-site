@@ -247,6 +247,10 @@ def header(R, active):
 </div>"""
 
 
+# The build page has no footer: it is only the pizza and the Add button.
+TOAST = '<div class="toast" data-toast role="status" aria-live="polite" hidden></div>'
+
+
 def footer(R):
     a = SITE["address"]
     hrs = "".join(f"<div><dt>{d}</dt><dd>{t}</dd></div>" for d, t in hours_summary())
@@ -267,7 +271,7 @@ def footer(R):
   </div>
   <p class="wrap foot-fine">{e(SITE['owner'])}.</p>
 </footer>
-<div class="toast" data-toast role="status" aria-live="polite" hidden></div>"""
+{TOAST}"""
 
 
 def page(path, *, title, desc, body, active="", page_id, data=None, ld=None, ASSETS=None):
@@ -307,7 +311,7 @@ def page(path, *, title, desc, body, active="", page_id, data=None, ld=None, ASS
 <main id="main">
 {body}
 </main>
-{footer(R)}
+{footer(R) if page_id != "build" else TOAST}
 {data_js}<script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js" defer></script>
 {f'<script src="{R}{ASSETS["config"]}" defer></script>' if page_id == "build" else ""}
 <script src="{R}{ASSETS['js']}" defer></script>
