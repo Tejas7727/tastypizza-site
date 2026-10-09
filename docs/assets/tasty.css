@@ -524,6 +524,18 @@ h2.sec:first-of-type{margin-top:0}
 .pbox-menu button[aria-selected="true"]{background:var(--ink);color:#fff}
 .card:has(.pbox-btn[aria-expanded="true"]){z-index:5;position:relative}
 
+/* add-ons on a donair or sub: tick boxes that look like the size chips */
+.addons{display:flex;flex-wrap:wrap;gap:.4rem}
+.addon{position:relative;cursor:pointer}
+.addon input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.addon span{display:inline-flex;align-items:center;gap:.35rem;padding:.4rem .8rem;border:1.5px solid var(--line);
+  border-radius:999px;font-size:.84rem;font-weight:700;transition:border-color .15s,background-color .15s,color .15s}
+.addon b{font-weight:800;color:var(--ink-3);font-variant-numeric:tabular-nums}
+@media (hover:hover){.addon:hover span{border-color:var(--ink)}}
+.addon input:checked + span{background:var(--ink);border-color:var(--ink);color:#fff}
+.addon input:checked + span b{color:rgba(255,255,255,.75)}
+.addon input:focus-visible + span{outline:3px solid var(--red);outline-offset:2px}
+
 /* quantity: minus, number, plus */
 .stepper{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:999px;
   padding:.12rem;flex:none}
@@ -574,6 +586,15 @@ h2.sec:first-of-type{margin-top:0}
   padding:.35rem .4rem .35rem .65rem;font-size:.88rem}
 .topq{gap:.15rem}
 .topq button{width:28px;height:28px;font-size:1rem}
+/* left half / whole / right half, under a chosen topping */
+.sides{grid-column:1 / -1;display:flex;gap:.3rem}
+.sides:empty{display:none}
+.sides button{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;cursor:pointer;
+  color:rgba(255,255,255,.55);border:1.5px solid rgba(255,255,255,.25);transition:color .14s,border-color .14s}
+.sides button svg{width:20px;height:20px}
+.sides button[aria-pressed="true"]{color:#fff;border-color:#fff}
+@media (hover:hover){.sides button:hover{color:#fff}}
+.half-note{font-size:.82rem;color:var(--ink-3);margin-top:.7rem}
 .fixedslot{display:flex;align-items:center;gap:.6rem;padding:.8rem 1rem;border:1.5px dashed var(--line);
   border-radius:14px;font-weight:700;font-size:.92rem;margin-top:1rem}
 .fixedslot::before{content:'Included';font-size:.66rem;font-weight:800;letter-spacing:.1em;

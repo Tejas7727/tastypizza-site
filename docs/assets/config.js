@@ -42,19 +42,48 @@
     if (this.base) this.included = 0;
     this.crust = 'White';
     this.sur = 0;
-    this.tops = this.baseTops.map(function (n) { return { name: n, qty: 1 }; });   // [{name, qty}]
+    // [{name, qty, side}] — side is 'whole', 'left' or 'right'
+    this.tops = this.baseTops.map(function (n) { return { name: n, qty: 1, side: 'whole' }; });
+  }
+
+  /* Special toppings and extra cheese have their own price per size. They
+     never count towards the toppings a price or a deal includes. */
+  function special(name) {
+    var list = root.BUILD.specials || [];
+    for (var i = 0; i < list.length; i++) if (list[i].name === name) return list[i];
+    return null;
+  }
+  Config.prototype.specialCost = function () {
+    var self = this;
+    return this.tops.reduce(function (s, t) {
+      var sp = special(t.name);
+      return s + (sp ? sp.prices[self.size] * t.qty : 0);
+    }, 0);
+  };
+
+  Config.prototype.sideOf = function (name) {
+    for (var i = 0; i < this.tops.length; i++) if (this.tops[i].name === name) return this.tops[i].side;
+    return 'whole';
+  };
+  Config.prototype.setSide = function (name, side) {
+    this.tops.forEach(function (t) { if (t.name === name) t.side = side; });
+  };
+  // "Pepperoni (left half)" — how the kitchen reads a topping
+  function unit(t, n) {
+    return (n > 1 ? n + '× ' : '') + t.name + (t.side && t.side !== 'whole' ? ' (' + t.side + ' half)' : '');
   }
 
   /* toppings put on beyond what the pizza comes with */
   Config.prototype.added = function () {
     var self = this;
     return this.tops.reduce(function (s, t) {
+      if (special(t.name)) return s;
       return s + Math.max(0, t.qty - (self.baseTops.indexOf(t.name) >= 0 ? 1 : 0));
     }, 0);
   };
 
   Config.prototype.count = function () {
-    return this.tops.reduce(function (s, t) { return s + t.qty; }, 0);
+    return this.tops.reduce(function (s, t) { return s + (special(t.name) ? 0 : t.qty); }, 0);
   };
 
   Config.prototype.qtyOf = function (name) {
@@ -65,7 +94,7 @@
   Config.prototype.bump = function (name, d) {
     var i = -1;
     for (var k = 0; k < this.tops.length; k++) if (this.tops[k].name === name) i = k;
-    if (i < 0) { if (d > 0) this.tops.push({ name: name, qty: 1 }); return; }
+    if (i < 0) { if (d > 0) this.tops.push({ name: name, qty: 1, side: 'whole' }); return; }
     this.tops[i].qty += d;
     if (this.tops[i].qty <= 0) this.tops.splice(i, 1);
   };
@@ -85,7 +114,7 @@
 
   Config.prototype.price = function () {
     var B = root.BUILD;
-    var extra = this.extras() * B.extra[this.size] + this.sur;
+    var extra = this.extras() * B.extra[this.size] + this.specialCost() + this.sur;
     if (this.dealPrice != null) return extra;            // on top of the deal price
     if (this.base) return this.base[this.size] + extra;
     var n = Math.min(this.count(), B.prices.length - 1);
@@ -97,21 +126,21 @@
     if (this.base) {
       // say what changed from the pizza as it comes, which is what the kitchen needs
       var off = this.baseTops.filter(function (n) { return !self.qtyOf(n); });
-      var more = [];
+      var more = [], halves = [];
       this.tops.forEach(function (t) {
-        var n = t.qty - (self.baseTops.indexOf(t.name) >= 0 ? 1 : 0);
-        if (n > 0) more.push((n > 1 ? n + '× ' : '') + t.name);
+        var own = self.baseTops.indexOf(t.name) >= 0;
+        var n = t.qty - (own ? 1 : 0);
+        if (n > 0) more.push(unit(t, n));
+        else if (own && t.side !== 'whole') halves.push(unit(t, 1));
       });
       var bits = [];
       if (more.length) bits.push((this.free ? 'with ' : 'extra ') + more.join(', '));
+      if (halves.length) bits.push(halves.join(', '));
       if (off.length) bits.push('no ' + off.join(', no '));
       return bits.length ? bits.join('; ') : 'as it comes';
     }
-    if (!this.count()) return 'just cheese';
-    var parts = this.tops.map(function (t) {
-      return t.qty > 1 ? t.qty + '× ' + t.name : t.name;
-    });
-    return parts.join(', ');
+    if (!this.tops.length) return 'just cheese';
+    return this.tops.map(function (t) { return unit(t, t.qty); }).join(', ');
   };
 
   Config.prototype.name = function () {
@@ -124,9 +153,9 @@
 
   /* ------------------------------------------------------------ markup */
 
-  Config.prototype.toppingGrid = function () {
+  Config.prototype.toppingGrid = function (names) {
     var self = this;
-    return (root.TOPPINGS || []).map(function (name) {
+    return (names || root.TOPPINGS || []).map(function (name) {
       var q = self.qtyOf(name);
       return '<div class="topbtn' + (q ? ' is-on' : '') + '" data-top="' + esc(name) + '">'
         + '<i class="tdot"></i>'
@@ -136,9 +165,22 @@
         + (q ? '<button type="button" data-t="-1" aria-label="One less ' + esc(name) + '">&minus;</button>'
              + '<b>' + q + '</b>' : '')
         + '<button type="button" data-t="1" aria-label="Add ' + esc(name) + '">+</button>'
-        + '</span></div>';
+        + '</span><span class="sides" data-sides></span></div>';
     }).join('');
   };
+
+  // left half, whole, right half — small pizzas to tap under a chosen topping
+  var SIDES = [['left', 'Left half', 'M12 2a10 10 0 0 0 0 20z'],
+               ['whole', 'Whole pizza', 'M12 2a10 10 0 1 0 0.01 0z'],
+               ['right', 'Right half', 'M12 2a10 10 0 0 1 0 20z']];
+  function sidePicker(name, side) {
+    return SIDES.map(function (s) {
+      return '<button type="button" data-side="' + s[0] + '" aria-pressed="' + (s[0] === side) + '" '
+        + 'aria-label="' + esc(name) + ': ' + s[1] + '" title="' + s[1] + '">'
+        + '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" '
+        + 'stroke="currentColor" stroke-width="1.8"/><path d="' + s[2] + '" fill="currentColor"/></svg></button>';
+    }).join('');
+  }
 
   /* ------------------------------------------------------------ painting */
 
@@ -176,8 +218,11 @@
       var look = root.TOPPING_LOOK[name];
       var dot = b.querySelector('.tdot');
       if (look && dot && !dot.style.background) dot.style.background = look.c;
+      var sp = special(name), each = sp ? sp.prices[self.size] : cost;
       var c = b.querySelector('[data-topcost]');
-      if (c) { c.textContent = cost ? '+' + money(cost) : ''; c.hidden = !cost; }
+      if (c) { c.textContent = each ? '+' + money(each) : ''; c.hidden = !each; }
+      var sides = b.querySelector('[data-sides]');
+      if (sides) sides.innerHTML = qty ? sidePicker(name, self.sideOf(name)) : '';
       var box = b.querySelector('.topq');
       if (box) {
         box.innerHTML = (qty
@@ -218,8 +263,9 @@
     return { x: 50 + Math.cos(a) * r, y: 50 + Math.sin(a) * r };
   }
 
-  /* the pieces that land on the dough, one set per unit of quantity */
-  Config.prototype.sprinkle = function (el, name) {
+  /* the pieces that land on the dough, one set per unit of quantity; a half
+     topping folds its spots onto that half, so it is just as evenly spread */
+  Config.prototype.sprinkle = function (el, name, side) {
     var host = el.querySelector('[data-tops]'), look = root.TOPPING_LOOK[name];
     if (!host || !look) return;
     var used = [];
@@ -232,6 +278,8 @@
     var layer = Math.round(used[lane]);
     for (var k = 0; k < PER; k++) {
       var j = k * LANES + lane, p = spot(lane, k, layer);
+      if (side === 'left') p.x = Math.min(p.x, 100 - p.x, 47);
+      if (side === 'right') p.x = Math.max(p.x, 100 - p.x, 53);
       var bit = document.createElement('span');
       bit.className = 'bit';
       bit.setAttribute('data-for', name);
@@ -253,6 +301,31 @@
     var drop = all ? bits.length : 7;
     bits.slice(-drop).forEach(function (b) { b.remove(); });
   };
+
+  // drawings for the special toppings and extra cheese, same 32-unit grid as the rest
+  root.TOPPING_LOOK = root.TOPPING_LOOK || {};
+  var MORE = {
+    'Extra Cheese': { c: '#F7D46A', size: 22, svg:
+      '<rect x="4" y="10" width="20" height="3.4" rx="1.7" transform="rotate(-25 14 12)" fill="#FBE08A"/>' +
+      '<rect x="8" y="17" width="18" height="3.4" rx="1.7" transform="rotate(20 17 19)" fill="#F7D46A"/>' },
+    'Zesty Chicken': { c: '#C98B4A', size: 22, svg:
+      '<path d="M7 11c2-5 12-6 17-2s3 12-3 14-15 1-14-5z" fill="#C98B4A"/>' +
+      '<path d="M10 12c3-3 9-3 12 0" stroke="#E0B07A" stroke-width="2" fill="none"/>' +
+      '<circle cx="13" cy="17" r="1.2" fill="#B5432A"/><circle cx="19" cy="15" r="1" fill="#B5432A"/>' },
+    'Sliced Steak': { c: '#6B3A22', size: 26, svg:
+      '<path d="M4 18c4-6 18-9 24-4-3 4-17 9-24 4z" fill="#6B3A22"/>' +
+      '<path d="M8 17c5-3 12-5 16-3" stroke="#8E5534" stroke-width="1.6" fill="none"/>' },
+    'Parmesan Cheese': { c: '#F2E9CC', size: 20, svg:
+      '<path d="M9 10l6-3 4 5-6 3z" fill="#FBF6E6"/><path d="M17 18l6-2 1 5-6 1z" fill="#F4EBD0"/>' +
+      '<path d="M8 20l4-2 2 4-5 1z" fill="#FFFDF5"/>' },
+    'Cheddar Cheese': { c: '#F29A2E', size: 22, svg:
+      '<rect x="5" y="9" width="18" height="4" rx="2" transform="rotate(-20 14 11)" fill="#F29A2E"/>' +
+      '<rect x="9" y="17" width="16" height="4" rx="2" transform="rotate(15 17 19)" fill="#E8861C"/>' },
+    'Feta Cheese': { c: '#F5F2E8', size: 20, svg:
+      '<rect x="8" y="8" width="9" height="9" rx="1.5" fill="#FFFFFF" stroke="#E6E1D3"/>' +
+      '<rect x="16" y="15" width="8" height="8" rx="1.5" fill="#FBFAF4" stroke="#E6E1D3"/>' }
+  };
+  Object.keys(MORE).forEach(function (k) { if (!root.TOPPING_LOOK[k]) root.TOPPING_LOOK[k] = MORE[k]; });
 
   root.PizzaConfig = Config;
 })(window);

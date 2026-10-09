@@ -113,6 +113,10 @@ def item_json(it, g):
         out["tags"] = it["tags"]
     if it.get("builder"):
         out["builder"] = True
+    if it.get("addon"):
+        out["addon"] = True
+    if "addons" in it:
+        out["addons"] = it["addons"]
     if "tops" in it:
         out["tops"] = it["tops"]
         out["free"] = it.get("free", 0)
@@ -344,10 +348,10 @@ def tiles(R, cats):
     # A door is a tall window: the food fills it, the name sits at the foot.
     # The shop's own photo when there is one, otherwise the category picture.
     def tile(name, href, photo, small, cls):
-        return (f'<a class="tile {cls}" href="{href}">'
-                f'<img src="{R}assets/img/{photo}@sm.webp" srcset="{R}assets/img/{photo}@sm.webp 400w, '
-                f'{R}assets/img/{photo}.webp 800w" sizes="(max-width:620px) 50vw, 240px" '
-                f'width="400" height="300" loading="lazy" alt="">'
+        img = (f'<img src="{R}assets/img/{photo}@sm.webp" srcset="{R}assets/img/{photo}@sm.webp 400w, '
+               f'{R}assets/img/{photo}.webp 800w" sizes="(max-width:620px) 50vw, 240px" '
+               f'width="400" height="300" loading="lazy" alt="">' if photo else "")
+        return (f'<a class="tile {cls}{"" if photo else " no-photo"}" href="{href}">{img}'
                 f'<span class="tile-text"><b>{e(name)}</b><small>{e(small)}</small></span></a>')
 
     return (f'<h2 class="sec">Pizza</h2><div class="tiles tiles-pizza">'
@@ -386,7 +390,21 @@ def stepper():
             '<output data-qty>1</output><button type="button" data-step="1" aria-label="One more">+</button></div>')
 
 
-def card(R, d, cat_id):
+def addon_boxes(d, addons):
+    """Cheese and extra meat as tick boxes on the dish itself, priced for the
+    size picked, instead of separate cards nobody connects to their donair."""
+    allowed = [a for a in addons if a["name"] in d.get("addons", [a["name"] for a in addons])]
+    if not allowed:
+        return ""
+    boxes = "".join(
+        f'<label class="addon"><input type="checkbox" data-addon="{e(a["name"].removeprefix("Add ").lower())}" '
+        f'data-prices="{e(json.dumps([x["price"] for x in a["sizes"]]))}">'
+        f'<span>+ {e(a["name"].removeprefix("Add "))} <b data-addon-price>{money(a["sizes"][0]["price"])}</b></span></label>'
+        for a in allowed)
+    return f'<div class="addons">{boxes}</div>'
+
+
+def card(R, d, cat_id, addons=()):
     """A dish you can order without opening anything: pick a size from the
     price box, set a quantity, Add. Specialty pizzas also get Customize."""
     uid = slug(d["group"] + "-" + d["name"])
@@ -417,9 +435,10 @@ def card(R, d, cat_id):
                   f' data-customize>Customize</a>')
     return (f'<article class="card" id="{uid}" data-card data-name="{e(d["name"])}">'
             f'{card_top(R, d["name"], pricebox(d, uid), tags, d.get("desc"), img)}'
+            f'{addon_boxes(d, addons)}'
             f'<div class="card-foot">{stepper()}'
             f'{custom}<button class="btn btn-red btn-sm btn-add" type="button" data-add'
-            f' data-price="{start["price"]}" data-note="{e(start["label"])}">Add '
+            f' data-base="{start["price"]}" data-price="{start["price"]}" data-note="{e(start["label"])}">Add '
             f'<span data-total>{money(start["price"])}</span></button></div></article>')
 
 
@@ -511,7 +530,7 @@ def faq_entries():
     if gf:
         out.append(("Do you have gluten-free crust?",
                     f"Yes, gluten-free crust is +{money(gf['surcharge'])}. "
-                    f"{' and '.join(others)} crust cost nothing extra."))
+                    f"{' and '.join(others)} crust {'costs' if len(others) == 1 else 'cost'} nothing extra."))
     if veg:
         out.append(("What vegetarian pizzas do you have?",
                     f"{', '.join(veg[:-1])} and {veg[-1]}, plus any pizza you build yourself."))
@@ -673,7 +692,8 @@ def main():
         for g in c["groups"]:
             body += (f'<h2 class="grouphead" id="{g["id"]}">{e(g["name"])}</h2>'
                      + (f'<p class="groupnote">{e(g["note"])}</p>' if g.get("note") else "")
-                     + '<div class="cards">' + "".join(card("../", d, c["id"]) for d in g["items"]) + "</div>")
+                     + '<div class="cards">' + "".join(card("../", d, c["id"], [a for a in g["items"] if a.get("addon")])
+                                                     for d in g["items"] if not d.get("addon")) + "</div>")
         body += "</div></section>"
         page(f"menu/{c['id']}.html", title=f"{e(c['name'])} &mdash; Tasty Pizza, Dartmouth",
              desc=(f"{c['name']} at Tasty Pizza, 760 Main St., Dartmouth. "
@@ -736,7 +756,13 @@ def main():
          body=build_body, active="build", page_id="build", ASSETS=ASSETS,
          data={**common,
                "BUILD": {"sizes": b["sizes"], "prices": b["priceByToppingCount"], "max": b["maxToppings"],
-                         "special": b["specialName"], "extra": b["extraToppingPrice"]},
+                         "special": b["specialName"], "extra": b["extraToppingPrice"],
+                         # extra cheese and the special toppings, each priced by size
+                         "specials": [{"name": "Extra Cheese", "prices": next(
+                                          it["prices"] for it in all_groups()["pizza-extras"]["items"]
+                                          if it["name"] == "Extra Cheese")}]
+                                     + [{"name": n, "prices": MENU["specialToppings"]["prices"]}
+                                        for n in MENU["specialToppings"]["names"]]},
                "TOPPINGS": MENU["toppings"], "CRUSTS": MENU["crusts"],
                "DEALS": {d["id"]: {"name": d["name"], "desc": d.get("desc", ""), "price": d["price"],
                                    "slots": d.get("slots", [])} for d in live if d.get("slots")},
@@ -781,6 +807,8 @@ def main():
          desc="Your Tasty Pizza order: check it, add special instructions, then call it in or order for pickup or delivery.", body=order_body, page_id="order", ASSETS=ASSETS, data=common)
 
     # ---------------- about
+    latest = max(h['close'] for h in SITE['hours'] if not h.get('closed'))
+    late_days = [h['day'] for h in SITE['hours'] if not h.get('closed') and h['close'] == latest]
     about_body = f"""<section class="band">
   <div class="wrap narrowcol">
     <header class="pagehead"><h1 class="sec-big">{e(SITE['tagline'])}</h1></header>
@@ -790,8 +818,8 @@ def main():
       <p>The dough is made fresh every morning and stretched by hand, and the pizzas go
         into a deck oven. Garlic fingers come with donair sauce, and the donairs are the
         Halifax kind, carved off the spit.</p>
-      <p>We are open seven days, till {hour(max(h['close'] for h in SITE['hours'] if not h.get('closed')))}
-        on Friday and Saturday, and we deliver to {e(', '.join(SITE['delivery']['areas']))}.</p>
+      <p>We are open seven days, till {hour(latest)} on {e(' and '.join(late_days))},
+        and we deliver to {e(', '.join(SITE['delivery']['areas']))}.</p>
     </div>
     <div class="acts"><a class="btn btn-red" href="menu.html">See the menu</a>
       <a class="btn btn-line" href="tel:{SITE['phoneLink']}">Call {SITE['phone']}</a></div>

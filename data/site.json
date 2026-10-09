@@ -57,7 +57,7 @@
     {
       "day": "Saturday",
       "open": 11,
-      "close": 25
+      "close": 24
     }
   ],
   "ordering": {
@@ -79,9 +79,12 @@
       "Cole Harbour",
       "Forest Hill",
       "Lake Echo",
-      "Main Street",
       "Westphal",
-      "Montague"
+      "Woodlawn",
+      "Colby",
+      "Lawrencetown",
+      "Eastern Passage",
+      "Mineville"
     ]
   },
   "_hitsReadme": "The six cards in 'What people actually order' on the home page. Use the exact item name from menu.json. Reorder or swap any of them; six fits best.",

@@ -109,6 +109,14 @@
       "groups": [
         "salads-pasta"
       ]
+    },
+    {
+      "id": "drinks",
+      "name": "Drinks",
+      "blurb": "Pop, juice, Gatorade, water and chocolate milk.",
+      "groups": [
+        "beverages"
+      ]
     }
   ]
 }

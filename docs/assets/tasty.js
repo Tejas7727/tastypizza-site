@@ -182,10 +182,22 @@
     var addBtn = $('[data-add]', card);
     if (!addBtn) return;
     var picked = $('[data-szpick] [aria-selected="true"]', card);
+    var size = picked ? parseInt(picked.getAttribute('data-i'), 10) : 0;
+    var base = picked ? parseFloat(picked.getAttribute('data-price')) : parseFloat(addBtn.getAttribute('data-base'));
+    var extra = 0, withs = [];
+    // tick boxes (cheese, extra meat) are priced for the size picked
+    $$('[data-addon]', card).forEach(function (box) {
+      var p = JSON.parse(box.getAttribute('data-prices'))[size];
+      box.parentNode.querySelector('[data-addon-price]').textContent = money(p);
+      if (box.checked) { extra += p; withs.push(box.getAttribute('data-addon')); }
+    });
+    if (addBtn.hasAttribute('data-base')) {
+      addBtn.setAttribute('data-price', Math.round((base + extra) * 100) / 100);
+      addBtn.setAttribute('data-note', (picked ? picked.getAttribute('data-note') : '')
+        + (withs.length ? (picked ? ', ' : '') + 'with ' + withs.join(' & ') : ''));
+    }
     if (picked) {
       var price = picked.getAttribute('data-price'), note = picked.getAttribute('data-note');
-      addBtn.setAttribute('data-price', price);
-      addBtn.setAttribute('data-note', note);
       $('[data-szlabel]', card).textContent = note;
       $('[data-szprice]', card).textContent = money(parseFloat(price));
       $('.pbox-btn', card).setAttribute('aria-label', 'Size: ' + note + ', ' + money(parseFloat(price)) + '. Change size');
@@ -217,6 +229,9 @@
 
   if (PAGE === 'category') {
     $$('[data-card]').forEach(paintCard);
+    document.addEventListener('change', function (ev) {
+      if (ev.target.matches('[data-addon]')) paintCard(ev.target.closest('[data-card]'));
+    });
     document.addEventListener('keydown', function (ev) {
       var list = ev.target.closest('.pbox-menu');
       if (ev.key === 'Escape') {
@@ -267,6 +282,7 @@
           addBtn.removeAttribute('data-done');
           addBtn.innerHTML = label;
           $('[data-qty]', card).textContent = '1';
+          $$('[data-addon]', card).forEach(function (b) { b.checked = false; });
           paintCard(card);
         }, 1100);
       }
@@ -341,8 +357,13 @@
       html += step(2, 'Crust', '', '<div class="chips" data-crusts>' + c.crusts + '</div>');
       html += step(3, 'Toppings', '<em data-cfg-count></em>',
         '<p class="ctrl-hint" data-cfg-hint></p><div class="tops-grid">' + cfg.toppingGrid() + '</div>'
+        + '<p class="half-note">Half toppings: tap a topping, then pick the left or right half under it. '
+        + 'There is an extra labour charge for half toppings.</p>'
         + fixed.map(function (f) { return '<p class="fixedslot">' + esc(f) + '</p>'; }).join(''));
-      html += step(4, 'Anything else?', '',
+      html += step(4, 'Special toppings &amp; extra cheese', '',
+        '<p class="ctrl-hint">Priced on their own, by size.</p><div class="tops-grid">'
+        + cfg.toppingGrid((B.specials || []).map(function (x) { return x.name; })) + '</div>');
+      html += step(5, 'Anything else?', '',
         '<textarea class="special" data-special rows="2" maxlength="140" '
         + 'placeholder="Well done, light sauce, cut in squares&hellip;">' + esc(notes[cur]) + '</textarea>');
       stepsEl.innerHTML = html;
@@ -352,7 +373,7 @@
       var host = $('[data-tops]', root);
       host.innerHTML = '';
       cfgs[cur].tops.forEach(function (t) {
-        for (var k = 0; k < t.qty; k++) cfgs[cur].sprinkle(root, t.name);
+        for (var k = 0; k < t.qty; k++) cfgs[cur].sprinkle(root, t.name, t.side);
       });
     }
 
@@ -421,13 +442,23 @@
         });
         summary(true); return;
       }
+      var sd = t.closest('[data-side]');
+      if (sd) {
+        // move this topping's pieces to the half picked
+        var top = sd.closest('.topbtn').getAttribute('data-top'), side = sd.getAttribute('data-side');
+        cfg.setSide(top, side);
+        cfg.unsprinkle(root, top, true);
+        for (var u = 0; u < cfg.qtyOf(top); u++) cfg.sprinkle(root, top, side);
+        cfg.paint(root, true); summary(true); return;
+      }
+      if (t.closest('[data-sides]')) return;
       var ts = t.closest('[data-t]');
       var row = t.closest('.topbtn');
       if (row) {
         var name = row.getAttribute('data-top');
         var d = ts ? parseInt(ts.getAttribute('data-t'), 10) : 1;
         cfg.bump(name, d);
-        if (d > 0) cfg.sprinkle(root, name); else cfg.unsprinkle(root, name, false);
+        if (d > 0) cfg.sprinkle(root, name, cfg.sideOf(name)); else cfg.unsprinkle(root, name, false);
         cfg.paint(root, true); summary(true); return;
       }
       var st = t.closest('[data-buildqty] [data-step]');
