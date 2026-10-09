@@ -83,7 +83,7 @@ def all_groups():
 
 def item_json(it, g):
     """One item, flattened: every size becomes a label and a price."""
-    sizes = g.get("sizes")
+    sizes = it.get("sizes") or g.get("sizes")
     if "prices" in it:
         prices = it["prices"]
     elif "tier" in it and g.get("tiers"):
@@ -117,6 +117,8 @@ def item_json(it, g):
         out["addon"] = True
     if "addons" in it:
         out["addons"] = it["addons"]
+    if it.get("options"):
+        out["options"] = it["options"]
     if "tops" in it:
         out["tops"] = it["tops"]
         out["free"] = it.get("free", 0)
@@ -267,7 +269,9 @@ def footer(R):
     <nav class="foot-links" aria-label="Footer">{links}
       <a href="{R}order.html">Your order</a>
       <a href="{SITE['ordering']['doordash']}" target="_blank" rel="noopener">DoorDash</a>
-      <a href="{SITE['ordering']['ubereats']}" target="_blank" rel="noopener">Uber Eats</a></nav>
+      <a href="{SITE['ordering']['ubereats']}" target="_blank" rel="noopener">Uber Eats</a>
+      <a href="{SITE['social']['facebook']}" target="_blank" rel="noopener">Facebook</a>
+      <a href="{SITE['social']['instagram']}" target="_blank" rel="noopener">Instagram</a></nav>
   </div>
   <p class="wrap foot-fine">{e(SITE['owner'])}.</p>
 </footer>
@@ -340,13 +344,13 @@ def tiles(R, cats):
     first = []
     if pizza:
         first.append(("Specialty pizzas", f"{R}menu/pizza.html", pizza["photo"],
-                      f'{sum(len(g["items"]) for g in pizza["groups"])} to choose from', "is-wide"))
+                      f'{sum(len([i for i in g["items"] if not i.get("addon")]) for g in pizza["groups"])} to choose from', "is-wide"))
     first.append(("Build your own", f"{R}build.html", "custom-pizza",
                   f"from {money(min(b['priceByToppingCount'][0]))}", ""))
     first.append(("Deals", f"{R}deals.html", "two-topping-pizza",
                   f"{len([d for d in DEALS['deals'] if d.get('active')])} running", "is-deal"))
     rest = [(c["name"], f"{R}menu/{c['id']}.html", c["photo"],
-             f'{sum(len(g["items"]) for g in c["groups"])} to choose from', "")
+             f'{sum(len([i for i in g["items"] if not i.get("addon")]) for g in c["groups"])} to choose from', "")
             for c in cats if c["id"] != "pizza"]
 
     # A door is a tall window: the food fills it, the name sits at the foot.
@@ -394,18 +398,41 @@ def stepper():
             '<output data-qty>1</output><button type="button" data-step="1" aria-label="One more">+</button></div>')
 
 
-def addon_boxes(d, addons):
+def addon_boxes(d, addons, at=0):
     """Cheese and extra meat as tick boxes on the dish itself, priced for the
     size picked, instead of separate cards nobody connects to their donair."""
     allowed = [a for a in addons if a["name"] in d.get("addons", [a["name"] for a in addons])]
     if not allowed:
         return ""
+    def price(a):
+        ps = [x["price"] for x in a["sizes"]]
+        return ps[at] if at < len(ps) else ps[0]
     boxes = "".join(
         f'<label class="addon"><input type="checkbox" data-addon="{e(a["name"].removeprefix("Add ").lower())}" '
         f'data-prices="{e(json.dumps([x["price"] for x in a["sizes"]]))}">'
-        f'<span>+ {e(a["name"].removeprefix("Add "))} <b data-addon-price>{money(a["sizes"][0]["price"])}</b></span></label>'
+        f'<span>+ {e(a["name"].removeprefix("Add "))} <b data-addon-price>{money(price(a))}</b></span></label>'
         for a in allowed)
     return f'<div class="addons">{boxes}</div>'
+
+
+def option_chips(uid, options):
+    """Choices the dish needs, one tap each: sauce, filling, crispy or grilled.
+    A required one has nothing picked, so nobody gets Hot wings by accident;
+    an optional one starts on its "none" choice."""
+    def chip(k, c):
+        extra = f' <b>+{money(c["price"])}</b>' if c.get("price") else ""
+        none = " data-none checked" if c.get("none") else ""
+        return (f'<label class="addon"><input type="radio" name="{uid}-o{k}" value="{e(c["name"])}"'
+                f' data-price="{c.get("price", 0)}"{none}><span>{e(c["name"])}{extra}</span></label>')
+
+    out = ""
+    for k, o in enumerate(options):
+        chips = "".join(chip(k, c) for c in o["choices"])
+        req = o.get("required")
+        out += (f'<fieldset class="opt" data-opt data-note="{e(o.get("note", "{}"))}"{" data-required" if req else ""}>'
+                f'<legend>{e(o["label"])}{" <span class=opt-req>Pick one</span>" if req else ""}</legend>'
+                f'<div class="addons">{chips}</div></fieldset>')
+    return out
 
 
 def card(R, d, cat_id, addons=()):
@@ -431,6 +458,7 @@ def card(R, d, cat_id, addons=()):
                 f'<div class="card-foot"><a class="btn btn-line btn-sm" href="tel:{SITE["phoneLink"]}">Call</a></div></article>')
 
     start = priced[0]
+    at = d["sizes"].index(start)
     custom = ""
     if d["group"] == "gourmet":
         idx = d["sizes"].index(start)
@@ -439,9 +467,9 @@ def card(R, d, cat_id, addons=()):
                   f' data-customize>Customize</a>')
     return (f'<article class="card" id="{uid}" data-card data-name="{e(d["name"])}">'
             f'{card_top(R, d["name"], pricebox(d, uid), tags, d.get("desc"), img)}'
-            f'{addon_boxes(d, addons)}'
+            f'{option_chips(uid, d.get("options", []))}{addon_boxes(d, addons, at)}'
             f'<div class="card-foot">{stepper()}'
-            f'{custom}<button class="btn btn-red btn-sm btn-add" type="button" data-add'
+            f'{custom}<button class="btn btn-red btn-sm btn-add" type="button" data-add data-size-i="{at}"'
             f' data-base="{start["price"]}" data-price="{start["price"]}" data-note="{e(start["label"])}">Add '
             f'<span data-total>{money(start["price"])}</span></button></div></article>')
 
@@ -461,9 +489,10 @@ def deal_card(R, d):
                 f'<a class="btn btn-red btn-sm" href="{R}build.html?deal={d["id"]}">'
                 f'{"Choose your pizzas" if n > 1 else "Choose your toppings"}</a></div></article>')
     return (f'<article class="card card-deal" id="deal-{d["id"]}" data-card data-name="{e(d["name"])}">{top}'
+            f'{option_chips("deal-" + d["id"], d.get("options", []))}'
             f'<div class="card-foot">{stepper()}'
-            f'<button class="btn btn-red btn-sm btn-add" type="button" data-add data-price="{d["price"]}"'
-            f' data-note="deal">Add <span data-total>{money(d["price"])}</span></button></div></article>')
+            f'<button class="btn btn-red btn-sm btn-add" type="button" data-add data-base="{d["price"]}" '
+            f'data-price="{d["price"]}" data-note="">Add <span data-total>{money(d["price"])}</span></button></div></article>')
 
 
 def rail(R, cats, active):
@@ -522,7 +551,7 @@ def faq_entries():
     out = [
         ("What are your hours?", f"{hrs}. Hours can change on holidays, so call {SITE['phone']} if you are unsure."),
         ("Do you deliver?", f"Yes, to {', '.join(d['areas'][:-1])} and {d['areas'][-1]}. "
-                            f"{d['note']} The delivery charge is {money(d['fee'])}."),
+                            f"{d['note']} Delivery starts at {money(d['fee'])}."),
         ("Where are you?", f"{a['street']} in {a['city']}, {a['note'].lower()}. Parking is free."),
         ("How do I order?", f"Put your order together on this site, then call it in on {SITE['phone']} "
                             "or order through DoorDash or Uber Eats."),
@@ -708,7 +737,7 @@ def main():
     deals_body = (rail("", cats, "deals")
                   + '<section class="band band-menu"><div class="wrap">'
                   + '<header class="pagehead"><h1 class="sec-big">Deals</h1>'
-                  + '<p>Running now. Pizza deals let you pick every topping.</p></header>'
+                  + '<p>Running now. Pizza deals let you pick every topping. Specials may end without notice; prices plus HST.</p></header>'
                   + '<div class="cards">' + "".join(deal_card("", d) for d in live) + "</div></div></section>")
     page("deals.html", title="Deals &mdash; Tasty Pizza, Dartmouth",
          desc="Pizza deals and combos at Tasty Pizza on Main Street, Dartmouth: pick every topping, pickup or delivery.",
@@ -802,7 +831,7 @@ def main():
           <a class="btn btn-line btn-wide" href="{SITE['ordering']['doordash']}" target="_blank" rel="noopener">Order on DoorDash</a>
           <a class="btn btn-line btn-wide" href="{SITE['ordering']['ubereats']}" target="_blank" rel="noopener">Order on Uber Eats</a>
         </div>
-        <p class="small">{e(SITE['delivery']['note'])} Delivery is {money(SITE['delivery']['fee'])}.</p>
+        <p class="small">{e(SITE['delivery']['note'])} Delivery starts at {money(SITE['delivery']['fee'])}.</p>
       </aside>
     </div>
   </div>

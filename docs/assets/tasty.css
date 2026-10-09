@@ -536,6 +536,18 @@ h2.sec:first-of-type{margin-top:0}
 .addon input:checked + span b{color:rgba(255,255,255,.75)}
 .addon input:focus-visible + span{outline:3px solid var(--red);outline-offset:2px}
 
+/* choices on a dish (sauce, filling, crispy or grilled): a small label, then the
+   same chips as the add-ons. One the dish needs says "Pick one" and turns red,
+   with a nudge, if Add is pressed before it is picked. */
+.opt{border:0;margin:0;padding:0;min-width:0;display:grid;gap:.4rem}
+.opt legend{padding:0;margin-bottom:.4rem;font-size:.66rem;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3)}
+.opt-req{margin-left:.35rem;font-weight:700;letter-spacing:.02em;text-transform:none;color:var(--ink-3)}
+.opt.is-missing legend,.opt.is-missing .opt-req{color:var(--red)}
+.opt.is-missing .addons{animation:nudge .36s var(--ease)}
+@keyframes nudge{20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+.addon input[type="radio"]:checked + span b{color:rgba(255,255,255,.75)}
+
 /* quantity: minus, number, plus */
 .stepper{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:999px;
   padding:.12rem;flex:none}

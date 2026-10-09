@@ -47,8 +47,7 @@
       "groups": [
         "donair",
         "donair-plates",
-        "donair-fried",
-        "donair-sauce"
+        "donair-fried"
       ]
     },
     {
@@ -94,7 +93,7 @@
     {
       "id": "sides",
       "name": "Sides & Nachos",
-      "blurb": "Fries, rings, mozza sticks, gravy and the loaded nachos.",
+      "blurb": "Fries, rings, mozza sticks and the loaded nachos.",
       "photo": "onion-rings",
       "groups": [
         "sides",
@@ -108,6 +107,15 @@
       "photo": "salad",
       "groups": [
         "salads-pasta"
+      ]
+    },
+    {
+      "id": "sauces",
+      "name": "Sauces & Dips",
+      "blurb": "Donair sauce, gravy and dips, by the cup.",
+      "groups": [
+        "sauces",
+        "dips"
       ]
     },
     {

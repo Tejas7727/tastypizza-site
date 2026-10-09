@@ -128,10 +128,44 @@
       "active": true,
       "badge": "",
       "name": "Two Large Subs",
-      "desc": "Cold cut, pizza or real turkey.",
+      "desc": "Two large subs: cold cut, pizza or real turkey.",
       "price": 25.95,
       "photo": "cold-cut-sub",
-      "compareAt": 26.5
+      "compareAt": 26.5,
+      "options": [
+        {
+          "label": "Sub 1",
+          "required": true,
+          "note": "Sub 1: {}",
+          "choices": [
+            {
+              "name": "Cold Cut"
+            },
+            {
+              "name": "Pizza"
+            },
+            {
+              "name": "Real Turkey"
+            }
+          ]
+        },
+        {
+          "label": "Sub 2",
+          "required": true,
+          "note": "Sub 2: {}",
+          "choices": [
+            {
+              "name": "Cold Cut"
+            },
+            {
+              "name": "Pizza"
+            },
+            {
+              "name": "Real Turkey"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "two-can-dine",

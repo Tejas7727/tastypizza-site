@@ -237,9 +237,10 @@ def export():
                     prices = []
                 prices = (prices + [None, None, None, None])[:4]
                 tag = f"tier {it['tier']}" if "tier" in it else ""
+                own = it.get("sizes") or sizes        # Fish & Chips: 1 piece / 2 pieces ...
                 row(ws, r, [f"{g['id']}/{it['name']}", g["name"], it["name"],
                             it.get("desc", ""), *prices,
-                            " / ".join(sizes) if sizes else tag, it.get("photo", "")],
+                            " / ".join(own) if own else tag, it.get("photo", "")],
                     locked=1)
                 r += 1
     pick_list(ws, "J", 5, r - 1, "B", len(photo_names))

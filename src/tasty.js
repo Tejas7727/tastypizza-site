@@ -182,19 +182,30 @@
     var addBtn = $('[data-add]', card);
     if (!addBtn) return;
     var picked = $('[data-szpick] [aria-selected="true"]', card);
-    var size = picked ? parseInt(picked.getAttribute('data-i'), 10) : 0;
+    // a card without a size box (one price) still knows its size slot and name
+    if (!addBtn.hasAttribute('data-size-note')) addBtn.setAttribute('data-size-note', addBtn.getAttribute('data-note') || '');
+    var size = picked ? parseInt(picked.getAttribute('data-i'), 10) : parseInt(addBtn.getAttribute('data-size-i') || '0', 10);
     var base = picked ? parseFloat(picked.getAttribute('data-price')) : parseFloat(addBtn.getAttribute('data-base'));
-    var extra = 0, withs = [];
+    var extra = 0, withs = [], parts = [picked ? picked.getAttribute('data-note') : addBtn.getAttribute('data-size-note')];
+    // choices (sauce, filling, crispy or grilled) read on the order the way the kitchen says them
+    $$('[data-opt]', card).forEach(function (set) {
+      var on = $('input:checked', set);
+      if (!on) return;
+      set.classList.remove('is-missing');
+      extra += parseFloat(on.getAttribute('data-price')) || 0;
+      if (!on.hasAttribute('data-none')) parts.push(set.getAttribute('data-note').replace('{}', on.value));
+    });
     // tick boxes (cheese, extra meat) are priced for the size picked
     $$('[data-addon]', card).forEach(function (box) {
-      var p = JSON.parse(box.getAttribute('data-prices'))[size];
+      var ps = JSON.parse(box.getAttribute('data-prices'));
+      var p = size < ps.length && ps[size] != null ? ps[size] : ps[0];
       box.parentNode.querySelector('[data-addon-price]').textContent = money(p);
       if (box.checked) { extra += p; withs.push(box.getAttribute('data-addon')); }
     });
+    if (withs.length) parts.push('with ' + withs.join(' & '));
     if (addBtn.hasAttribute('data-base')) {
       addBtn.setAttribute('data-price', Math.round((base + extra) * 100) / 100);
-      addBtn.setAttribute('data-note', (picked ? picked.getAttribute('data-note') : '')
-        + (withs.length ? (picked ? ', ' : '') + 'with ' + withs.join(' & ') : ''));
+      addBtn.setAttribute('data-note', parts.filter(Boolean).join(', '));
     }
     if (picked) {
       var price = picked.getAttribute('data-price'), note = picked.getAttribute('data-note');
@@ -230,7 +241,7 @@
   if (PAGE === 'category') {
     $$('[data-card]').forEach(paintCard);
     document.addEventListener('change', function (ev) {
-      if (ev.target.matches('[data-addon]')) paintCard(ev.target.closest('[data-card]'));
+      if (ev.target.matches('[data-addon], [data-opt] input')) paintCard(ev.target.closest('[data-card]'));
     });
     document.addEventListener('keydown', function (ev) {
       var list = ev.target.closest('.pbox-menu');
@@ -270,6 +281,15 @@
       }
       var addBtn = ev.target.closest('[data-add]');
       if (addBtn && card) {
+        // a choice the dish needs (sauce, filling) is asked for, not guessed
+        var missing = $$('[data-opt][data-required]', card).filter(function (set) { return !$('input:checked', set); });
+        if (missing.length) {
+          missing.forEach(function (set) {
+            set.classList.remove('is-missing'); void set.offsetWidth; set.classList.add('is-missing');
+          });
+          $('input', missing[0]).focus({ preventScroll: true });
+          return;
+        }
         var q = qtyOf(card), price = parseFloat(addBtn.getAttribute('data-price'));
         var note = addBtn.getAttribute('data-note') || '';
         var name = card.getAttribute('data-name');
@@ -283,6 +303,7 @@
           addBtn.innerHTML = label;
           $('[data-qty]', card).textContent = '1';
           $$('[data-addon]', card).forEach(function (b) { b.checked = false; });
+          $$('[data-opt] input', card).forEach(function (b) { b.checked = b.hasAttribute('data-none'); });
           paintCard(card);
         }, 1100);
       }
