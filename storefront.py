@@ -551,7 +551,7 @@ def faq_entries():
     out = [
         ("What are your hours?", f"{hrs}. Hours can change on holidays, so call {SITE['phone']} if you are unsure."),
         ("Do you deliver?", f"Yes, to {', '.join(d['areas'][:-1])} and {d['areas'][-1]}. "
-                            f"{d['note']} Delivery starts at {money(d['fee'])}."),
+                            f"{d['note']}"),
         ("Where are you?", f"{a['street']} in {a['city']}, {a['note'].lower()}. Parking is free."),
         ("How do I order?", f"Put your order together on this site, then call it in on {SITE['phone']} "
                             "or order through DoorDash or Uber Eats."),
@@ -831,7 +831,7 @@ def main():
           <a class="btn btn-line btn-wide" href="{SITE['ordering']['doordash']}" target="_blank" rel="noopener">Order on DoorDash</a>
           <a class="btn btn-line btn-wide" href="{SITE['ordering']['ubereats']}" target="_blank" rel="noopener">Order on Uber Eats</a>
         </div>
-        <p class="small">{e(SITE['delivery']['note'])} Delivery starts at {money(SITE['delivery']['fee'])}.</p>
+        <p class="small">{e(SITE['delivery']['note'])}</p>
       </aside>
     </div>
   </div>

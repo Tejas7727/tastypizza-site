@@ -459,7 +459,7 @@
           "items": [
             {
               "name": "Donair",
-              "desc": "Spiced beef off the spit, sweet sauce, warm pita. The one we're known for.",
+              "desc": "Spiced beef off the spit with onions, tomatoes and sweet donair sauce on a warm pita. The one we're known for.",
               "photo": "donair",
               "tags": [
                 "donair",
@@ -580,7 +580,7 @@
             },
             {
               "name": "Donair Poutine",
-              "desc": "With donair meat and a line of donair sauce.",
+              "desc": "With donair meat.",
               "tags": [
                 "donair",
                 "popular"
@@ -951,7 +951,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "addons": []
             },
             {
               "name": "Pocket",
@@ -1000,6 +1001,11 @@
                   ]
                 }
               ]
+            },
+            {
+              "name": "Extra Cheese",
+              "price": 4.05,
+              "addon": true
             }
           ]
         },
@@ -1433,7 +1439,9 @@
                 6.25,
                 7.45
               ],
-              "addons": []
+              "addons": [
+                "Extra Cheese"
+              ]
             },
             {
               "name": "Extra Cheese",
