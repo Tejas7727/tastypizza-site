@@ -504,7 +504,8 @@
         // back to the page the pizza was chosen from, at the spot it was left
         var ref = '';
         try { ref = new URL(document.referrer).pathname; } catch (e) {}
-        if (cameFromHere() && !/build\.html$/.test(ref) && history.length > 1) history.back();
+        // Cloudflare serves pages without ".html", so the builder can be /build or /build.html
+        if (cameFromHere() && !/\/build(\.html)?$/.test(ref) && history.length > 1) history.back();
         else location.href = R + 'menu/pizza.html';
       }
     });
