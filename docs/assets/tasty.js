@@ -354,10 +354,30 @@
       }).join('');
       var crusts = (window.CRUSTS || []).map(function (c) {
         return '<button class="chip" type="button" data-crust="' + esc(c.name) + '" data-sur="' + c.surcharge + '"'
-          + (c.name === cfg.crust ? ' data-on' : '') + '>' + esc(c.name)
+          + (c.name === cfg.crust ? ' data-on' : '') + (crustFits(c, cfg) ? '' : ' disabled') + '>' + esc(c.name)
           + (c.surcharge ? '<em>+' + money(c.surcharge) + '</em>' : '') + '</button>';
       }).join('');
       return { sizes: sizes, crusts: crusts };
+    }
+
+    /* a crust made in some sizes only (gluten free: 12" Medium) */
+    function crustFits(c, cfg) { return !c.sizes || c.sizes.indexOf(cfg.size) >= 0; }
+    function crustNote() {
+      return (window.CRUSTS || []).filter(function (c) { return c.sizes; }).map(function (c) {
+        return '<p class="ctrl-hint">' + esc(c.name) + ' comes in '
+          + c.sizes.map(function (i) { return esc(B.sizes[i]); }).join(' or ') + ' only.</p>';
+      }).join('');
+    }
+    // after a size change: grey out crusts that size can't have, and fall back to White
+    function syncCrusts(cfg) {
+      (window.CRUSTS || []).forEach(function (c) {
+        if (c.name === cfg.crust && !crustFits(c, cfg)) { cfg.crust = 'White'; cfg.sur = 0; }
+      });
+      $$('[data-crusts] .chip', root).forEach(function (o) {
+        var c = (window.CRUSTS || []).filter(function (x) { return x.name === o.getAttribute('data-crust'); })[0];
+        o.disabled = !!c && !crustFits(c, cfg);
+        if (o.getAttribute('data-crust') === cfg.crust) o.setAttribute('data-on', ''); else o.removeAttribute('data-on');
+      });
     }
 
     function step(n, title, extra, body) {
@@ -375,7 +395,7 @@
       }
       html += step(1, 'Size', cfg.sizeLocked ? '<em>set by the deal</em>' : '',
         '<div class="chips" data-sizes>' + c.sizes + '</div>');
-      html += step(2, 'Crust', '', '<div class="chips" data-crusts>' + c.crusts + '</div>');
+      html += step(2, 'Crust', '', crustNote() + '<div class="chips" data-crusts>' + c.crusts + '</div>');
       html += step(3, 'Toppings', '<em data-cfg-count></em>',
         '<p class="ctrl-hint" data-cfg-hint></p><div class="tops-grid">' + cfg.toppingGrid() + '</div>'
         + fixed.map(function (f) { return '<p class="fixedslot">' + esc(f) + '</p>'; }).join(''));
@@ -450,6 +470,7 @@
       var sz = t.closest('[data-size]');
       if (sz && !sz.disabled) {
         cfg.size = parseInt(sz.getAttribute('data-size'), 10);
+        syncCrusts(cfg);
         cfg.paint(root, true); summary(true); return;
       }
       var cr = t.closest('[data-crust]');

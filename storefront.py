@@ -562,7 +562,7 @@ def faq_entries():
     ]
     if gf:
         out.append(("Do you have gluten-free crust?",
-                    f"Yes, gluten-free crust is +{money(gf['surcharge'])}. "
+                    f"Yes, on 12\" medium pizzas: gluten-free crust is +{money(gf['surcharge'])}. "
                     f"{' and '.join(others)} crust {'costs' if len(others) == 1 else 'cost'} nothing extra."))
     if veg:
         out.append(("What vegetarian pizzas do you have?",

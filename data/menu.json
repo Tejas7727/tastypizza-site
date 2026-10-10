@@ -61,6 +61,9 @@
       "surcharge": 6.45,
       "tags": [
         "glutenfree"
+      ],
+      "sizes": [
+        1
       ]
     }
   ],
@@ -134,7 +137,7 @@
         {
           "id": "build-your-own",
           "name": "Build Your Own",
-          "note": "Pick your size, pick your toppings. White or gluten free crust.",
+          "note": "Pick your size, pick your toppings. White crust, or gluten free on a 12\" medium.",
           "sizes": [
             "9\" S",
             "12\" M",
@@ -156,7 +159,7 @@
         {
           "id": "gourmet",
           "name": "Gourmet Specialty Pizza",
-          "note": "Built for you, already figured out. White or gluten free crust.",
+          "note": "Built for you, already figured out. White crust, or gluten free on a 12\" medium.",
           "sizes": [
             "9\" S",
             "12\" M",
@@ -431,7 +434,7 @@
             },
             {
               "name": "Gluten Free Crust",
-              "desc": "Any size.",
+              "desc": "12\" medium pizzas only.",
               "price": 6.45,
               "tags": [
                 "glutenfree"
