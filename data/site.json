@@ -119,7 +119,7 @@
     "Prices and store hours are subject to change without notice."
   ],
   "_liveReadme": "Leave this false while the site is only a preview on github.io. It tells Google not to index the preview, so it can never compete with the real tastypizza.ca in search. Set it to true on the day the site goes live on tastypizza.ca.",
-  "live": false,
+  "live": true,
   "seo": {
     "title": "Tasty Pizza — Donairs, Pizza & Garlic Fingers in Dartmouth, NS",
     "description": "Dartmouth's donair and pizza shop on Main Street. Fresh dough daily, garlic fingers, subs and seafood. Open 7 days, Friday till 1am. Call 902-435-5700.",

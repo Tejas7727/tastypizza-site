@@ -1,4 +1,3 @@
-# Preview build. Set "live": true in data/site.json when this goes to
-# tastypizza.ca, and search engines will be allowed in.
 User-agent: *
-Disallow: /
+Allow: /
+Sitemap: https://tastypizza.ca/sitemap.xml
