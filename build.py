@@ -459,14 +459,26 @@ def copy_assets():
 
 def write_sitemap():
     """Every page the generator wrote, so search finds the menu pages too."""
-    pages = sorted(p.relative_to(OUT).as_posix() for p in OUT.rglob("*.html"))
+    pages = sorted(p.relative_to(OUT).as_posix() for p in OUT.rglob("*.html") if p.name != "404.html")
+    # clean addresses: Cloudflare Pages serves menu/pizza.html at menu/pizza
     urls = "".join(
-        f'<url><loc>https://tastypizza.ca/{"" if p == "index.html" else p}</loc>'
+        f'<url><loc>https://tastypizza.ca/{"" if p == "index.html" else p[:-5]}</loc>'
         f'<lastmod>{date.today()}</lastmod></url>\n' for p in pages)
     (OUT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + urls + '</urlset>\n', encoding="utf-8")
+
+
+# The old site (Gatsby on Netlify) had these addresses. Search results and
+# saved links keep working after the move: Cloudflare Pages reads _redirects.
+OLD_PAGES = {"/pizza-menu": "/menu/pizza", "/donairs": "/menu/donairs", "/seafood-subs": "/menu/seafood",
+             "/specials": "/deals", "/favorites": "/menu", "/burrito": "/menu", "/contact": "/about"}
+
+
+def write_redirects():
+    lines = [f"{old}{slash} {new} 301" for old, new in OLD_PAGES.items() for slash in ("", "/")]
+    (OUT / "_redirects").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main():
@@ -476,6 +488,7 @@ def main():
 
     storefront.main()
     write_sitemap()
+    write_redirects()
 
     n_items = sum(len(visible(g["items"]))
                   for c in visible(menu["categories"]) for g in c["groups"])

@@ -37,7 +37,7 @@ HOME = SITE["home"]
 
 # GitHub Pages serves the site from a sub-path; og: and canonical need the
 # full URL, so keep it in one place.
-CANON = "https://tejas7727.github.io/tastypizza-site/"
+CANON = "https://tastypizza.ca/" if SITE.get("live") else "https://tejas7727.github.io/tastypizza-site/"
 
 # The preview must not compete with the real tastypizza.ca in search. robots.txt
 # stops crawling, but a blocked URL can still be indexed from links, so the page
@@ -278,10 +278,12 @@ def footer(R):
 {TOAST}"""
 
 
-def page(path, *, title, desc, body, active="", page_id, data=None, ld=None, ASSETS=None):
+def page(path, *, title, desc, body, active="", page_id, data=None, ld=None, ASSETS=None, root=None):
     depth = path.count("/")
-    R = "../" * depth
-    canon = CANON + ("" if path == "index.html" else path)
+    # the not-found page answers at any depth, so it links from the site root
+    R = root if root is not None else "../" * depth
+    clean = "" if path == "index.html" else path[:-5] if SITE.get("live") else path
+    canon = CANON + clean
     data_js = ""
     if data:
         data_js = "<script>" + "\n".join(
@@ -877,6 +879,16 @@ def main():
          ld={"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
              {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": an}}
              for q, an in qa]})
+
+    nf_body = (f'<section class="band"><div class="wrap narrowcol">'
+               f'<header class="pagehead"><h1 class="sec-big">That page isn&rsquo;t here</h1>'
+               f'<p>The menu has moved around. Everything is one tap away.</p></header>'
+               f'<div class="acts"><a class="btn btn-red" href="/menu">See the menu</a>'
+               f'<a class="btn btn-line" href="tel:{SITE["phoneLink"]}">Call {SITE["phone"]}</a></div>'
+               f'</div></section>')
+    page("404.html", title="Page not found &mdash; Tasty Pizza, Dartmouth",
+         desc="That page isn't on the Tasty Pizza site any more. See the menu or call 902-435-5700.",
+         body=nf_body, page_id="notfound", ASSETS=ASSETS, data=common, root="/")
 
     n = sum(len(g["items"]) for c in cats for g in c["groups"])
     print(f"wrote {len(cats) + 7} pages: index, menu, {len(cats)} categories, deals, build, order, about, faq")

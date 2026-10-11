@@ -77,6 +77,13 @@ class Scan(HTMLParser):
             self.ld.append(d)
 
 
+def resolve(name, ref):
+    """A link as the site will serve it: root-relative ("/menu") from docs/,
+    relative from the page's folder, and clean addresses as their .html file."""
+    f = (OUT / ref.lstrip("/")) if ref.startswith("/") else (OUT / name).parent / ref
+    return f if f.exists() or f.suffix else f.with_name(f.name + ".html")
+
+
 def check_page(name):
     p = OUT / name
     if not p.exists():
@@ -129,13 +136,13 @@ def check_page(name):
         if img.get("alt") is None:
             fail(f"{name}: <img src={src}> has no alt attribute")
         if src and not src.startswith(("http", "data:")):
-            f = (OUT / name).parent / src
+            f = resolve(name, src)
             if not f.exists():
                 fail(f"{name}: image not found -> {src}")
         if not (img.get("width") and img.get("height")):
             warn(f"{name}: <img src={src}> has no width/height (causes layout shift)")
         for s2 in re.findall(r"([^\s,]+\.webp)", img.get("srcset", "")):
-            if not ((OUT / name).parent / s2).exists():
+            if not resolve(name, s2).exists():
                 fail(f"{name}: srcset image not found -> {s2}")
 
     # --- internal links and fragments ------------------------------------
@@ -147,7 +154,7 @@ def check_page(name):
             continue
         target, _, frag = h.partition("#")
         target = target.split("?")[0]
-        if target and not ((OUT / name).parent / target).exists():
+        if target and not resolve(name, target).exists():
             fail(f"{name}: dead link -> {target}")
 
     # --- structured data --------------------------------------------------
