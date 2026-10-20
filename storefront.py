@@ -531,8 +531,9 @@ def find_us(R):
       </div>
     </div>
     <a class="mapcard" href="{SITE['mapsUrl']}" target="_blank" rel="noopener" aria-label="Open Tasty Pizza in Google Maps">
-      <iframe src="https://www.openstreetmap.org/export/embed.html?bbox={bbox}&amp;layer=mapnik&amp;marker={lat},{lng}"
+      <iframe src="https://www.openstreetmap.org/export/embed.html?bbox={bbox}&amp;layer=mapnik"
               title="Map of 760 Main Street, Dartmouth" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+      <span class="mappin" aria-hidden="true"><svg viewBox="0 0 40 52"><path d="M20 1.5C9.8 1.5 1.5 9.6 1.5 19.8 1.5 33.4 20 50.5 20 50.5S38.5 33.4 38.5 19.8C38.5 9.6 30.2 1.5 20 1.5z" fill="#B70017" stroke="#fff" stroke-width="2.5"/><circle cx="20" cy="19.5" r="7" fill="#fff"/></svg></span>
       <span class="pin">Open in Google Maps</span>
       <span class="mapattr">&copy; OpenStreetMap contributors</span>
     </a>
